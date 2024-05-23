@@ -1,0 +1,9 @@
+.content-left {
+    border: 1px solid red;
+    height: 600px;
+}
+
+.content-right {
+    border: 1px solid green;
+    height: 600px;
+}
