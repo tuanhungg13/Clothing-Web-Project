@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './home.css';
+import './Home.css';
 import poster1 from '../../assets/img/poster_4.jpg';
 import poster2 from '../../assets/img/poster_5.jpg';
 import poster3 from '../../assets/img/poster_6.jpg';

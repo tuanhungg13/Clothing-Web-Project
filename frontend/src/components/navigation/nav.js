@@ -2,7 +2,7 @@ import React from "react";
 import './nav.css';
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png';
-import Product from "../product/product";
+import Product from "../productPage/Product";
 const Nav = () => {
     return (
         <>

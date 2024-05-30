@@ -5,10 +5,10 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './components/header/header';
 import Nav from './components/navigation/nav';
 import { BrowserRouter } from "react-router-dom";
-import Home from './components/home/home';
-import Product from './components/product/product';
-import ProductOnSale from './components/product_sale/product_sale';
-
+import Home from './components/homePage/Home';
+import Product from './components/productPage/Product';
+import ProductOnSale from './components/productOnSalePage/ProductOnSale';
+import Instruction from './components/instructionPage/Instruction';
 function App() {
   return (
     <BrowserRouter>
@@ -35,6 +35,7 @@ function App() {
                     <Route path="delete" element={<ModalCreateUser />} /> */}
             </Route>
             <Route path='/sale' element={<ProductOnSale />} />
+            <Route path='/huong-dan-mua-hang' element={<Instruction />} />
             {/* Xử lý các trang ngoại lệ */}
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>
