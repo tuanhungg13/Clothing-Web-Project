@@ -1,0 +1,23 @@
+.price-sale {
+    color: rgb(199, 25, 25);
+    margin-right: 5px;
+}
+
+.price-real {
+    color: rgb(146, 144, 144);
+    text-decoration-line: line-through;
+}
+
+.label-sale {
+    position: absolute;
+    top: 8px;
+    left: 1px;
+    font-size: 13px;
+    border-radius: 5px;
+    padding: 4px 8px;
+    background: #f7e15f;
+    font-size: 15px;
+    color: #191919;
+    font-weight: 800;
+    font-family: Roboto-Regular;
+}
