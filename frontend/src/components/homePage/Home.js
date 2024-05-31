@@ -6,7 +6,7 @@ import poster3 from '../../assets/img/poster_6.jpg';
 import poster4 from '../../assets/img/poster_8.jpeg';
 import poster5 from '../../assets/img/poster_3.jpg';
 import poster6 from '../../assets/img/poster_2.jpg';
-import introduce from '../../assets/video/introduce.mp4'
+import introduce from '../../assets/video/introduce.mp4';
 import data from '../../data/data.json';
 import { NavLink } from 'react-router-dom';
 const Home = () => {

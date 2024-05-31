@@ -1,5 +1,5 @@
 import React from "react";
-import './nav.css';
+import './Nav.css';
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png';
 import Product from "../productPage/Product";
@@ -12,7 +12,7 @@ const Nav = () => {
                     <NavLink to="/san-pham">Sản phẩm</NavLink>
                     <NavLink to="/sale">Sale</NavLink>
                     <NavLink to="/huong-dan-mua-hang">Hướng dẫn</NavLink>
-                    <NavLink to="/thong-bap">Thông báo</NavLink>
+                    <NavLink to="/thong-bao">Thông báo</NavLink>
                 </div>
             </div>
             <div className="btn-toggler d-lg-none d-block">

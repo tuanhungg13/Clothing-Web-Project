@@ -2,13 +2,14 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import { Routes, Route } from 'react-router-dom';
-import Header from './components/header/header';
-import Nav from './components/navigation/nav';
+import Header from './components/header/Header';
+import Nav from './components/navigation/Nav';
 import { BrowserRouter } from "react-router-dom";
 import Home from './components/homePage/Home';
 import Product from './components/productPage/Product';
 import ProductOnSale from './components/productOnSalePage/ProductOnSale';
 import Instruction from './components/instructionPage/Instruction';
+import Announcement from './components/announcement/Announcement';
 function App() {
   return (
     <BrowserRouter>
@@ -36,6 +37,7 @@ function App() {
             </Route>
             <Route path='/sale' element={<ProductOnSale />} />
             <Route path='/huong-dan-mua-hang' element={<Instruction />} />
+            <Route path='/thong-bao' element={<Announcement />} />
             {/* Xử lý các trang ngoại lệ */}
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>

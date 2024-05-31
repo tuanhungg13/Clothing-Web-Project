@@ -1,11 +1,11 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png'
-import './header.css'
+import './Header.css'
 import { FaPhone } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
-import Nav from '../navigation/nav';
+import Nav from '../navigation/Nav';
 const Header = () => {
     return (
         <div>
