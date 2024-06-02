@@ -2,7 +2,6 @@ import React from "react";
 import './Nav.css';
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png';
-import Product from "../productPage/Product";
 const Nav = () => {
     return (
         <>

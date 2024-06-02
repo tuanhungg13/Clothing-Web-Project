@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './Product.css';
-import data from '../../data/data.json';
+import './ProductOnSale.css';
+import data from '../../../data/data.json';
 import { Slider } from 'antd';
-const Product = () => {
+const ProductOnSale = () => {
     const [products, setProducts] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedOption, setSelectedOption] = useState()
@@ -159,7 +159,7 @@ const Product = () => {
                                     <option >Mặc định</option>
                                     <option value="1">Giá giảm dần</option>
                                     <option value="2">Giá tăng dần</option>
-                                    <option value="3">Sản phẩm bán chạy</option>
+                                    <option value="3">Giảm giá nhiều nhất</option>
                                 </select>
                             </div>
                             <div className='container-product d-flex justify-content-center flex-wrap row '>
@@ -168,14 +168,15 @@ const Product = () => {
                                         <div className='product-content col-6 col-sm-4 d-flex flex-column  text-center' key={`product-${index}`}>
                                             <div className='product-information'>
                                                 <div className='product-detail '>
-                                                    <img src={require(`../../assets/img/${item.image}`)} alt='' />
+                                                    <img src={require(`../../../assets/img/${item.image}`)} alt='' />
                                                     <div className='product-name'>{item.name}</div>
                                                 </div>
                                                 <div className='product-price'>
-                                                    <div>{item.price}</div>
+                                                    <div className='price-sale d-inline'>200,000đ</div>
+                                                    <div className='price-real d-inline'>({item.price})</div>
                                                     <button>Thêm vào giỏ hàng</button>
                                                 </div>
-                                                <label className='label-sold'>Hết hàng</label>
+                                                <label className='label-sale'>-50%</label>
                                             </div>
                                         </div>
                                     )
@@ -191,4 +192,4 @@ const Product = () => {
     )
 }
 
-export default Product;
+export default ProductOnSale;

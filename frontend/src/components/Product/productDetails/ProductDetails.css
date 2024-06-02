@@ -1,0 +1,64 @@
+.product-details-page {
+    margin: 50px 150px 0 150px;
+
+}
+
+.imgs-product {
+    border: 1px solid red;
+}
+
+.info-product {
+    height: 500px;
+    border: 1px solid green;
+}
+
+.list-imgs-product {
+    height: 500px;
+    border: 1px solid rgb(173, 137, 247);
+    position: relative;
+    overflow: hidden;
+    padding-top: 30px;
+}
+
+.display-img-product {
+    height: 500px;
+    border: 1px solid black;
+
+}
+
+.display-img-product img {
+    max-width: 100%;
+    height: 100%;
+}
+
+.list-imgs-product img {
+    max-width: 100%;
+    /* Đảm bảo ảnh không vượt quá chiều rộng của phần tử cha */
+    height: 100%;
+    /* Cho phép ảnh tự điều chỉnh chiều cao tương ứng với chiều rộng */
+    background-color: #f7f7f7;
+    padding: 5px;
+    border: 1px solid #e0e0e0;
+}
+
+.prevBtn {
+    position: absolute;
+    top: -10px;
+    left: 40%;
+    font-size: 20px;
+}
+
+.nextBtn {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    font-size: 20px;
+
+}
+
+.size-items {
+    margin-right: 10px;
+    padding: 0 6px;
+    border: 1px solid #ddd;
+    background: #f7f7f7;
+}

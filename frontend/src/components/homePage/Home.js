@@ -9,6 +9,7 @@ import poster6 from '../../assets/img/poster_2.jpg';
 import introduce from '../../assets/video/introduce.mp4';
 import data from '../../data/data.json';
 import { NavLink } from 'react-router-dom';
+import ProductDetails from '../Product/productDetails/ProductDetails';
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [currentOutfit, setCurrentOutfit] = useState(0);

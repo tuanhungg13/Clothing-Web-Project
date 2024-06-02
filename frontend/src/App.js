@@ -6,10 +6,11 @@ import Header from './components/header/Header';
 import Nav from './components/navigation/Nav';
 import { BrowserRouter } from "react-router-dom";
 import Home from './components/homePage/Home';
-import Product from './components/productPage/Product';
-import ProductOnSale from './components/productOnSalePage/ProductOnSale';
+import Product from './components/Product/productPage/Product';
+import ProductOnSale from './components/Product/productOnSalePage/ProductOnSale';
 import Instruction from './components/instructionPage/Instruction';
 import Announcement from './components/announcement/Announcement';
+import ProductDetails from './components/Product/productDetails/ProductDetails';
 function App() {
   return (
     <BrowserRouter>
@@ -38,6 +39,7 @@ function App() {
             <Route path='/sale' element={<ProductOnSale />} />
             <Route path='/huong-dan-mua-hang' element={<Instruction />} />
             <Route path='/thong-bao' element={<Announcement />} />
+            <Route path='/thong-tin-san-pham' element={<ProductDetails />} />
             {/* Xử lý các trang ngoại lệ */}
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>
