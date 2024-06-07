@@ -6,8 +6,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from 'react';
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "react-icons/io";
+import { CiHeart } from "react-icons/ci";
+import { FaFacebook, FaHome } from "react-icons/fa";
+
 
 
 const ProductDetails = () => {
@@ -32,9 +34,12 @@ const ProductDetails = () => {
     };
     return (
         <div className='product-details-page'>
+            <div className='nav-title'>
+                <FaHome className='mb-1' /> <IoMdArrowDropright />Sản phẩm <IoMdArrowDropright /> Áo phông <IoMdArrowDropright /> Áo phông unisex
+            </div>
             <div className='container'>
                 <div className='row'>
-                    <div className='imgs-product col-lg-7'>
+                    <div className='imgs-product col-lg-8'>
                         <div className='row'>
                             <div className='list-imgs-product col-lg-3'>
                                 <Slider {...settings} ref={sliderRef}>
@@ -67,38 +72,97 @@ const ProductDetails = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='info-product col-lg-5'>
+                    <div className=' ps-4 info-product col-lg-4'>
                         <h3>Áo phông unisex</h3>
-                        <div className='product-price'>
-                            <div className='price-sale d-inline' style={{ fontSize: '25px', marginRight: '30px' }}>200,000đ</div>
+                        <div>
+                            <div className='voteView me-1 pe-1 d-inline-block'>4.7</div>
+                            <div className='vote d-inline-block'>
+                                <IoMdStar className='star-point' />
+                                <IoMdStar className='star-point' />
+                                <IoMdStar className='star-point' />
+                                <IoMdStar className='star-point' />
+                                <IoMdStar className='star-point' />
+                            </div>
+                        </div>
+                        <hr />
+                        <div className='product-price mt-0'>
+                            <div className='price-sale d-inline' style={{ fontSize: '25px', marginRight: '20px' }}>200,000đ</div>
                             <div className='price-real d-inline'>350,000</div>
+                            <div className='sale d-inline'>Giảm 30%</div>
                         </div>
 
-                        <div className='info-color-product'>
+                        <div className='info-color-product mt-3'>
                             <div className='d-inline '>Màu sắc</div>
                             <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Đen</div>
-                            <div className='d-flex'>
-                                <button>Đen</button>
-                                <button>Xanh</button>
-                                <button>Trắng</button>
+                            <div className='d-flex mt-2'>
+                                <label><img src={vd1} /></label>
+                                <label><img src={vd1} /></label>
+                                <label><img src={vd1} /></label>
                             </div>
                         </div>
-                        <div className='size-product d-flex flex-column'>
+                        <div className='size-product d-flex flex-column mt-3'>
                             <div>
                                 <div className='d-inline'>Kích thước:</div>
-                                <div className='d-inline mx-4' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
+                                <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
                             </div>
                             <div className='list-size-items d-flex mt-2'>
-                                <div className='size-items'>XS</div>
-                                <div className='size-items'>X</div>
-                                <div className='size-items'>M</div>
-                                <div className='size-items'>L</div>
-                                <div className='size-items'>XL</div>
-                                <div className='size-items'>XXL</div>
+                                <label className='size-items'><span>XS</span></label>
+                                <label className='size-items'><span>X</span></label>
+                                <label className='size-items'><span>M</span></label>
+                                <label className='size-items'><span>L</span></label>
+                                <label className='size-items'><span>XL</span></label>
+                                <label className='size-items'><span>XXL</span></label>
+                            </div>
+                            <div className='input-quantity mt-3'>
+                                <input type='button' className='minus-quantity border' value={'-'} />
+                                <input type='text' className='text-center border-top border-bottom w-25' value={1} />
+                                <input type='button' value={'+'} className='plus-quantity border' />
+                            </div>
+                            <div className='add-cart mt-3'>
+                                <button className='add-to-cart'>THÊM VÀO GIỎ HÀNG</button>
+                                <button className='add-to-cart add-quick-cart'>MUA NGAY</button>
+                            </div>
+                            <div className='favourite mt-4 d-flex justify-content-center '>
+                                <button><CiHeart className='mb-1' /> YÊU THÍCH</button>
+                            </div>
+                            <div className='share-product mt-3 d-flex justify-content-center'>
+                                <label>Chia sẻ <FaFacebook className='mb-1 ms-2' style={{ fontSize: '30px' }} /></label>
                             </div>
                         </div>
 
                     </div>
+                </div>
+                <hr />
+                <div className='description-product'>
+                    <h1>1. THÔNG TIN SẢN PHẨM</h1>
+                    <ul>
+                        <li>➤ Màu sắc: đen, trắng</li>
+                        <li>➤ Chất liệu: tweed</li>
+                        <li>➤ Set đồ phù hợp phong cách năng động, thoải mái</li>
+                        <li>➤ Mô tả chung: Chất liệu tweed, ko co giãn, đứng phom, áo suông dáng ngắn, chân váy dáng suông dài, sản phẩm 1 lớp, chất liệu dày dặn đứng phom.
+                            Áo mở khuy trước, chân váy kéo khóa sau, chân váy dáng dài, xẻ sau đính khuy túi trước, áo cổ trụ phối tay bồng vải thô,
+                            thích hợp mặc set hoặc tách set mix áo cùng quần suông, chân váy cùng áo thun ôm, sản phẩm mặc dạo phố, công sở</li>
+                        <li>➤ Thông số size: XS, S, M, L, XL, XXL</li>
+                    </ul>
+                    <h1>2. ĐẶC ĐIỂM SẢN PHẨM</h1>
+                    <ul>
+                        <li>➤ Set đồ được yêu thích bởi chất tweed cao cấp dày dặn, bề mặt nổi nhẹ chất dệt, chuẩn form, có cảm giác mềm mại trên da, tạo sự thoải mái cho người mặc.</li>
+                        <li>➤ Set đồ bao gồm một một thiết kế áo ở hữu form dáng ngắn nhẹ nhàng giúp tỉ lệ cơ thể nàng hoàn hảo và cuốn hút hơn, kết hợp với chi tiết tay áo phối vải thô nhẹ nhàng, thoải mái. Kết
+                            hợp cùng thiết kế chân váy có form dáng suông dễ dàng che khuyết điểm phần chân chưa hoàn hảo</li>
+                        <li>➤ Tính ứng dụng: Set đồ phù hợp mặc đi làm, đi chơi, đi hẹn hò dạo phố</li>
+                    </ul>
+
+                    <h1>3. HƯỚNG DẪN BẢO QUẢN SẢN PHẨM</h1>
+                    <ul>
+                        <li>➤ Lộn trái sản phẩm khi giặt, không giặt chung sản phẩm trắng với quần áo tối màu.</li>
+                        <li>➤ Giặt với sản phẩm cùng màu.</li>
+                        <li>➤ Sản phẩm đậm màu hãng khuyến cáo nên giặt nước trắng 2 -3 lần đầu.</li>
+                        <li>➤ Không sử dụng hóa chất tẩy có chứa Clo, không ngâm sản phẩm.</li>
+                        <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường.</li>
+                        <li>➤ Không phơi trực tiếp dưới ánh nắng mặt trời.</li>
+                        <li>➤ Sấy khô ở nhiệt độ thấp.</li>
+                        <li>➤ Là ở nhiệt độ thấp, ≤ 110°C.</li>
+                    </ul>
                 </div>
             </div>
         </div>
