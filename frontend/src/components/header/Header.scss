@@ -1,0 +1,73 @@
+:root {
+    --fontSize-icons: calc(6px + 1vw);
+    --fontSize-text: calc(3px+1vw);
+}
+
+.header-desktop {
+    display: block;
+
+    img {
+        width: 13vw;
+        height: 15vh;
+        object-fit: contain;
+    }
+
+    .searchTop {
+        width: 360px;
+        height: 37px;
+        margin: 25px 0;
+        border: 2px solid #d5d5d5;
+        border-radius: 16px;
+        padding: 0 12px;
+
+        input {
+            font-size: 14px;
+            outline: none;
+            border: none;
+            height: 33px;
+        }
+
+        .icons {
+            font-size: var(--fontSize-icons);
+            padding-bottom: 2px;
+            color: #5b5a5a;
+        }
+    }
+
+    button {
+        border: none;
+        background-color: white;
+    }
+}
+
+
+//giao diện mobile
+.header-mobile {
+    margin: 0 !important;
+
+    .navbar-brand {
+        img {
+            width: 15vw;
+            object-fit: contain;
+        }
+    }
+
+    .btn-login {
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-left: 25px;
+    }
+
+
+}
+
+
+
+
+
+
+
+.offcanvas-title img {
+    width: 15vw;
+    object-fit: contain;
+}

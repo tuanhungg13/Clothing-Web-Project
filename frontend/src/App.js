@@ -2,52 +2,40 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import { Routes, Route } from 'react-router-dom';
-import Header from './components/header/Header';
-import Nav from './components/navigation/Nav';
-import { BrowserRouter } from "react-router-dom";
 import Home from './components/homePage/Home';
-import Product from './components/Product/productPage/Product';
-import ProductOnSale from './components/Product/productOnSalePage/ProductOnSale';
+import Product from './components/product/productPage/Product';
+import ProductOnSale from './components/product/productOnSalePage/ProductOnSale';
 import Instruction from './components/instructionPage/Instruction';
 import Announcement from './components/announcement/Announcement';
-import ProductDetails from './components/Product/productDetails/ProductDetails';
+import ProductDetails from './components/product/productDetails/ProductDetails';
+import Login from './components/login/Login';
+
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <header className="App-header">
-          <Header />
-          <Nav />
-        </header>
-        <div>
-          <Routes>
-            <Route
-              path="/"
-              element={<Home />}
-            />
+    <Routes>
+      <Route
+        path='/login'
+        element={<Login />}
+      />
 
-            <Route
-              path="/san-pham"
-              element={<Product />}
-            />
-            <Route path="/san-pham" element={<Product />} >
-              {/* Đường dẫn của route con bắt đầu với đường dẫn của route cha */}
-              {/* <Route path="/san-pham/" element={<ModalCreateUser />} />
-                    <Route path="update" element={<ModalCreateUser />} />
-                    <Route path="delete" element={<ModalCreateUser />} /> */}
-            </Route>
-            <Route path='/sale' element={<ProductOnSale />} />
-            <Route path='/huong-dan-mua-hang' element={<Instruction />} />
-            <Route path='/thong-bao' element={<Announcement />} />
-            <Route path='/thong-tin-san-pham' element={<ProductDetails />} />
-            {/* Xử lý các trang ngoại lệ */}
-            {/* <Route path="*" element={<Navigate to="/" />} /> */}
-          </Routes>
-        </div>
+      <Route
+        path="/"
+        element={<Home />}
+      />
 
+      <Route
+        path="/san-pham"
+        element={<Product />}
+      />
 
-      </div>
-    </BrowserRouter>
+      <Route path='/sale' element={<ProductOnSale />} />
+      <Route path='/huong-dan-mua-hang' element={<Instruction />} />
+      <Route path='/thong-bao' element={<Announcement />} />
+      <Route path='/thong-tin-san-pham' element={<ProductDetails />} />
+      {/* Xử lý các trang ngoại lệ */}
+      {/* <Route path="*" element={<Navigate to="/" />} /> */}
+    </Routes>
+
   );
 }
 

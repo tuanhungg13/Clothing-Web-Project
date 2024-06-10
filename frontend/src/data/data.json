@@ -5,70 +5,80 @@
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product01.webp",
-            "status": "Hết hàng"
+            "status": "",
+            "sale": "200,000đ"
         },
         {
             "id": 2,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product02.webp",
-            "status": "Còn hàng"
+            "status": "",
+            "sale": "200,000đ"
         },
         {
             "id": 3,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product03.webp",
-            "status": "Hết hàng"
+            "status": "",
+            "sale": "200,000đ"
         },
         {
             "id": 4,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product04.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": "200,000đ"
         },
         {
             "id": 5,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product05.webp",
-            "status": "Hết hàng"
+            "status": "",
+            "sale": ""
         },
         {
             "id": 6,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product06.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": ""
         },
         {
             "id": 7,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product07.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": "200,000đ"
         },
         {
             "id": 8,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product08.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": ""
         },
         {
             "id": 9,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product09.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": ""
         },
         {
             "id": 10,
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product10.webp",
-            "status": "Hết hàng"
+            "status": "Hết hàng",
+            "sale": ""
         }
     ],
     "outfit": [
@@ -84,7 +94,7 @@
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product02.webp",
-            "status": "Còn hàng"
+            "status": ""
         },
         {
             "id": 3,
@@ -149,7 +159,7 @@
             "name": "Áo phông unisex",
             "price": "350,000đ",
             "image": "product02.webp",
-            "status": "Còn hàng"
+            "status": ""
         },
         {
             "id": 3,

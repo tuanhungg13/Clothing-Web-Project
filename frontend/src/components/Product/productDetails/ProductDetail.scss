@@ -1,0 +1,186 @@
+.product-details-page {
+    margin: 50px 100px 0 100px;
+
+    /* thông báo sản phẩm */
+    .nav-title {
+        font-size: 14px;
+        margin-left: -50px;
+        margin-top: -38px;
+        margin-bottom: 40px;
+    }
+
+    .container {
+
+        /* danh sách ảnh */
+        .list-imgs-product {
+            height: 630px;
+            position: relative;
+            overflow: hidden;
+            padding-top: 20px;
+            padding-bottom: 40px;
+
+            img {
+                max-width: 100%;
+                height: 100%;
+                background-color: #f7f7f7;
+                padding: 5px;
+                border: 1px solid #e0e0e0;
+            }
+
+            /* button điều hướng img */
+            .prevBtn {
+                background-color: transparent;
+                position: absolute;
+                top: -15px;
+                left: 40%;
+                font-size: 20px;
+                border: none;
+
+            }
+
+            .nextBtn {
+                background-color: transparent;
+                position: absolute;
+                bottom: -10px;
+                left: 40%;
+                font-size: 20px;
+                border: none;
+
+
+            }
+
+        }
+
+        /* hiển thị ảnh */
+        .display-img-product {
+            img {
+                max-width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .info-product {
+
+        /* điểm đánh giá sản phẩm */
+        .voteView {
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .vote {
+
+            .star-point {
+                margin-bottom: 5px;
+            }
+        }
+
+        .product-price {
+            .price-sale {
+                color: rgb(199, 25, 25);
+                margin-right: 5px;
+            }
+
+            .price-real {
+                color: rgb(146, 144, 144);
+                text-decoration-line: line-through;
+            }
+
+            /* giảm giá */
+            .sale {
+                margin-left: 15px;
+                color: #e01b22;
+                font-weight: 600;
+                font-size: 15px;
+            }
+        }
+
+        /* danh sách màu quần áo*/
+        .info-color-product {
+            label {
+                margin-right: 8px;
+                background-color: #ffffff;
+                border: 1px solid #d7d7d7;
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            img {
+                height: 27px;
+                width: 27px;
+                margin-left: 3px;
+                margin-top: 3px;
+                border-radius: 100%;
+            }
+        }
+
+        .size-product {
+            .list-size-items {
+
+                /* danh sách size */
+                .size-items {
+                    text-align: center;
+                    min-width: 40px;
+                    height: 40px;
+                    margin-right: 10px;
+                    background: #ffffff;
+                    border: 1px solid #d7d7d7;
+                    line-height: 38px;
+                }
+            }
+        }
+
+        /* số lượng muốn mua */
+        .input-quantity {
+            input {
+                border: none;
+                height: 40px;
+
+                .minus-quantity {
+                    width: 50px;
+                }
+
+                .plus-quantity {
+                    width: 50px;
+                }
+
+            }
+        }
+
+        .add-cart {
+
+            /* button thêm vào giỏ hàng */
+            .add-to-cart {
+                width: 45%;
+                min-height: 50px;
+                background-color: black;
+                font-size: 15px;
+                color: white;
+                margin-right: 10px;
+            }
+        }
+
+        /* button yêu thích */
+        .favourite {
+            width: 250px;
+            height: 40px;
+            border: 1px solid black;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+    }
+
+    /* mô tả sản phẩm */
+    .description-product {
+        li {
+            margin-top: 9px;
+            list-style: none;
+        }
+
+        h1 {
+            font-size: 20px;
+        }
+    }
+}

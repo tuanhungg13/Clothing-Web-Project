@@ -1,12 +1,18 @@
 import React from "react";
-import './Instruction.css';
+import './Instruction.scss';
 import vd1 from '../../assets/img/poster_7.jpg'
-
-const Instruction = () => {
+import Announcement from "../announcement/Announcement";
+import { IoMdArrowDropright } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
+const Instruction = (props) => {
     return (
         <div className="instruction-page">
             <div className="container">
-                <div className="row mt-3">
+                <div className='nav-title' style={{ marginTop: '10px', fontSize: '14px' }}>
+                    <FaHome className='mb-1' /> Trang chủ <IoMdArrowDropright />Hướng dẫn mua hàng
+                </div>
+                <div className="row mt-4">
+
                     <div className="content-left-post col-8">
                         <h2>Hướng dẫn mua hàng</h2>
                         <div className="fw-bolder fst-italic mb-4">Khi mua hàng tại GenBasic Clothes, bạn có thể lựa chọn một trong cách mua hàng sau:</div>
@@ -36,7 +42,7 @@ const Instruction = () => {
                         </div>
                     </div>
                     <div className="content-right-post col-4">
-
+                        <Announcement limit={3} />
                     </div>
                 </div>
 

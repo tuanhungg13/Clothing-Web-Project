@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProductDetails.css';
+import './ProductDetail.scss';
 import vd1 from '../../../assets/img/product01.webp'
 import vd2 from '../../../assets/img/product02.webp'
 import Slider from "react-slick";
@@ -12,12 +12,12 @@ import { FaFacebook, FaHome } from "react-icons/fa";
 
 
 
-const ProductDetails = () => {
+const ProductDetails = (props) => {
     const settings = {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 5,
         slidesToScroll: 1,
         autoplaySpeed: 2000,
         vertical: true,
@@ -37,11 +37,11 @@ const ProductDetails = () => {
             <div className='nav-title'>
                 <FaHome className='mb-1' /> <IoMdArrowDropright />Sản phẩm <IoMdArrowDropright /> Áo phông <IoMdArrowDropright /> Áo phông unisex
             </div>
-            <div className='container'>
+            <div className='container '>
                 <div className='row'>
                     <div className='imgs-product col-lg-8'>
                         <div className='row'>
-                            <div className='list-imgs-product col-lg-3'>
+                            <div className='list-imgs-product col-lg-2'>
                                 <Slider {...settings} ref={sliderRef}>
 
                                     <div>
@@ -67,7 +67,7 @@ const ProductDetails = () => {
                                 <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
                                 <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                             </div>
-                            <div className='display-img-product col-lg-9' >
+                            <div className='display-img-product col-lg-10' >
                                 <img src={vd1} alt='' />
                             </div>
                         </div>
@@ -113,59 +113,60 @@ const ProductDetails = () => {
                                 <label className='size-items'><span>XL</span></label>
                                 <label className='size-items'><span>XXL</span></label>
                             </div>
-                            <div className='input-quantity mt-3'>
-                                <input type='button' className='minus-quantity border' value={'-'} />
-                                <input type='text' className='text-center border-top border-bottom w-25' value={1} />
-                                <input type='button' value={'+'} className='plus-quantity border' />
-                            </div>
-                            <div className='add-cart mt-3'>
-                                <button className='add-to-cart'>THÊM VÀO GIỎ HÀNG</button>
-                                <button className='add-to-cart add-quick-cart'>MUA NGAY</button>
-                            </div>
-                            <div className='favourite mt-4 d-flex justify-content-center '>
-                                <button><CiHeart className='mb-1' /> YÊU THÍCH</button>
-                            </div>
-                            <div className='share-product mt-3 d-flex justify-content-center'>
-                                <label>Chia sẻ <FaFacebook className='mb-1 ms-2' style={{ fontSize: '30px' }} /></label>
-                            </div>
                         </div>
-
+                        <div className='input-quantity mt-3'>
+                            <input type='button' className='minus-quantity border' value={'-'} />
+                            <input type='text' className='text-center border-top border-bottom w-25' value={1} />
+                            <input type='button' value={'+'} className='plus-quantity border' />
+                        </div>
+                        <div className='add-cart mt-3'>
+                            <button className='add-to-cart'>THÊM VÀO GIỎ HÀNG</button>
+                            <button className='add-to-cart add-quick-cart'>MUA NGAY</button>
+                        </div>
+                        <div className='favourite mt-4 d-flex justify-content-center '>
+                            <button className='border-0 bg-transparent'><CiHeart className='mb-1' /> YÊU THÍCH</button>
+                        </div>
+                        <div className='share-product mt-3 d-flex justify-content-center'>
+                            <label>Chia sẻ <FaFacebook className='mb-1 ms-2' style={{ fontSize: '30px' }} /></label>
+                        </div>
                     </div>
-                </div>
-                <hr />
-                <div className='description-product'>
-                    <h1>1. THÔNG TIN SẢN PHẨM</h1>
-                    <ul>
-                        <li>➤ Màu sắc: đen, trắng</li>
-                        <li>➤ Chất liệu: tweed</li>
-                        <li>➤ Set đồ phù hợp phong cách năng động, thoải mái</li>
-                        <li>➤ Mô tả chung: Chất liệu tweed, ko co giãn, đứng phom, áo suông dáng ngắn, chân váy dáng suông dài, sản phẩm 1 lớp, chất liệu dày dặn đứng phom.
-                            Áo mở khuy trước, chân váy kéo khóa sau, chân váy dáng dài, xẻ sau đính khuy túi trước, áo cổ trụ phối tay bồng vải thô,
-                            thích hợp mặc set hoặc tách set mix áo cùng quần suông, chân váy cùng áo thun ôm, sản phẩm mặc dạo phố, công sở</li>
-                        <li>➤ Thông số size: XS, S, M, L, XL, XXL</li>
-                    </ul>
-                    <h1>2. ĐẶC ĐIỂM SẢN PHẨM</h1>
-                    <ul>
-                        <li>➤ Set đồ được yêu thích bởi chất tweed cao cấp dày dặn, bề mặt nổi nhẹ chất dệt, chuẩn form, có cảm giác mềm mại trên da, tạo sự thoải mái cho người mặc.</li>
-                        <li>➤ Set đồ bao gồm một một thiết kế áo ở hữu form dáng ngắn nhẹ nhàng giúp tỉ lệ cơ thể nàng hoàn hảo và cuốn hút hơn, kết hợp với chi tiết tay áo phối vải thô nhẹ nhàng, thoải mái. Kết
-                            hợp cùng thiết kế chân váy có form dáng suông dễ dàng che khuyết điểm phần chân chưa hoàn hảo</li>
-                        <li>➤ Tính ứng dụng: Set đồ phù hợp mặc đi làm, đi chơi, đi hẹn hò dạo phố</li>
-                    </ul>
 
-                    <h1>3. HƯỚNG DẪN BẢO QUẢN SẢN PHẨM</h1>
-                    <ul>
-                        <li>➤ Lộn trái sản phẩm khi giặt, không giặt chung sản phẩm trắng với quần áo tối màu.</li>
-                        <li>➤ Giặt với sản phẩm cùng màu.</li>
-                        <li>➤ Sản phẩm đậm màu hãng khuyến cáo nên giặt nước trắng 2 -3 lần đầu.</li>
-                        <li>➤ Không sử dụng hóa chất tẩy có chứa Clo, không ngâm sản phẩm.</li>
-                        <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường.</li>
-                        <li>➤ Không phơi trực tiếp dưới ánh nắng mặt trời.</li>
-                        <li>➤ Sấy khô ở nhiệt độ thấp.</li>
-                        <li>➤ Là ở nhiệt độ thấp, ≤ 110°C.</li>
-                    </ul>
                 </div>
             </div>
+            <hr />
+            <div className='description-product'>
+                <h1>1. THÔNG TIN SẢN PHẨM</h1>
+                <ul>
+                    <li>➤ Màu sắc: đen, trắng</li>
+                    <li>➤ Chất liệu: tweed</li>
+                    <li>➤ Set đồ phù hợp phong cách năng động, thoải mái</li>
+                    <li>➤ Mô tả chung: Chất liệu tweed, ko co giãn, đứng phom, áo suông dáng ngắn, chân váy dáng suông dài, sản phẩm 1 lớp, chất liệu dày dặn đứng phom.
+                        Áo mở khuy trước, chân váy kéo khóa sau, chân váy dáng dài, xẻ sau đính khuy túi trước, áo cổ trụ phối tay bồng vải thô,
+                        thích hợp mặc set hoặc tách set mix áo cùng quần suông, chân váy cùng áo thun ôm, sản phẩm mặc dạo phố, công sở</li>
+                    <li>➤ Thông số size: XS, S, M, L, XL, XXL</li>
+                </ul>
+                <h1>2. ĐẶC ĐIỂM SẢN PHẨM</h1>
+                <ul>
+                    <li>➤ Set đồ được yêu thích bởi chất tweed cao cấp dày dặn, bề mặt nổi nhẹ chất dệt, chuẩn form, có cảm giác mềm mại trên da, tạo sự thoải mái cho người mặc.</li>
+                    <li>➤ Set đồ bao gồm một một thiết kế áo ở hữu form dáng ngắn nhẹ nhàng giúp tỉ lệ cơ thể nàng hoàn hảo và cuốn hút hơn, kết hợp với chi tiết tay áo phối vải thô nhẹ nhàng, thoải mái. Kết
+                        hợp cùng thiết kế chân váy có form dáng suông dễ dàng che khuyết điểm phần chân chưa hoàn hảo</li>
+                    <li>➤ Tính ứng dụng: Set đồ phù hợp mặc đi làm, đi chơi, đi hẹn hò dạo phố</li>
+                </ul>
+
+                <h1>3. HƯỚNG DẪN BẢO QUẢN SẢN PHẨM</h1>
+                <ul>
+                    <li>➤ Lộn trái sản phẩm khi giặt, không giặt chung sản phẩm trắng với quần áo tối màu.</li>
+                    <li>➤ Giặt với sản phẩm cùng màu.</li>
+                    <li>➤ Sản phẩm đậm màu hãng khuyến cáo nên giặt nước trắng 2 -3 lần đầu.</li>
+                    <li>➤ Không sử dụng hóa chất tẩy có chứa Clo, không ngâm sản phẩm.</li>
+                    <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường.</li>
+                    <li>➤ Không phơi trực tiếp dưới ánh nắng mặt trời.</li>
+                    <li>➤ Sấy khô ở nhiệt độ thấp.</li>
+                    <li>➤ Là ở nhiệt độ thấp, ≤ 110°C.</li>
+                </ul>
+            </div>
         </div>
+
     )
 }
 

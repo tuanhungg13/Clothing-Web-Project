@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Home.css';
+import './Home.scss';
 import poster1 from '../../assets/img/poster_4.jpg';
 import poster2 from '../../assets/img/poster_5.jpg';
 import poster3 from '../../assets/img/poster_6.jpg';
@@ -9,7 +9,6 @@ import poster6 from '../../assets/img/poster_2.jpg';
 import introduce from '../../assets/video/introduce.mp4';
 import data from '../../data/data.json';
 import { NavLink } from 'react-router-dom';
-import ProductDetails from '../Product/productDetails/ProductDetails';
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [currentOutfit, setCurrentOutfit] = useState(0);
@@ -102,7 +101,7 @@ const Home = () => {
     };
 
     return (
-        <div>
+        <>
             {/* background-header */}
             <div className="slideshow-container">
                 <div className='list-slides' ref={listRef}>
@@ -175,13 +174,15 @@ const Home = () => {
                         {data['new-product'].map((item, index) => {
                             return (
                                 <div className='content-product col-sm-4 d-flex flex-column  text-center'>
-                                    <div className='product-detail '>
-                                        <img src={require(`../../assets/img/${item.image}`)} alt='' />
-                                        <div className='product-name'>{item.name}</div>
-                                    </div>
-                                    <div className='product-price'>
-                                        <div>{item.price}</div>
-                                        <button>Thêm vào giỏ hàng</button>
+                                    <div className='product-information'>
+                                        <div className='product-detail '>
+                                            <img src={require(`../../assets/img/${item.image}`)} alt='' />
+                                            <div className='product-name'>{item.name}</div>
+                                        </div>
+                                        <div className='product-price'>
+                                            <div>{item.price}</div>
+                                            <button>Thêm vào giỏ hàng</button>
+                                        </div>
                                     </div>
                                 </div>
                             )
@@ -201,7 +202,7 @@ const Home = () => {
                         </div>
                         <div className='container-outfit'>
                             <div className='content-outfit'>
-                                <div className='list-slides' ref={listOutfit}>
+                                <div className='list-outfit' ref={listOutfit}>
                                     {data.outfit.map((item, index) => {
                                         return (
                                             <div className='items-outfit' key={`outfit-${index}`}>
@@ -245,7 +246,7 @@ const Home = () => {
                 </div>
 
             </div>
-        </div>
+        </>
 
     );
 };
