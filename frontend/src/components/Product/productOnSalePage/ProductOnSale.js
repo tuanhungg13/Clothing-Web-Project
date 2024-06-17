@@ -181,7 +181,7 @@ const ProductOnSale = (props) => {
                                                 <button>Thêm vào giỏ hàng</button>
                                             </div>
                                             <label className='label-sold'>{item.status}</label>
-                                            {!item.status && <label className='label-sale'>50%</label>}
+                                            {!item.status && item.sale && <label className='label-sale'>50%</label>}
 
                                         </div>
                                     </div>

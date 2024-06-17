@@ -34,10 +34,18 @@
         }
     }
 
+    .account {
+        img {
+            width: 35px;
+            height: 35px;
+        }
+    }
+
     button {
         border: none;
         background-color: white;
     }
+
 }
 
 
@@ -52,10 +60,23 @@
         }
     }
 
+    button {
+        width: 35px;
+        height: 35px;
+        margin-right: -70px;
+    }
+
     .btn-login {
         border: 1px solid black;
         border-radius: 5px;
         margin-left: 25px;
+    }
+
+    .account {
+        img {
+            width: 35px;
+            height: 35px;
+        }
     }
 
 

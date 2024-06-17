@@ -16,9 +16,9 @@ const Login = () => {
                         placeholder='Nhập password' onChange={(event) => { setPassword(event.target.value) }}
                     />
 
-                    <button className=''>Đăng nhập</button>
+                    <button className='mt-3'>Đăng nhập</button>
                     <label>Quên mật khẩu</label>
-                    <label>Bạn chưa có tài khoản? <NavLink>Đăng ký</NavLink></label>
+                    <label >Bạn chưa có tài khoản? <NavLink to='/register' className='text-decoration-none'>Đăng ký</NavLink></label>
                 </form>
             </div>
         </div>

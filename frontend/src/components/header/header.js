@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png'
 import './Header.scss'
@@ -7,6 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import Nav from '../navigation/Nav';
 const Header = () => {
+    const [account, setAccount] = useState("123")
     return (
         <>
             <div className='header-desktop container d-lg-flex d-none justify-content-evenly align-items-center' >
@@ -17,10 +18,28 @@ const Header = () => {
                 </div>
 
                 <div className='hotline'><FaPhone style={{ marginRight: '5px' }} />  Hotline: 0123456789</div>
-                <div className='login d-flex'>
-                    <button>Đăng Nhập |</button>
-                    <button style={{ marginLeft: '-5px' }}>Đăng kí</button>
-                </div>
+                {!account &&
+                    <div className='login d-flex'>
+                        <button><NavLink to='/login' className='text-decoration-none text-dark'>Đăng Nhập |</NavLink></button>
+                        <button style={{ marginLeft: '-5px' }}><NavLink to='/register' className='text-decoration-none text-dark'>Đăng kí</NavLink></button>
+                    </div>
+                }
+
+                {account &&
+
+                    <div class="account dropdown text-end">
+                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="mdo" class="rounded-circle" />
+                        </a>
+                        <ul class="dropdown-menu text-small">
+                            <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#">Thông tin đơn hàng</a></li>
+                            <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                }
 
                 <button><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px' }} /> Giỏ hàng</button>
             </div>
@@ -31,10 +50,26 @@ const Header = () => {
                     <div className="container-fluid">
                         <Nav />
                         <NavLink className="navbar-brand me-0" to='/'><img src={logo} alt='' /></NavLink>
-                        <div>
-                            <button><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px' }} /></button>
+
+                        <button className='ms-5 border-0 rounded-circle p-2'><FaShoppingCart style={{ fontSize: '26px', paddingBottom: '10px', marginLeft: '-4px' }} /></button>
+                        {!account &&
                             <button className='btn-login'>Login</button>
-                        </div>
+                        }
+                        {account &&
+                            <div class="account dropdown text-end">
+                                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://github.com/mdo.png" alt="mdo" class="rounded-circle" />
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end text-small">
+                                    <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                                    <li><a class="dropdown-item" href="#">Thông tin đơn hàng</a></li>
+                                    <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                                </ul>
+                            </div>
+                        }
+
                     </div>
                 </nav>
             </div>

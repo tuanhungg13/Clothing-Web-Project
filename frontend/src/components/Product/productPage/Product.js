@@ -4,14 +4,14 @@ import data from '../../../data/data.json';
 import { Slider } from 'antd';
 import { IoMdArrowDropright } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
-
+import { useNavigate } from 'react-router-dom';
 
 const Product = (props) => {
     const [products, setProducts] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 3000000]);
-    const [selectedOption, setSelectedOption] = useState()
+    const [selectedOption, setSelectedOption] = useState();
     const [selectedSize, setSlectedSize] = useState();
-
+    const navigation = useNavigate();
     useEffect(() => {
         setProducts(data.products);
     }, []);
@@ -30,6 +30,11 @@ const Product = (props) => {
 
     const handleChooseSize = (size) => {
         setSlectedSize(size);
+    }
+
+    const handleGetInforProduct = (id) => {
+
+        navigation(`/san-pham/${id}`)
     }
     return (
         <>
@@ -174,7 +179,7 @@ const Product = (props) => {
                                 return (
                                     <div className='product-content col-6 col-sm-4 d-flex flex-column text-center' key={`product-${index}`}>
                                         <div className='product-information'>
-                                            <div className='product-detail'>
+                                            <div className='product-detail' onClick={() => handleGetInforProduct(item.id)}>
                                                 <img src={require(`../../../assets/img/${item.image}`)} alt='' />
                                                 <div className='product-name'>{item.name}</div>
                                             </div>
@@ -184,7 +189,7 @@ const Product = (props) => {
                                                 <button>Thêm vào giỏ hàng</button>
                                             </div>
                                             <label className='label-sold'>{item.status}</label>
-                                            {!item.status && <label className='label-sale'>50%</label>}
+                                            {!item.status && item.sale && <label className='label-sale'>50%</label>}
 
                                         </div>
                                     </div>

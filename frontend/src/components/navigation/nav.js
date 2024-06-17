@@ -38,7 +38,7 @@ const Nav = () => {
                                 <NavLink to="/huong-dan-mua-hang">Hướng dẫn</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/thong-bap">Thông báo</NavLink>
+                                <NavLink to="/thong-bao">Thông báo</NavLink>
                             </li>
                         </ul>
                     </div>

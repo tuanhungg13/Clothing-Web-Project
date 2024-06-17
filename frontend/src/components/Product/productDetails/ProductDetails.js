@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProductDetail.scss';
 import vd1 from '../../../assets/img/product01.webp'
 import vd2 from '../../../assets/img/product02.webp'
@@ -9,10 +9,12 @@ import { useRef } from 'react';
 import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
-
+import { useParams, useNavigate } from 'react-router-dom';
+import data from '../../../data/data.json'
 
 
 const ProductDetails = (props) => {
+    const [productDetails, setProductDetails] = useState({});
     const settings = {
         dots: false,
         infinite: true,
@@ -23,6 +25,14 @@ const ProductDetails = (props) => {
         vertical: true,
         verticalSwiping: true
     };
+
+    let { productId } = useParams();
+    useEffect(() => {
+        const foundProduct = data.products.find(item => item.id === parseInt(productId));
+        setProductDetails(foundProduct);
+        console.log('check params', productId);
+        console.log('check state:', foundProduct)
+    }, [])
     const sliderRef = useRef();
 
     const prevSlide = () => {
@@ -68,7 +78,7 @@ const ProductDetails = (props) => {
                                 <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                             </div>
                             <div className='display-img-product col-lg-10' >
-                                <img src={vd1} alt='' />
+                                <img src={productDetails?.image ? require(`../../../assets/img/${productDetails.image}`) : ''} alt='' />
                             </div>
                         </div>
                     </div>
@@ -86,9 +96,11 @@ const ProductDetails = (props) => {
                         </div>
                         <hr />
                         <div className='product-price mt-0'>
-                            <div className='price-sale d-inline' style={{ fontSize: '25px', marginRight: '20px' }}>200,000đ</div>
-                            <div className='price-real d-inline'>350,000</div>
-                            <div className='sale d-inline'>Giảm 30%</div>
+                            <div className={`price-sale d-inline me-4`}>{productDetails?.sale}</div>
+                            <div className={`${productDetails?.sale ? 'price-real d-inline' : 'price'}`}>{productDetails?.price}</div>
+                            <div className={`${productDetails?.sale ? 'sale d-inline' : ''}`}>
+                                {productDetails?.sale ? `Giảm ${((parseFloat(productDetails.price) - parseFloat(productDetails.sale)) * 100 / parseFloat(productDetails.price)).toFixed(2)} %` : ''}
+                            </div>
                         </div>
 
                         <div className='info-color-product mt-3'>
