@@ -2,9 +2,6 @@ import User from "../models/users"
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../middlewares/jwt';
 import jwt from 'jsonwebtoken';
-import promisify from 'util'
-
-
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -157,7 +154,7 @@ const handleRefreshAccessToken = async (cookie) => {
 
 }
 
-const handleGetAllUsers = async (data) => {
+const handleGetAllUsers = async () => {
     try {
         const listUsers = await User.find().select('-password -refreshToken')
         if (!listUsers) {

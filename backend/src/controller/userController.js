@@ -150,7 +150,7 @@ const updateUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const response = await userService.handleGetAllUsers(req.body);
+        const response = await userService.handleGetAllUsers();
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
