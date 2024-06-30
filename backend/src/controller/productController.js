@@ -23,9 +23,9 @@ const createNewProduct = async (req, res) => {
     }
 }
 
-const getAllProducts = async (req, res) => {
+const getProducts = async (req, res) => {
     try {
-        const response = await productService.handleGetAllProducts();
+        const response = await productService.handleGetProducts(req.query);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -34,7 +34,7 @@ const getAllProducts = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "getAllProducts function" in productControllers.js: ${error.message} `,
+            EM: `There is an error in the "getProducts function" in productControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -89,4 +89,4 @@ const updateProduct = async (req, res) => {
 
 
 
-module.exports = { createNewProduct, getAllProducts, deleteProduct, updateProduct }
+module.exports = { createNewProduct, getProducts, deleteProduct, updateProduct }

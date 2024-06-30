@@ -28,26 +28,68 @@ const handleCreateNewProduct = async (data) => {
 }
 
 
-const handleGetAllProducts = async () => {
+const handleGetProducts = async (data) => {
     try {
-        const allProduct = await Product.find();
-        if (!allProduct) {
-            return ({
-                EM: "get all products failed!!",
+        const queries = { ...data };
+        console.log("check req.query:", data)
+        const excluderFields = ["sort", "limit", "page", "fields"];
+        //Loại bỏ các trường sort, limit, page, fields khỏi queries;
+        excluderFields.forEach(item => delete queries[item]);
+        //Format lại các operators cho đúng cú pháp của mongodb;
+        let queryString = JSON.stringify(queries);
+        console.log(queryString)
+        queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, condition => `$${condition}`);
+        console.log("2:", queryString)
+        queryString = JSON.parse(queryString);
+
+        //Filter
+        if (queries?.title) {
+            queryString.title = { $regex: queries.title, $options: "i" }
+            console.log("3:", queryString)
+        }
+        let queryCommand = Product.find(queryString);
+
+        //sort
+        if (data.sort) {
+            const sortBy = data.sort.split(",").join(" ")
+            queryCommand = queryCommand.sort(sortBy);
+        }
+
+        //field limiting
+        if (data.fields) {
+            const fields = data.fields.split(",").join(" ");
+            queryCommand = queryCommand.select(fields);
+        }
+
+        //pagination page
+        const page = +data.page || 1;
+        const limit = +data.limit || process.env.LIMIT_ITEM;
+        const offset = (page - 1) * limit;
+        queryCommand = queryCommand.skip(offset).limit(limit)
+
+        //Excute query
+        const listProduct = await queryCommand.exec();
+        const counts = await Product.find(queryString).countDocuments();
+        if (!listProduct) {
+            return {
+                EM: "Get products failed!",
                 EC: 1,
-                DT: []
-            })
+                DT: [],
+                counts
+            }
         }
         return ({
-            EM: " Get all products successfully!",
+            EM: "Get products successfully!",
             EC: 0,
-            DT: allProduct
+            DT: listProduct,
+            counts
         })
     } catch (error) {
         return {
-            EM: `There is an error in the "handleGetAllProducts function" in productService.js: ${error.message} `,
+            EM: `There is an error in the "handleGetProducts function" in productService.js: ${error.message} `,
             EC: 1,
-            DT: {}
+            DT: {},
+            counts: ""
         }
     }
 }
@@ -100,4 +142,4 @@ const handleUpdateProduct = async (pid, data) => {
     }
 }
 
-module.exports = { handleCreateNewProduct, handleGetAllProducts, handleDeleteProduct, handleUpdateProduct }
+module.exports = { handleCreateNewProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct }
