@@ -142,4 +142,42 @@ const handleUpdateProduct = async (pid, data) => {
     }
 }
 
-module.exports = { handleCreateNewProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct }
+
+const handleRatings = async (_id, data) => {
+    try {
+        const rating = await Product.findByIdAndUpdate(data.pid, {
+            $push: { ratings: { star: data.star, comment: data.comment, postedBy: _id } }
+        }, {
+            new: true
+        });
+        if (!rating) {
+            return {
+                EM: "Rating failed!",
+                EC: 1,
+                DT: []
+            }
+        }
+        const updatedProduct = await Product.findById(data.pid);
+        const ratingsCount = updatedProduct.ratings.length;
+        const sumRatings = updatedProduct.ratings.reduce((sum, item) => sum + item.star, 0);
+        console.log("check totalRatings: ", ratingsCount, sumRatings)
+        updatedProduct.totalRatings = Math.round(sumRatings * 10 / ratingsCount) / 10;
+        await updatedProduct.save();
+        return {
+            EM: "Rating successfully!",
+            EC: 0,
+            DT: updatedProduct
+        }
+    } catch (error) {
+        return ({
+            EM: `There is an error in the "handleRatings function" in productService.js: ${error.message} `,
+            EC: 1,
+            DT: {}
+        })
+    }
+}
+
+module.exports = {
+    handleCreateNewProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
+    handleRatings
+}

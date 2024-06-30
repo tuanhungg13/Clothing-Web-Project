@@ -7,5 +7,5 @@ router.post("/create", [verifyAccessToken, isAdmin], controllers.createNewProduc
 router.get("/", controllers.getProducts);
 router.delete("/delete/:pid", [verifyAccessToken, isAdmin], controllers.deleteProduct);
 router.put("/update/:pid", [verifyAccessToken, isAdmin], controllers.updateProduct);
-
+router.post("/rating", verifyAccessToken, controllers.ratings);
 module.exports = router
