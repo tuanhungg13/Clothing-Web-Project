@@ -75,7 +75,6 @@ const deleteBlogCategory = async (req, res) => {
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
-            DT: response.DT
         })
     } catch (error) {
         return res.status(500).json({

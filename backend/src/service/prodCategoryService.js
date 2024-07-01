@@ -87,7 +87,11 @@ const handleDeleteProdCategory = async (_pcid) => {
             EC: 0
         }
     } catch (error) {
-
+        return {
+            EM: `There is an error in the "handleDeleteProdCategory function" in productService.js: ${error.message} `,
+            EC: 1,
+            DT: {}
+        }
     }
 }
 

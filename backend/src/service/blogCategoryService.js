@@ -90,7 +90,6 @@ const handleDeleteBlogCategory = async (_bcid) => {
         return {
             EM: `There is an error in the "handleDeleteBlogCategory function" in blogCategoryService.js: ${error.message} `,
             EC: 1,
-            DT: {}
         }
     }
 }
