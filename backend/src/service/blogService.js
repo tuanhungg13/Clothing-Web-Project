@@ -93,6 +93,39 @@ const handleDeleteBlog = async (_bid) => {
     }
 }
 
+const handleLikeBlog = async (_id, _bid) => {
+    try {
+        const blog = await Blog.findById(_bid);
+        const isLiked = blog.likes.find(item => item.toString() === _id);
+        if (isLiked) {
+            await Blog.findByIdAndUpdate(_bid, {
+                $pull: { likes: _id }
+            }, {
+                new: true
+            })
+            return {
+                EM: "Unlike successfully!",
+                EC: 0
+            }
+        }
+        else {
+            await Blog.findByIdAndUpdate(_bid, {
+                $push: { likes: _id, }
+            }, { new: true })
+            return {
+                EM: "Like successfully!",
+                EC: 0
+            }
+        }
+
+    } catch (error) {
+        return {
+            EM: `There is an error in the "handleLikeBlog function" in blogService.js: ${error.message} `,
+            EC: 1,
+        }
+    }
+}
+
 module.exports = {
-    handleCreateNewBlog, handleGetBlogs, handleUpdateBlog, handleDeleteBlog
+    handleCreateNewBlog, handleGetBlogs, handleUpdateBlog, handleDeleteBlog, handleLikeBlog
 }

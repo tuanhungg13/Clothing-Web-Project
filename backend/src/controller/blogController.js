@@ -85,7 +85,30 @@ const deleteBlog = async (req, res) => {
     }
 }
 
+const likeBlog = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { bid } = req.params
+        if (!_id || !bid) {
+            return res.status(400).json({
+                EM: "_id or bid not found!",
+                EC: 1
+            })
+        }
+        const response = await blogService.handleLikeBlog(_id, bid);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "likeBlog func" in blogController.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
 
 module.exports = {
-    createNewBlog, getBlogs, updateBlog, deleteBlog
+    createNewBlog, getBlogs, updateBlog, deleteBlog, likeBlog
 }
