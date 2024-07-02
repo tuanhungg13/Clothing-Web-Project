@@ -6,8 +6,6 @@ const handleCreateNewProduct = async (data) => {
         data.slug = slugify(data.title);
         data.size = data.size.split(",");
         data.color = data.color.split(",");
-        data.size = data.size.map(size => String(size));
-        data.color = data.color.map(color => String(color))
         const newProduct = await Product.create(data);
         if (!newProduct) {
             return ({
@@ -126,11 +124,9 @@ const handleUpdateProduct = async (pid, data) => {
         }
         if (data.size) {
             data.size = data.size.split(",");
-            data.size = data.size.map(size => String(size));
         }
         if (data.color) {
             data.color = data.color.split(",");
-            data.color = data.color.map(color => String(color));
         }
         const updateProduct = await Product.findByIdAndUpdate(pid, data, { new: true });
         if (!updateProduct) {
