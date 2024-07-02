@@ -28,7 +28,14 @@ var productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-
+    size: {
+        type: Array,
+        required: true
+    },
+    color: {
+        type: Array,
+        required: true
+    },
     category: {
         type: mongoose.Types.ObjectId,
         ref: "Category"
@@ -40,9 +47,7 @@ var productSchema = new mongoose.Schema({
     images: {
         type: Array,
     },
-    color: {
-        type: Array,
-    },
+
     ratings: [
         {
             star: { type: Number },
