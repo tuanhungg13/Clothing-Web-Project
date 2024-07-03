@@ -48,6 +48,31 @@ const handleGetBlogs = async () => {
     }
 }
 
+const handleGetBlog = async (_bid) => {
+    try {
+        const blog = await Blog.findByIdAndUpdate(_bid, { $inc: { views: 1 } }, { new: true })
+            .populate("likes", "-refreshToken -password -role -createdAt -updatedAt -cart -address -favoriteList")
+        if (!blog) {
+            return {
+                EM: "Get blog failed!",
+                EC: 1,
+                DT: []
+            }
+        }
+        return {
+            EM: "Get blog successfully!",
+            EC: 0,
+            DT: blog
+        }
+    } catch (error) {
+        return {
+            EM: `There is an error in the "handleGetBlog function" in blogService.js: ${error.message} `,
+            EC: 1,
+            DT: []
+        }
+    }
+}
+
 const handleUpdateBlog = async (_bid, data) => {
     try {
         const updateBlog = await Blog.findByIdAndUpdate(_bid, data, { new: true });
@@ -127,5 +152,6 @@ const handleLikeBlog = async (_id, _bid) => {
 }
 
 module.exports = {
-    handleCreateNewBlog, handleGetBlogs, handleUpdateBlog, handleDeleteBlog, handleLikeBlog
+    handleCreateNewBlog, handleGetBlogs, handleUpdateBlog, handleDeleteBlog, handleLikeBlog,
+    handleGetBlog
 }

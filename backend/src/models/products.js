@@ -22,7 +22,7 @@ var productSchema = new mongoose.Schema({
     },
     brand: {
         type: String,
-        required: true,
+        default: "Atino"
     },
     quantity: {
         type: Number,

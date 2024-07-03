@@ -39,6 +39,29 @@ const getBlogs = async (req, res) => {
     }
 }
 
+const getBlog = async (req, res) => {
+    try {
+        const { bid } = req.params;
+        if (!bid) {
+            return res.status(400).json({
+                EM: "Missing blog id",
+                EC: 1
+            })
+        }
+        const response = await blogService.handleGetBlog(bid);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "getBlog func" in blogController.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
 const updateBlog = async (req, res) => {
     try {
         const { bid } = req.params;
@@ -110,5 +133,5 @@ const likeBlog = async (req, res) => {
 
 
 module.exports = {
-    createNewBlog, getBlogs, updateBlog, deleteBlog, likeBlog
+    createNewBlog, getBlogs, updateBlog, deleteBlog, likeBlog, getBlog
 }
