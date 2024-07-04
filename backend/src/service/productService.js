@@ -123,6 +123,7 @@ const handleUpdateProduct = async (pid, data) => {
             data.slug = slugify(data.slug);
         }
         if (data.size) {
+            //Tách chuỗi
             data.size = data.size.split(",");
         }
         if (data.color) {
@@ -153,6 +154,7 @@ const handleUpdateProduct = async (pid, data) => {
 
 const handleRatings = async (_id, data) => {
     try {
+        //Tìm sản phẩm và đẩy đánh giá người dùng vào mảng ratings của sản phẩm đó
         const rating = await Product.findByIdAndUpdate(data.pid, {
             $push: { ratings: { star: data.star, comment: data.comment, postedBy: _id } }
         }, {
@@ -166,9 +168,12 @@ const handleRatings = async (_id, data) => {
             }
         }
         const updatedProduct = await Product.findById(data.pid);
+        //Số lượt đánh giá
         const ratingsCount = updatedProduct.ratings.length;
+        //Tổng sao đán giá
         const sumRatings = updatedProduct.ratings.reduce((sum, item) => sum + item.star, 0);
         console.log("check totalRatings: ", ratingsCount, sumRatings)
+        //Tổng sao trung bình
         updatedProduct.totalRatings = Math.round(sumRatings * 10 / ratingsCount) / 10;
         await updatedProduct.save();
         return {
@@ -185,7 +190,34 @@ const handleRatings = async (_id, data) => {
     }
 }
 
+const handleUploadImageProduct = async (_pid, data) => {
+    try {
+        //Tim sản phẩm và đẩy từng ảnh vào mảng images
+        const uploadImgProduct = await Product.findByIdAndUpdate(_pid, {
+            $push: { images: { $each: data.map(item => item.path) } }
+        }, { new: true })
+        if (!uploadImgProduct) {
+            return {
+                EM: "Upload image failed!",
+                EC: 1,
+                DT: {}
+            }
+        }
+        return {
+            EM: "Upload image successfully!",
+            EC: 0,
+            DT: uploadImgProduct
+        }
+    } catch (error) {
+        return ({
+            EM: `There is an error in the "handleUploadImageProduct function" in productService.js: ${error.message} `,
+            EC: 1,
+            DT: {}
+        })
+    }
+}
+
 module.exports = {
     handleCreateNewProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
-    handleRatings
+    handleRatings, handleUploadImageProduct
 }

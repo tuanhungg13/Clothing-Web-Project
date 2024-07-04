@@ -211,6 +211,31 @@ const updateUserByAdmin = async (req, res) => {
     }
 }
 
+const addToCart = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { pid, quantity, color, size } = req.body;
+        if (!pid || !quantity || !color || !size) {
+            return res.status(400).json({
+                EM: "Missing inputs!",
+                EC: 1
+            })
+        }
+        const response = await userService.handleAddToCart(_id, req.body);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "addToCart function" in userControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
 module.exports = {
-    register, login, getUserById, refreshAccessToken, logout, getAllUsers, updateUser, deleteUser, updateUserByAdmin
+    register, login, getUserById, refreshAccessToken, logout, getAllUsers, updateUser, deleteUser, updateUserByAdmin,
+    addToCart
 }

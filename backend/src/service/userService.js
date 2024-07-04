@@ -2,6 +2,7 @@ import User from "../models/users"
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../middlewares/jwt';
 import jwt from 'jsonwebtoken';
+import products from "../models/products";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -252,7 +253,52 @@ const handleUpdateUserByAdmin = async (_id, data) => {
     }
 }
 
+
+const handleAddToCart = async (_id, data) => {
+    try {
+        const user = await User.findById(_id);
+        const alreadyProduct = user?.cart?.find(item => item.product.toString() === data.pid);
+        if (alreadyProduct) {
+            if (alreadyProduct.color === data.color && alreadyProduct.size === data.size) {
+                const cart = await User.updateOne({
+                    cart: { $elemMatch: alreadyProduct }
+                }, { $inc: { "cart.$.quantity": data.quantity } }, { new: true })
+                return {
+                    EM: "Add to cart successfully!",
+                    EC: 0,
+                    DT: cart
+                }
+            }
+            else {
+                const cart = await User.findByIdAndUpdate(_id, {
+                    $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
+                }, { new: true })
+                return {
+                    EM: "Add to cart successfully!",
+                    EC: 0,
+                    DT: cart
+                }
+            }
+        }
+        else {
+            const cart = await User.findByIdAndUpdate(_id, {
+                $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
+            }, { new: true })
+            return {
+                EM: "Add to cart successfully!",
+                EC: 0,
+                DT: cart
+            }
+        }
+    } catch (error) {
+        return ({
+            EM: `There is an error in the "handleAddToCart function" in userService.js: ${error.message}`,
+            EC: 1,
+        })
+    }
+}
+
 module.exports = {
     handleRegister, handleLogin, handleGetUserById, handleRefreshAccessToken, handleGetAllUsers,
-    handleUpdateUser, handleDeleteUser, handleUpdateUserByAdmin
+    handleUpdateUser, handleDeleteUser, handleUpdateUserByAdmin, handleAddToCart
 }

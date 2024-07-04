@@ -113,9 +113,9 @@ const ratings = async (req, res) => {
 const uploadImageProduct = async (req, res) => {
     try {
         const { pid } = req.params;
-        if (!pid || req.files) {
+        if (!pid || !req.files) {
             return res.status(400).json({
-                EM: "Upload image failed!",
+                EM: "Missing inputs!",
                 EC: 1
             })
         }

@@ -8,6 +8,6 @@ router.post("/create", [verifyAccessToken, isAdmin], controllers.createNewProduc
 router.get("/", controllers.getProducts);
 router.delete("/delete/:pid", [verifyAccessToken, isAdmin], controllers.deleteProduct);
 router.put("/update/:pid", [verifyAccessToken, isAdmin], controllers.updateProduct);
-router.put("/uploadImage/:pid", [verifyAccessToken, isAdmin], uploader.single("images"), controllers.uploadImageProduct)
+router.put("/uploadImage/:pid", [verifyAccessToken, isAdmin], uploader.array("images", 10), controllers.uploadImageProduct)
 router.post("/rating", verifyAccessToken, controllers.ratings);
 module.exports = router
