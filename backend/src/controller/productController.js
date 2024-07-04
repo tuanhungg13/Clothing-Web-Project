@@ -110,6 +110,30 @@ const ratings = async (req, res) => {
     }
 }
 
+const uploadImageProduct = async (req, res) => {
+    try {
+        const { pid } = req.params;
+        if (!pid || req.files) {
+            return res.status(400).json({
+                EM: "Upload image failed!",
+                EC: 1
+            })
+        }
+        const response = await productService.handleUploadImageProduct(pid, req.files);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "uploadImageProduct" in productControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
 
-
-module.exports = { createNewProduct, getProducts, deleteProduct, updateProduct, ratings }
+module.exports = {
+    createNewProduct, getProducts, deleteProduct, updateProduct, ratings,
+    uploadImageProduct
+}
