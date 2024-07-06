@@ -27,16 +27,16 @@ const Header = () => {
 
                 {account &&
 
-                    <div class="account dropdown text-end">
-                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="mdo" class="rounded-circle" />
+                    <div className="account dropdown text-end">
+                        <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />
                         </a>
-                        <ul class="dropdown-menu text-small">
-                            <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
-                            <li><a class="dropdown-item" href="#">Thông tin đơn hàng</a></li>
-                            <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                        <ul className="dropdown-menu text-small">
+                            <li><a className="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                            <li><a className="dropdown-item" href="#">Thông tin đơn hàng</a></li>
+                            <li><a className="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                            <li><hr className="dropdown-divider" /></li>
+                            <li><a className="dropdown-item" href="#">Đăng xuất</a></li>
                         </ul>
                     </div>
                 }
@@ -56,16 +56,16 @@ const Header = () => {
                             <button className='btn-login'>Login</button>
                         }
                         {account &&
-                            <div class="account dropdown text-end">
-                                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" class="rounded-circle" />
+                            <div className="account dropdown text-end">
+                                <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end text-small">
-                                    <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
-                                    <li><a class="dropdown-item" href="#">Thông tin đơn hàng</a></li>
-                                    <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
-                                    <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                                <ul className="dropdown-menu dropdown-menu-end text-small">
+                                    <li><a className="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                                    <li><a className="dropdown-item" href="#">Thông tin đơn hàng</a></li>
+                                    <li><a className="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <li><a className="dropdown-item" href="#">Đăng xuất</a></li>
                                 </ul>
                             </div>
                         }

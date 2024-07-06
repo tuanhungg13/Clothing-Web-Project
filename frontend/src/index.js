@@ -3,22 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Header from './components/header/Header';
-import Nav from './components/navigation/Nav';
-import { BrowserRouter } from "react-router-dom"
+import store from './redux/store';
+import { Provider } from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <div className="App">
-      <header className="App-header">
-        <Header />
-        <Nav />
-      </header>
-      <div><App /></div>
-
-    </div>
-
-  </BrowserRouter>
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
