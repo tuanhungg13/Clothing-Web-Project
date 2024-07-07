@@ -23,7 +23,7 @@ const ProductPage = () => {
                             <option value="3">Sản phẩm bán chạy</option>
                         </select>
                     </div>
-                    <DisplayProduct />
+                    <DisplayProduct display={"products"} />
 
                 </div>
             </div>

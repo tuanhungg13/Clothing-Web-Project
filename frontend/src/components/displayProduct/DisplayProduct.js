@@ -4,11 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from "./displayProductSlice"
 
 const DisplayProduct = (props) => {
-    const products = useSelector(state => state.displayProduct.products);
+    const products = useSelector(state => state.displayProduct[props.display]);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchProducts());
-        console.log("products:", products)
     }, []);
     const formatCurrency = (amount) => {
         return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

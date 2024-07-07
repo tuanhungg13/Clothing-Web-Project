@@ -1,0 +1,47 @@
+.slider-background {
+    img {
+
+        object-fit: cover;
+    }
+}
+
+.slick-dots {
+    li {
+        padding-top: 50px !important;
+
+        button:before {
+            font-size: 12px !important;
+        }
+    }
+}
+
+.slick-arrow {
+    position: absolute;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+
+.slick-prev:before {
+    color: #bbbbbbf7 !important;
+    margin-right: -100px;
+    font-size: 50px !important;
+}
+
+.slick-prev:hover::before {
+    color: rgb(184, 184, 184) !important;
+}
+
+.slick-next:before {
+    color: #bbbbbbf7 !important;
+    margin-left: -100px;
+    font-size: 50px !important;
+}
+
+.slick-next:hover::before {
+    color: rgb(184, 184, 184) !important;
+}

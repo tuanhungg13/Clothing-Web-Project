@@ -3,8 +3,6 @@ import './ProductDetail.scss';
 import vd1 from '../../../assets/img/product01.webp'
 import vd2 from '../../../assets/img/product02.webp'
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useRef } from 'react';
 import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";

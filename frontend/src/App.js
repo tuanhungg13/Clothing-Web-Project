@@ -2,7 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Home from "./components/homePage/Home";
+import Home from "./pages/public/homePage/Home";
 import Instruction from "./components/instructionPage/Instruction";
 import Announcement from "./components/announcement/Announcement";
 import ProductDetails from "./components/product/productDetails/ProductDetails"
