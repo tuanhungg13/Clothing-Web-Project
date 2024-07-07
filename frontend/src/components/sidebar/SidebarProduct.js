@@ -44,40 +44,11 @@ const SidebarProduct = (props) => {
                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 {categories.map((item, index) => {
                                     return (
-                                        <li>
+                                        <li key={item._id}>
                                             <input type='checkbox' onChange={() => handleChooseOption()} /> {item.categoryName}
                                         </li>
                                     )
                                 })}
-                                {/* 
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'ao-so-mi'} onChange={() => handleChooseOption('ao-so-mi')} /> Áo sơ mi
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'ao-hoodie'} onChange={() => handleChooseOption('ao-hoodie')} /> Áo hoodie
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'ao-sweater'} onChange={() => handleChooseOption('ao-sweater')} /> Áo sweater
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'ao-mangto'} onChange={() => handleChooseOption('ao-mangto')} /> Áo măng tô
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'ao-len'} onChange={() => handleChooseOption('ao-len')} /> Áo len
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'quan-jeans'} onChange={() => handleChooseOption('quan-jeans')} /> Quần jeans
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'quan-au'} onChange={() => handleChooseOption('quan-au')} /> Quần âu
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'quan-short'} onChange={() => handleChooseOption('quan-short')} /> Quần short
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedOption === 'quan-tui-hop'} onChange={() => handleChooseOption('quan-tui-hop')} /> Quần túi hộp
-                                </li> */}
-
                             </ul>
                         </div>
                     </li>
@@ -90,7 +61,9 @@ const SidebarProduct = (props) => {
                             <div className="slidecontainer">
                                 <Slider
                                     className='content-slider'
-                                    tooltipVisible={false}
+                                    tooltip={{
+                                        open: false
+                                    }}
                                     range
                                     min={0}
                                     max={3000000}
