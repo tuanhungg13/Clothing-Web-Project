@@ -96,6 +96,31 @@ const handleGetProducts = async (data) => {
     }
 }
 
+const handleGetAProduct = async (pid) => {
+    try {
+        const product = await Product.findById(pid);
+        if (!product) {
+            return {
+                EM: "Get a product failed!",
+                EC: 1,
+                DT: {}
+            }
+        }
+        return {
+            EM: "Get a product successfully!",
+            EC: 0,
+            DT: product
+        }
+    } catch (error) {
+        return {
+            EM: `There is an error in the "handleAGetProduct function" in productService.js: ${error.message} `,
+            EC: 1,
+            DT: {},
+            counts: ""
+        }
+    }
+}
+
 const handleDeleteProduct = async (pid) => {
     try {
         const deleteProduct = await Product.findByIdAndDelete(pid);
@@ -218,6 +243,6 @@ const handleUploadImageProduct = async (_pid, data) => {
 }
 
 module.exports = {
-    handleCreateNewProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
+    handleCreateNewProduct, handleGetAProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
     handleRatings, handleUploadImageProduct
 }

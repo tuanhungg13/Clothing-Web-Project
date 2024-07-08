@@ -40,6 +40,30 @@ const getProducts = async (req, res) => {
     }
 }
 
+const getAProduct = async (req, res) => {
+    try {
+        const { pid } = req.params;
+        if (!pid) {
+            return res.status(400).json({
+                EM: "pid not found!",
+                EC: 1
+            })
+        }
+        const response = await productService.handleGetAProduct(pid);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT,
+            counts: response.counts
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "getAProduct function" in productControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
 const deleteProduct = async (req, res) => {
     try {
         const { pid } = req.params;
@@ -134,6 +158,6 @@ const uploadImageProduct = async (req, res) => {
 }
 
 module.exports = {
-    createNewProduct, getProducts, deleteProduct, updateProduct, ratings,
-    uploadImageProduct
+    createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,
+    ratings, uploadImageProduct
 }
