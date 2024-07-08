@@ -21,14 +21,14 @@ import { NavLink } from 'react-router-dom';
 import SliderComponent from "../../../components/slider/Slider";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
 import { fetchBestSellingProduct, fetchNewProducts } from "../../../components/displayProduct/displayProductSlice"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 const Home = () => {
     const background = [poster1, poster2, poster3, poster4, poster5, poster6];
     const listStyle = [style01, style02, style03, style04, style05, style06, style07, style08, style09, style10]
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchBestSellingProduct("sort=-sold"));
-        dispatch(fetchNewProducts("sort=-createdAt"))
+        dispatch(fetchBestSellingProduct({ sort: "-sold" }));
+        dispatch(fetchNewProducts({ sort: "-createdAt" }))
     }, [])
     return (
         <>

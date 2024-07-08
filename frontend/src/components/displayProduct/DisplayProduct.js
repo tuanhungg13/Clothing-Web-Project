@@ -2,17 +2,19 @@ import React, { useEffect } from 'react';
 import "./DisplayProduct.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from "./displayProductSlice"
-
+import { formatCurrency } from "../../untils/helpers";
+import { useNavigate } from 'react-router-dom';
 const DisplayProduct = (props) => {
     const products = useSelector(state => state.displayProduct[props.display]);
+    const navigation = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchProducts());
     }, []);
-    const formatCurrency = (amount) => {
-        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
 
+    const handleGetDetailsProduct = (item) => {
+        navigation(`${item.slug}`)
+    }
     return (
 
         <div className=' container'>
@@ -22,13 +24,13 @@ const DisplayProduct = (props) => {
                         return (
                             <div className='product-content col-6 col-sm-4 d-flex flex-column text-center' key={`product-${index}`}>
                                 <div className='product-information'>
-                                    <div className='product-detail'>
+                                    <div className='product-detail' onClick={() => { handleGetDetailsProduct(item) }}>
                                         <img src={`${item?.images[0]}`} alt='' />
                                         <div className='product-name'>{item.title}</div>
                                     </div>
                                     <div className='product-price'>
                                         {/* <div className='price-sale d-inline-block'>{formatCurrency(item.sale)}</div> */}
-                                        <div className={`${item.sale ? 'price-real' : ''} d-inline-block`}>{formatCurrency(item.price)}</div>
+                                        <div className='price-real'>{formatCurrency(item.price)}</div>
                                         <button type='button' className='mt-2'>Thêm vào giỏ hàng</button>
                                     </div>
                                     {/* <label className='label-sold'>{item.status}</label> */}

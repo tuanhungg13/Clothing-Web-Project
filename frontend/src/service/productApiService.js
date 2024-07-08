@@ -1,11 +1,17 @@
 import axios from "../untils/axios"
-const getProducts = (...params) => {
-    const paramString = params.length > 0 ? params.join("&") : "";
+const apiGetProducts = (params) => {
     return axios({
-        url: "/product/?" + paramString,
+        url: "/product/",
+        method: "GET",
+        params
+    })
+}
+
+const apiGetProductDetails = (slug) => {
+    return axios({
+        url: `/product/${slug}`,
         method: "GET"
     })
 }
 
-
-export { getProducts }
+export { apiGetProducts, apiGetProductDetails }

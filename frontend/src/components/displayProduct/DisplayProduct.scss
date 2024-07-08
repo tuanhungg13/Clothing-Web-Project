@@ -8,6 +8,8 @@
                 position: relative;
 
                 .product-detail {
+                    cursor: pointer;
+
                     img {
                         opacity: 1;
                         object-fit: scale-down;
@@ -39,7 +41,7 @@
                         border: 1px solid #ccc;
                         border-radius: 5px;
                         color: #d61c1f;
-                        margin: 0 40px;
+                        margin: 0 auto;
 
                     }
                 }
@@ -71,4 +73,14 @@
         }
     }
 
+}
+
+@media only screen and (max-width: 576px) {
+    .display-product {
+        .container-product {
+            .product-content {
+                width: 195px;
+            }
+        }
+    }
 }

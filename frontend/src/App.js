@@ -25,7 +25,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/san-pham" element={<ProductPage />} />
-          <Route path="/san-pham/:productId" element={<ProductDetails />} />
+          <Route path="/:productId" element={<ProductDetails />} />
 
           {/* <Route path="/sale" element={<ProductOnSale />} /> */}
           <Route path="/huong-dan-mua-hang" element={<Instruction />} />

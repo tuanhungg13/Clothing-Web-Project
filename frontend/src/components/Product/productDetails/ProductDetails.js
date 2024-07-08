@@ -8,14 +8,16 @@ import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "reac
 import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
-import data from '../../../data/data.json'
-
+import { apiGetProductDetails } from '../../../service/productApiService';
+import { renderStarFromNumber } from "../../../untils/helpers"
 
 const ProductDetails = (props) => {
-    const [productDetails, setProductDetails] = useState({});
+    const [productDetails, setProductDetails] = useState();
+    const [displayImage, setDisplayImage] = useState("");
     const settings = {
         dots: false,
         infinite: true,
+        arrows: false,
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1,
@@ -23,16 +25,26 @@ const ProductDetails = (props) => {
         vertical: true,
         verticalSwiping: true
     };
-
     let { productId } = useParams();
-    useEffect(() => {
-        const foundProduct = data.products.find(item => item.id === parseInt(productId));
-        setProductDetails(foundProduct);
-        console.log('check params', productId);
-        console.log('check state:', foundProduct)
-    }, [])
-    const sliderRef = useRef();
 
+    const fetchAProduct = async () => {
+        try {
+            const productDetails = await apiGetProductDetails(productId);
+            console.log("check details:", productDetails);
+            setProductDetails(productDetails?.DT);
+            setDisplayImage(productDetails?.DT?.images[0])
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+        }
+    }
+
+    useEffect(() => {
+        fetchAProduct()
+        console.log('check productDetails', productDetails);
+    }, [])
+
+
+    const sliderRef = useRef();
     const prevSlide = () => {
         sliderRef.current.slickPrev();
     };
@@ -40,6 +52,10 @@ const ProductDetails = (props) => {
     const nextSlide = () => {
         sliderRef.current.slickNext();
     };
+
+    const handleChangeImage = (item) => {
+        setDisplayImage(item)
+    }
     return (
         <div className='product-details-page'>
             <div className='nav-title'>
@@ -51,55 +67,40 @@ const ProductDetails = (props) => {
                         <div className='row'>
                             <div className='list-imgs-product col-lg-2'>
                                 <Slider {...settings} ref={sliderRef}>
+                                    {productDetails?.images.map((item, index) => {
+                                        return (
+                                            <div>
+                                                <img src={item} onClick={() => { handleChangeImage(item) }} />
+                                            </div>
+                                        )
+                                    })}
 
-                                    <div>
-                                        <img src={vd1} alt="" />
-                                    </div>
-                                    <div>
-                                        <img src={vd2} alt="" />
-                                    </div>
-                                    <div>
-                                        <img src={vd1} alt="" />
-                                    </div>
-                                    <div>
-                                        <img src={vd2} alt="" />
-                                    </div>
-                                    <div>
-                                        <img src={vd1} alt="" />
-                                    </div>
-                                    <div>
-                                        <img src={vd2} alt="" />
-                                    </div>
                                     {/* Thêm ảnh từ các biến khác nếu cần */}
                                 </Slider>
                                 <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
                                 <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                             </div>
                             <div className='display-img-product col-lg-10' >
-                                <img src={productDetails?.image ? require(`../../../assets/img/${productDetails.image}`) : ''} alt='' />
+                                <img src={displayImage} alt='' />
                             </div>
                         </div>
                     </div>
                     <div className=' ps-4 info-product col-lg-4'>
                         <h3>Áo phông unisex</h3>
                         <div>
-                            <div className='voteView me-1 pe-1 d-inline-block'>4.7</div>
+                            <div className='voteView me-1 pe-1 d-inline-block'>{productDetails?.totalRatings}</div>
                             <div className='vote d-inline-block'>
-                                <IoMdStar className='star-point' />
-                                <IoMdStar className='star-point' />
-                                <IoMdStar className='star-point' />
-                                <IoMdStar className='star-point' />
-                                <IoMdStar className='star-point' />
+                                {renderStarFromNumber(productDetails?.totalRatings)}
                             </div>
                         </div>
                         <hr />
-                        <div className='product-price mt-0'>
+                        {/* <div className='product-price mt-0'>
                             <div className={`price-sale d-inline me-4`}>{productDetails?.sale}</div>
-                            <div className={`${productDetails?.sale ? 'price-real d-inline' : 'price'}`}>{productDetails?.price}</div>
+                            <div className='price'>{productDetails?.price}</div>
                             <div className={`${productDetails?.sale ? 'sale d-inline' : ''}`}>
                                 {productDetails?.sale ? `Giảm ${((parseFloat(productDetails.price) - parseFloat(productDetails.sale)) * 100 / parseFloat(productDetails.price)).toFixed(2)} %` : ''}
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='info-color-product mt-3'>
                             <div className='d-inline '>Màu sắc</div>
@@ -116,12 +117,14 @@ const ProductDetails = (props) => {
                                 <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
                             </div>
                             <div className='list-size-items d-flex mt-2'>
-                                <label className='size-items'><span>XS</span></label>
-                                <label className='size-items'><span>X</span></label>
-                                <label className='size-items'><span>M</span></label>
-                                <label className='size-items'><span>L</span></label>
-                                <label className='size-items'><span>XL</span></label>
-                                <label className='size-items'><span>XXL</span></label>
+                                {productDetails?.size.map((item, index) => {
+                                    return (
+                                        <label key={`${item}-${index}`} className='size-items'>
+                                            <span>{item}</span>
+                                        </label>
+
+                                    )
+                                })}
                             </div>
                         </div>
                         <div className='input-quantity mt-3'>
