@@ -23,7 +23,7 @@ const createNewProduct = async (req, res) => {
     }
 }
 
-const getProducts = async (req, res) => {
+const apiGetProducts = async (req, res) => {
     try {
         const response = await productService.handleGetProducts(req.query);
         return res.status(200).json({
@@ -34,7 +34,7 @@ const getProducts = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "getProducts function" in productControllers.js: ${error.message} `,
+            EM: `There is an error in the "apiGetProducts function" in productControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -42,14 +42,14 @@ const getProducts = async (req, res) => {
 
 const getAProduct = async (req, res) => {
     try {
-        const { pid } = req.params;
-        if (!pid) {
+        const { slug } = req.params;
+        if (!slug) {
             return res.status(400).json({
                 EM: "pid not found!",
                 EC: 1
             })
         }
-        const response = await productService.handleGetAProduct(pid);
+        const response = await productService.handleGetAProduct(slug);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -158,6 +158,6 @@ const uploadImageProduct = async (req, res) => {
 }
 
 module.exports = {
-    createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,
+    createNewProduct, getAProduct, apiGetProducts, deleteProduct, updateProduct,
     ratings, uploadImageProduct
 }

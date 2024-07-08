@@ -96,9 +96,9 @@ const handleGetProducts = async (data) => {
     }
 }
 
-const handleGetAProduct = async (pid) => {
+const handleGetAProduct = async (slug) => {
     try {
-        const product = await Product.findById(pid);
+        const product = await Product.find({ slug: slug });
         if (!product) {
             return {
                 EM: "Get a product failed!",
