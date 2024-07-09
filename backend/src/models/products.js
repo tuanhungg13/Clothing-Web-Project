@@ -36,6 +36,13 @@ var productSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    expiryDiscount: {
+        type: Date
+    },
     category: {
         type: mongoose.Types.ObjectId,
         ref: "Category"

@@ -91,7 +91,13 @@ const updateProduct = async (req, res) => {
         const { pid } = req.params;
         if (!pid || Object.keys(req.body).length === 0) {
             return res.status(400).json({
-                EM: "Missing require parameters",
+                EM: "Missing require parameters!",
+                EC: 1
+            })
+        }
+        if ((!req.body.discount && req.body.expiryDiscount) || (req.body.discount && !req.body.expiryDiscount)) {
+            return res.status(400).json({
+                EM: "Missing discount and expiration date!",
                 EC: 1
             })
         }
