@@ -33,8 +33,8 @@ const DisplayProduct = (props) => {
                                         <div className={`${item.discount !== 0 ? "price-real d-inline" : "price"}`}>{formatCurrency(item.price)}</div>
                                         <button type='button' className='mt-2'>Thêm vào giỏ hàng</button>
                                     </div>
-                                    {/* <label className='label-sold'>{item.status}</label> */}
-                                    {/* {!item.status && item.sale && <label className='label-sale'>50%</label>} */}
+                                    {item.quantity === 0 && <label className='label-sold'>Hết hàng</label>}
+                                    {item.discount !== 0 && item.quantity !== 0 && <label className='label-sale'>-{item.discount}%</label>}
 
                                 </div>
                             </div>

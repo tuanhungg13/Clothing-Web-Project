@@ -29,7 +29,6 @@ const login = async (req, res) => {
     try {
         const { loginValue, password } = req.body;
         if (!loginValue || !password) {
-            console.log("check req.body", loginValue, password)
             return res.status(400).json({
                 EM: "Missing require parameters login", //error message
                 EC: "1",                            //error code

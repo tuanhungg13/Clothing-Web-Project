@@ -7,7 +7,8 @@ import { IoSearch } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import Nav from '../navigation/Nav';
 const Header = () => {
-    const [account, setAccount] = useState("123")
+    const [account, setAccount] = useState("")
+
     return (
         <>
             <div className='header-desktop container d-lg-flex d-none justify-content-evenly align-items-center' >

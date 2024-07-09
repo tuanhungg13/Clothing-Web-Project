@@ -34,7 +34,7 @@ const Home = () => {
         <>
             {/* background-header */}
             <div className="slideshow-container">
-                <SliderComponent images={background} show={1} width={"100vw"} height={"100vh"} maxWidth={"100%"} auto={true} dots={false} arrows={false} />
+                <SliderComponent images={background} show={1} width={"100vw"} height={"100vh"} maxWidth={"100%"} auto={true} dots={true} arrows={false} />
             </div>
             <div>
                 <div className='container'>
