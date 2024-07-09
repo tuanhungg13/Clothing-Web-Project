@@ -4,11 +4,11 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 
 export const formatCurrency = (amount) => {
+    if (!amount) return
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export const renderStarFromNumber = (number) => {
-    if (!Number(number)) return
     //3.3
     const integerPart = Math.floor(number); //3
     const decimalPart = number - integerPart; //0.3

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './ProductDetail.scss';
-import vd1 from '../../../assets/img/product01.webp'
-import vd2 from '../../../assets/img/product02.webp'
 import Slider from "react-slick";
 import { useRef } from 'react';
 import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
-import { apiGetProductDetails } from '../../../service/productApiService';
-import { renderStarFromNumber } from "../../../untils/helpers"
+import { apiGetProductDetails } from '../../service/productApiService';
+import { formatCurrency, renderStarFromNumber } from "../../untils/helpers"
 
 const ProductDetails = (props) => {
     const [productDetails, setProductDetails] = useState();
@@ -86,7 +84,7 @@ const ProductDetails = (props) => {
                         </div>
                     </div>
                     <div className=' ps-4 info-product col-lg-4'>
-                        <h3>Áo phông unisex</h3>
+                        <h3>{productDetails?.title}</h3>
                         <div>
                             <div className='voteView me-1 pe-1 d-inline-block'>{productDetails?.totalRatings}</div>
                             <div className='vote d-inline-block'>
@@ -94,21 +92,21 @@ const ProductDetails = (props) => {
                             </div>
                         </div>
                         <hr />
-                        {/* <div className='product-price mt-0'>
-                            <div className={`price-sale d-inline me-4`}>{productDetails?.sale}</div>
-                            <div className='price'>{productDetails?.price}</div>
-                            <div className={`${productDetails?.sale ? 'sale d-inline' : ''}`}>
-                                {productDetails?.sale ? `Giảm ${((parseFloat(productDetails.price) - parseFloat(productDetails.sale)) * 100 / parseFloat(productDetails.price)).toFixed(2)} %` : ''}
+                        <div className='product-price mt-0'>
+                            <div className={`price-sale d-inline me-4`}>{productDetails?.discount !== 0 ? `${formatCurrency(productDetails?.price * (1 - productDetails?.discount / 100))}đ` : ""}</div>
+                            <div className={`${productDetails?.discount !== 0 ? 'price-real d-inline' : 'price'}`}>{`${formatCurrency(productDetails?.price)}đ`}</div>
+                            <div className={`${productDetails?.discount !== 0 ? 'sale d-inline' : ''}`}>
+                                {productDetails?.discount !== 0 ? `Giảm ${productDetails?.discount} %` : ''}
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className='info-color-product mt-3'>
                             <div className='d-inline '>Màu sắc</div>
                             <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Đen</div>
                             <div className='d-flex mt-2'>
+                                {/* <label><img src={vd1} /></label>
                                 <label><img src={vd1} /></label>
-                                <label><img src={vd1} /></label>
-                                <label><img src={vd1} /></label>
+                                <label><img src={vd1} /></label> */}
                             </div>
                         </div>
                         <div className='size-product d-flex flex-column mt-3'>

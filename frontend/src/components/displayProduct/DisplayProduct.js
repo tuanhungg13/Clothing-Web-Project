@@ -29,8 +29,8 @@ const DisplayProduct = (props) => {
                                         <div className='product-name'>{item.title}</div>
                                     </div>
                                     <div className='product-price'>
-                                        {/* <div className='price-sale d-inline-block'>{formatCurrency(item.sale)}</div> */}
-                                        <div className='price-real'>{formatCurrency(item.price)}</div>
+                                        <div className={`${item.discount !== 0 ? "price-sale d-inline-block" : ""}`}>{item.discount !== 0 ? `${formatCurrency(item.price * (1 - item.discount / 100))}đ` : ""}</div>
+                                        <div className={`${item.discount !== 0 ? "price-real d-inline" : "price"}`}>{formatCurrency(item.price)}</div>
                                         <button type='button' className='mt-2'>Thêm vào giỏ hàng</button>
                                     </div>
                                     {/* <label className='label-sold'>{item.status}</label> */}
