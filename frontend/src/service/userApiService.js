@@ -19,3 +19,12 @@ export const apiLogin = (loginValue, password) => {
         })
     )
 }
+
+export const apiGetCurrent = () => { //lấy thông tin người dùng
+    return (
+        axios({
+            url: "/user/current",
+            method: "GET"
+        })
+    )
+}

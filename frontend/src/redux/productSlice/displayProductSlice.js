@@ -72,7 +72,6 @@ export const productSlice = createSlice({
 
 export const fetchProducts = createAsyncThunk("product/fetchProducts", async (data, { rejectWithValue }) => {
     const response = await apiGetProducts(data)
-    console.log("check fetchProducts:", response);
     if (response.EC === 1) {
         return rejectWithValue(response)
     }
@@ -81,7 +80,6 @@ export const fetchProducts = createAsyncThunk("product/fetchProducts", async (da
 
 export const fetchBestSellingProduct = createAsyncThunk("product/fetchBestSellingProduct", async (data, { rejectWithValue }) => {
     const response = await apiGetProducts(data)
-    console.log("check fetchBestSellingProduct:", response);
     if (response.EC === 1) {
         return rejectWithValue(response)
     }
@@ -90,7 +88,6 @@ export const fetchBestSellingProduct = createAsyncThunk("product/fetchBestSellin
 
 export const fetchNewProducts = createAsyncThunk("product/fetchNewProducts", async (data, { rejectWithValue }) => {
     const response = await apiGetProducts(data)
-    console.log("check fetchNewProducts:", response);
     if (response.EC === 1) {
         return rejectWithValue(response)
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logo-white.png'
 import './Header.scss'
@@ -7,9 +7,22 @@ import { IoSearch } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import Nav from '../navigation/Nav';
 import avatar from "../../assets/img/avatar.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrent } from '../../redux/userSlice';
 const Header = () => {
-    const [account, setAccount] = useState("")
+    const { isLoggedIn, current } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (isLoggedIn) {
+            dispatch(getCurrent())
+        }
+    }, [dispatch, isLoggedIn])
 
+    // const handleGetProfile = () =>{
+    //     if (isLoggedIn) {
+    //         dispatch(getCurrent())
+    //     }
+    // }
     return (
         <>
             <div className='header-desktop container d-lg-flex d-none justify-content-evenly align-items-center' >
@@ -20,18 +33,18 @@ const Header = () => {
                 </div>
 
                 <div className='hotline'><FaPhone style={{ marginRight: '5px' }} />  Hotline: 0123456789</div>
-                {!account &&
+                {!isLoggedIn &&
                     <div className='login d-flex'>
                         <button><NavLink to='/login' className='text-decoration-none text-dark'>Đăng Nhập |</NavLink></button>
                         <button style={{ marginLeft: '-5px' }}><NavLink to='/register' className='text-decoration-none text-dark'>Đăng kí</NavLink></button>
                     </div>
                 }
 
-                {account &&
+                {isLoggedIn &&
 
                     <div className="account dropdown text-end">
                         <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src={avatar} alt="mdo" className="rounded-circle" />
+                            <img src={avatar} alt="mdo" className="rounded-circle border" />
                         </a>
                         <ul className="dropdown-menu text-small">
                             <li><a className="dropdown-item" href="#">Thông tin tài khoản</a></li>
@@ -54,10 +67,10 @@ const Header = () => {
                         <NavLink className="navbar-brand me-0" to='/'><img src={logo} alt='' /></NavLink>
 
                         <button className='ms-5 border-0 rounded-circle p-2'><FaShoppingCart style={{ fontSize: '26px', paddingBottom: '10px', marginLeft: '-4px' }} /></button>
-                        {!account &&
+                        {!isLoggedIn &&
                             <button className='btn-login'>Login</button>
                         }
-                        {account &&
+                        {isLoggedIn &&
                             <div className="account dropdown text-end">
                                 <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />

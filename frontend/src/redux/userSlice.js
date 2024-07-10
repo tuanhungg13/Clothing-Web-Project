@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { apiGetCurrent } from "../service/userApiService";
 export const userSlice = createSlice({
     name: "user",
     initialState: {
@@ -11,34 +11,37 @@ export const userSlice = createSlice({
         login: (state, action) => {
             console.log("check action login:", action);
             state.isLoggedIn = action.payload.isLoggedIn;
-            state.current = action.payload.userData;
             state.token = action.payload.token;
         }
     },
-    // extraReducers: (builder) => {
-    //     // Bắt đầu thực hiện action lấy dữ liệu sản phẩm (Promise pending)
-    //     builder.addCase(fetchProducts.pending, (state) => {
-    //         // Bật trạng thái loading
-    //         state.isLoading = true;
-    //     });
+    extraReducers: (builder) => {
+        // Bắt đầu thực hiện action lấy dữ liệu người dùng (Promise pending)
+        builder.addCase(getCurrent.pending, (state) => {
+        });
 
-    //     // Khi thực hiện action lấy dữ liệu sản phẩm thành công (Promise fulfilled)
-    //     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-    //         // Tắt trạng thái loading, lưu thông tin products vào store
-    //         state.isLoading = false;
-    //         state.products = action.payload.DT;
-    //     });
+        // Khi thực hiện action lấy dữ liệu người dùng thành công (Promise fulfilled)
+        builder.addCase(getCurrent.fulfilled, (state, action) => {
+            state.current = action.payload.DT;
+        });
 
-    //     // Khi thực hiện action lấy dữ liệu sản phẩm thất bại (Promise rejected)
-    //     builder.addCase(fetchProducts.rejected, (state, action) => {
-    //         // Tắt trạng thái loading
-    //         state.isLoading = false;
+        // Khi thực hiện action lấy dữ liệu người dùng thất bại (Promise rejected)
+        builder.addCase(getCurrent.rejected, (state, action) => {
+            // Tắt trạng thái loading
+            state.isLoading = false;
 
-    //     });
-    // }
+        })
+    }
 })
 
-
 export const { login } = userSlice.actions
+
+export const getCurrent = createAsyncThunk("user/getCurrent", async (data, { rejectWithValue }) => {
+    const response = await apiGetCurrent();
+    console.log("check response:", response)
+    if (response.EC === 1) {
+        return rejectWithValue(response)
+    }
+    return response
+})
 
 export default userSlice.reducer
