@@ -36,31 +36,31 @@ const handleRegister = async (rawUserData) => {
     try {
         const checkEmail = await checkEmailExist(rawUserData.email);
         const checkPhoneNumber = await checkPhoneNumberExist(rawUserData.phoneNumber);
+        const errors = {};
+        let EC = 0;
         if (checkEmail) {
-            return ({
-                EM: 'Email already exists!',
-                EC: 1
-            })
+            errors.email = "Email đã tồn tại!";
+            EC += 1;
         }
-        else if (checkPhoneNumber) {
-            return ({
-                EM: 'Phone number already exists!',
-                EC: 1
-            })
+        if (checkPhoneNumber) {
+            errors.phoneNumber = "Số điện thoại đã tồn tại!";
+            EC += 1;
+
         }
-        const hashPassword = handleHashPassword(rawUserData.password);
-        const newUser = await User.create({
-            email: rawUserData.email,
-            phoneNumber: rawUserData.phoneNumber,
-            userName: rawUserData.userName,
-            password: hashPassword,
-        })
+        if (Object.keys(errors).length > 0) {
+            return {
+                EM: "Lỗi xác thực!",
+                EC: EC,
+                errors: errors
+            }
+        }
+        const hashPassword = handleHashPassword(rawUserData);
+        rawUserData.password = hashPassword
+        const newUser = await User.create(rawUserData)
         return ({
             EM: newUser ? "A user is created successfully" : "Registration failed",
             EC: newUser ? 0 : 1
         })
-
-
     } catch (error) {
         console.log("Error from 'handleRegister function' of userService.js", error)
         return ({
@@ -87,23 +87,23 @@ const handleLogin = async (loginData) => {
             // console.log("check user.password: ", user.password)
             const checkPw = await checkPassword(loginData.password, user.password)
             if (checkPw) {    // check inputPasword vs password in database
-                const { password, role, ...userData } = user.toObject();
+                const { password, role, refreshToken, ...userData } = user.toObject();
                 const accessToken = generateAccessToken(user._id, role);
-                const refreshToken = generateRefreshToken(user._id);
-                await User.findByIdAndUpdate(user._id, { refreshToken: refreshToken }, { new: true })
+                const newRefreshToken = generateRefreshToken(user._id);
+                await User.findByIdAndUpdate(user._id, { refreshToken: newRefreshToken }, { new: true })
                 //Lưu resfresh token vào cookies
 
                 return ({
                     EM: user ? "Login successfully" : "Login failed",
                     EC: user ? 0 : 1,
                     accessToken,
-                    refreshToken,
+                    newRefreshToken,
                     DT: user ? userData : []
                 })
             }
         }
         return ({
-            EM: "Your email/phone number or password is incorrect!",
+            EM: "Email/số điện thoại hoặc mật khẩu không chính xác!",
             EC: 1,
         })
     } catch (error) {

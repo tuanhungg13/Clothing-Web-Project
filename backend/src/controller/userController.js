@@ -13,7 +13,8 @@ const register = async (req, res) => {
         const response = await userService.handleRegister(req.body);
         return res.status(200).json({
             EM: response.EM,
-            EC: response.EC
+            EC: response.EC,
+            errors: response.errors ? response.errors : ""
         })
 
     } catch (error) {
@@ -36,7 +37,7 @@ const login = async (req, res) => {
         }
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
-        res.cookie('refreshToken', response.refreshToken, { httpOnly: true, secure: true, maxAge: 604800000 })
+        res.cookie('refreshToken', response.newRefreshToken, { httpOnly: true, secure: true, maxAge: 604800000 })
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
