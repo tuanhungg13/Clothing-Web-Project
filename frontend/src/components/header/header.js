@@ -6,6 +6,7 @@ import { FaPhone } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import Nav from '../navigation/Nav';
+import avatar from "../../assets/img/avatar.jpg";
 const Header = () => {
     const [account, setAccount] = useState("")
 
@@ -30,7 +31,7 @@ const Header = () => {
 
                     <div className="account dropdown text-end">
                         <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />
+                            <img src={avatar} alt="mdo" className="rounded-circle" />
                         </a>
                         <ul className="dropdown-menu text-small">
                             <li><a className="dropdown-item" href="#">Thông tin tài khoản</a></li>

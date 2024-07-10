@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import './Register.scss';
 import { apiRegister } from '../../service/userApiService';
 const Register = () => {
@@ -15,6 +15,7 @@ const Register = () => {
         password: "",
         confirmPassword: ""
     })
+    const navigation = useNavigate()
     const validDate = () => {
         let isValid = true;
         const newErrors = {};
@@ -57,6 +58,13 @@ const Register = () => {
         if (checkValidate) {
             const response = await apiRegister(email, phoneNumber, name, password)
             console.log("check register", response)
+            if (response.EC === 1) {
+                navigation("/login")
+            }
+            else {
+                setErrors(response.errors)
+            }
+
         }
         return
     }
