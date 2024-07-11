@@ -13,7 +13,7 @@ const DisplayProduct = (props) => {
     }, []);
 
     const handleGetDetailsProduct = (item) => {
-        navigation(`${item.slug}`)
+        navigation(`/${item.slug}`)
     }
     return (
 

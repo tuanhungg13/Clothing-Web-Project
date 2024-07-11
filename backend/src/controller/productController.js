@@ -2,8 +2,8 @@ import productService from "../service/productService";
 
 const createNewProduct = async (req, res) => {
     try {
-        const { title, description, price, size, color } = req.body;
-        if (!title || !price || !description || !size || !color) {
+        const { title, price, size, color, quantity } = req.body;
+        if (!title || !price || !size || !color || !quantity) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1
@@ -29,7 +29,7 @@ const createNewProduct = async (req, res) => {
     }
 }
 
-const apiGetProducts = async (req, res) => {
+const getProducts = async (req, res) => {
     try {
         const response = await productService.handleGetProducts(req.query);
         return res.status(200).json({
@@ -60,7 +60,7 @@ const getAProduct = async (req, res) => {
             EM: response.EM,
             EC: response.EC,
             DT: response.DT,
-            counts: response.counts
+            quantity: response.quantity
         })
     } catch (error) {
         return res.status(500).json({
@@ -121,6 +121,7 @@ const updateProduct = async (req, res) => {
     }
 }
 
+
 const ratings = async (req, res) => {
     try {
         const { _id } = req.user;
@@ -146,16 +147,19 @@ const ratings = async (req, res) => {
     }
 }
 
-const uploadImageProduct = async (req, res) => {
+const updateOptions = async (req, res) => {
     try {
         const { pid } = req.params;
-        if (!pid || !req.files) {
+        const { otpId } = req.query;
+        const { color, size, quantity } = req.body;
+        if ((!pid && !otpId) || (!req.files && !color && !size && !quantity)) {
             return res.status(400).json({
                 EM: "Missing inputs!",
                 EC: 1
             })
         }
-        const response = await productService.handleUploadImageProduct(pid, req.files);
+        const response = await productService.handleUpdateOptions(pid, otpId, req.files, { color, size, quantity });
+        console.log("check response", response)
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -163,13 +167,13 @@ const uploadImageProduct = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "uploadImageProduct" in productControllers.js: ${error.message} `,
+            EM: `There is an error in the "updateOptions function" in productControllers.js: ${error.message} `,
             EC: 1,
         })
     }
 }
 
 module.exports = {
-    createNewProduct, getAProduct, apiGetProducts, deleteProduct, updateProduct,
-    ratings, uploadImageProduct
+    createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,
+    ratings, updateOptions
 }

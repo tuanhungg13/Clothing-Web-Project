@@ -12,6 +12,10 @@ import { formatCurrency, renderStarFromNumber } from "../../untils/helpers"
 const ProductDetails = (props) => {
     const [productDetails, setProductDetails] = useState();
     const [displayImage, setDisplayImage] = useState("");
+    const [size, setSize] = useState("");
+    const [color, setColor] = useState("");
+    const [quantity, setQuantity] = useState(1);
+    const [error, setError] = useState("")
     const settings = {
         dots: false,
         infinite: true,
@@ -51,8 +55,28 @@ const ProductDetails = (props) => {
         sliderRef.current.slickNext();
     };
 
-    const handleChangeImage = (item) => {
-        setDisplayImage(item)
+    const handleChangeImage = (image) => {
+        setDisplayImage(image)
+    }
+
+    const handleChooseSize = (size) => {
+        setSize(size);
+    }
+    const handleChooseColor = (color) => {
+        setColor(color)
+    }
+    const handleIncrementQuantity = () => {
+        if (quantity > productDetails?.quantity) return
+        setQuantity(quantity + 1)
+    }
+
+    const handleDecremantQuantity = () => {
+        if (quantity <= 1) return
+        setQuantity(quantity - 1)
+    }
+    const handleChangeQuantity = (event) => {
+        if (productDetails?.quantity === 0) return
+        setQuantity(event.target.value)
     }
     return (
         <div className='product-details-page'>
@@ -104,9 +128,11 @@ const ProductDetails = (props) => {
                             <div className='d-inline '>Màu sắc</div>
                             <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Đen</div>
                             <div className='d-flex mt-2'>
-                                {/* <label><img src={vd1} /></label>
-                                <label><img src={vd1} /></label>
-                                <label><img src={vd1} /></label> */}
+                                {productDetails?.color?.map((item, index) => {
+                                    return (
+                                        <label>{item}</label>
+                                    )
+                                })}
                             </div>
                         </div>
                         <div className='size-product d-flex flex-column mt-3'>
@@ -117,7 +143,7 @@ const ProductDetails = (props) => {
                             <div className='list-size-items d-flex mt-2'>
                                 {productDetails?.size.map((item, index) => {
                                     return (
-                                        <label key={`${item}-${index}`} className='size-items'>
+                                        <label key={`${item}-${index}`} className={`${size === item ? "active" : ""} size-items`} onClick={() => { handleChooseSize(item) }}>
                                             <span>{item}</span>
                                         </label>
 
@@ -126,9 +152,15 @@ const ProductDetails = (props) => {
                             </div>
                         </div>
                         <div className='input-quantity mt-3'>
-                            <input type='button' className='minus-quantity border' value={'-'} />
-                            <input type='text' className='text-center border-top border-bottom w-25' value={1} />
-                            <input type='button' value={'+'} className='plus-quantity border' />
+                            <input type='button' className='minus-quantity border' value={'-'} onClick={() => {
+                                handleDecremantQuantity()
+                            }} />
+                            <input type='text' className='text-center border-top border-bottom w-25' value={quantity}
+                                onChange={(event) => { handleChangeQuantity(event) }} />
+                            <input type='button' value={'+'} className='plus-quantity border' onClick={() => {
+                                handleIncrementQuantity()
+
+                            }} />
                         </div>
                         <div className='add-cart mt-3'>
                             <button className='add-to-cart'>THÊM VÀO GIỎ HÀNG</button>

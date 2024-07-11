@@ -24,18 +24,14 @@ var productSchema = new mongoose.Schema({
         type: String,
         default: "Atino"
     },
-    quantity: {
-        type: Number,
-        default: 0
-    },
-    size: {
-        type: Array,
-        required: true
-    },
-    color: {
-        type: Array,
-        required: true
-    },
+    options: [
+        {
+            color: { type: String, require: true },
+            quantity: { type: Number, require: true },
+            size: { type: Array, require: true },
+            images: Array
+        }
+    ],
     discount: {
         type: Number,
         default: 0
@@ -51,10 +47,6 @@ var productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    images: {
-        type: Array,
-    },
-
     ratings: [
         {
             star: { type: Number },

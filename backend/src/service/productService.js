@@ -5,8 +5,10 @@ const handleCreateNewProduct = async (data) => {
     try {
         data.slug = slugify(data.title);
         data.size = data.size.split(",");
-        data.color = data.color.split(",");
-        const newProduct = await Product.create(data);
+        const newProduct = await Product.create({
+            title: data.title, price: data.price, slug: data.slug,
+            options: { size: data.size, color: data.color, quantity: data.quantity }
+        });
         if (!newProduct) {
             return ({
                 EM: "Creating a new product failed!",
@@ -99,24 +101,27 @@ const handleGetProducts = async (data) => {
 const handleGetAProduct = async (slug) => {
     try {
         const product = await Product.findOne({ slug: slug });
+        const totalQuantity = product.options.reduce((sum, item) => sum + item.quantity, 0);
         if (!product) {
             return {
                 EM: "Get a product failed!",
                 EC: 1,
-                DT: {}
+                DT: {},
+                quantity: 0
             }
         }
         return {
             EM: "Get a product successfully!",
             EC: 0,
-            DT: product
+            DT: product,
+            quantity: totalQuantity
         }
     } catch (error) {
         return {
             EM: `There is an error in the "handleAGetProduct function" in productService.js: ${error.message} `,
             EC: 1,
             DT: {},
-            counts: ""
+            quantity: 0
         }
     }
 }
@@ -144,17 +149,11 @@ const handleDeleteProduct = async (pid) => {
 
 const handleUpdateProduct = async (pid, data) => {
     try {
-        if (data.slug) {
-            data.slug = slugify(data.slug);
+        const { size, quantity, images, color, ...dataUpdate } = data;
+        if (dataUpdate.title) {
+            dataUpdate.slug = slugify(dataUpdate.slug);
         }
-        if (data.size) {
-            //Tách chuỗi
-            data.size = data.size.split(",");
-        }
-        if (data.color) {
-            data.color = data.color.split(",");
-        }
-        const updateProduct = await Product.findByIdAndUpdate(pid, data, { new: true });
+        const updateProduct = await Product.findByIdAndUpdate(pid, dataUpdate, { new: true });
         if (!updateProduct) {
             return {
                 EM: "Update product failed!",
@@ -175,6 +174,8 @@ const handleUpdateProduct = async (pid, data) => {
         })
     }
 }
+
+
 
 
 const handleRatings = async (_id, data) => {
@@ -215,27 +216,64 @@ const handleRatings = async (_id, data) => {
     }
 }
 
-const handleUploadImageProduct = async (_pid, data) => {
+const handleUpdateOptions = async (pid, otpId, images, data) => {
     try {
-        //Tim sản phẩm và đẩy từng ảnh vào mảng images
-        const uploadImgProduct = await Product.findByIdAndUpdate(_pid, {
-            $push: { images: { $each: data.map(item => item.path) } }
-        }, { new: true })
-        if (!uploadImgProduct) {
+        //đẩy mới 1 mục option {color, quantity, size, images}
+        if (data.color && data.size && data.quantity && images) {
+            data.size = data.size.split(",");
+            images = images.map(item => item.path)
+            const updateOption = await Product.findByIdAndUpdate(pid, {
+                $push: {
+                    options: {
+                        images: images,
+                        color: data.color,
+                        size: data.size,
+                        quantity: data.quantity
+                    }
+                },
+
+            }, { new: true })
+            if (!updateOption) {
+                return {
+                    EM: "Upload image failed!",
+                    EC: 1,
+                    DT: {}
+                }
+            }
             return {
-                EM: "Upload image failed!",
-                EC: 1,
-                DT: {}
+                EM: "Upload image successfully!",
+                EC: 0,
+                DT: updateOption
             }
         }
-        return {
-            EM: "Upload image successfully!",
-            EC: 0,
-            DT: uploadImgProduct
+        //thêm ảnh vào mục đã có sẵn
+        if (images && !data.color && !data.size && !data.quantity) {
+            //tìm vị trí màu sắc đã có rồi thêm ảnh vào
+            const updateOption = await Product.findOneAndUpdate(
+                { _id: pid, 'options._id': otpId },
+                {
+                    $push: { 'options.$.images': { $each: images.map(item => item.path) } }
+                },
+                { new: true }
+            )
+            if (!updateOption) {
+                return {
+                    EM: "Upload image failed!",
+                    EC: 1,
+                    DT: {}
+                }
+            }
+            return {
+                EM: "Upload image successfully!",
+                EC: 0,
+                DT: updateOption
+            }
         }
+
+
     } catch (error) {
         return ({
-            EM: `There is an error in the "handleUploadImageProduct function" in productService.js: ${error.message} `,
+            EM: `There is an error in the "handleUpdateOptions function" in productService.js: ${error.message} `,
             EC: 1,
             DT: {}
         })
@@ -244,5 +282,5 @@ const handleUploadImageProduct = async (_pid, data) => {
 
 module.exports = {
     handleCreateNewProduct, handleGetAProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
-    handleRatings, handleUploadImageProduct
+    handleRatings, handleUpdateOptions
 }

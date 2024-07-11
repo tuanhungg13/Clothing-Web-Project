@@ -135,6 +135,11 @@
                     background: #ffffff;
                     border: 1px solid #d7d7d7;
                     line-height: 38px;
+                    cursor: pointer;
+                }
+
+                .active {
+                    background-color: #b7b5b5;
                 }
             }
         }
