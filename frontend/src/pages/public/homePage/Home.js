@@ -20,7 +20,7 @@ import style10 from "../../../assets/img/product10.webp";
 import { NavLink } from 'react-router-dom';
 import SliderComponent from "../../../components/slider/Slider";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
-import { fetchBestSellingProduct, fetchNewProducts } from '../../../redux/productSlice/displayProductSlice';
+import { fetchBestSellingProduct, fetchNewProducts } from '../../../redux/displayProductSlice';
 import { useDispatch } from 'react-redux';
 const Home = () => {
     const background = [poster1, poster2, poster3, poster4, poster5, poster6];
