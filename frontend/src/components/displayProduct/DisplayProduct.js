@@ -25,7 +25,7 @@ const DisplayProduct = (props) => {
                             <div className='product-content col-6 col-sm-4 d-flex flex-column text-center' key={`product-${index}`}>
                                 <div className='product-information'>
                                     <div className='product-detail' onClick={() => { handleGetDetailsProduct(item) }}>
-                                        <img src={`${item?.images[0]}`} alt='' />
+                                        <img src={`${item?.options[0]?.images[0]}`} alt='' />
                                         <div className='product-name'>{item.title}</div>
                                     </div>
                                     <div className='product-price'>

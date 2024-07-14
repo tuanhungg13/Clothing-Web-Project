@@ -10,6 +10,10 @@
                 .product-detail {
                     cursor: pointer;
 
+                    .product-name {
+                        font-size: 14px;
+                    }
+
                     img {
                         opacity: 1;
                         object-fit: scale-down;

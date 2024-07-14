@@ -15,7 +15,9 @@ const ProductDetails = (props) => {
     const [size, setSize] = useState("");
     const [color, setColor] = useState("");
     const [quantity, setQuantity] = useState(1);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const [imagesSlider, setImagesSlider] = useState([]);
+    const [allSizes, setAllSizes] = useState([]);
     const settings = {
         dots: false,
         infinite: true,
@@ -34,7 +36,11 @@ const ProductDetails = (props) => {
             const productDetails = await apiGetProductDetails(productId);
             console.log("check details:", productDetails);
             setProductDetails(productDetails?.DT);
-            setDisplayImage(productDetails?.DT?.images[0])
+            setDisplayImage(productDetails?.DT?.options[0]?.images[0])
+            const allImages = productDetails?.DT?.options.flatMap(option => option.images)
+            const sizes = [...new Set(productDetails?.DT?.options.flatMap(option => option.size))];
+            setAllSizes(sizes)
+            setImagesSlider(allImages)
         } catch (error) {
             console.error("Error fetching product details:", error);
         }
@@ -42,7 +48,6 @@ const ProductDetails = (props) => {
 
     useEffect(() => {
         fetchAProduct()
-        console.log('check productDetails', productDetails);
     }, [])
 
 
@@ -61,9 +66,38 @@ const ProductDetails = (props) => {
 
     const handleChooseSize = (size) => {
         setSize(size);
+
     }
-    const handleChooseColor = (color) => {
-        setColor(color)
+    const handleCheckSize = (size) => {
+        if (color) {
+            //kiểm tra xem những size nào có trong màu đang chọn
+            return productDetails?.options?.find(option => option.color === color)?.size.includes(size);
+        }
+        return true
+
+    }
+
+    const handleCheckColor = (colorSelect) => {
+        if (!size) return true
+        const availableColors = [];
+        //kiểm tra xem màu sắc nào có size được chọn thì push vào mảng
+        productDetails?.options.forEach(option => {
+            if (option.size.includes(size)) {
+                availableColors.push(option.color);
+            }
+        })
+        //kiểm tra xem màu sắc nào có trong mảng vừa push
+        return availableColors.includes(colorSelect)
+
+
+    }
+
+    //chọn màu sắc
+    const handleChooseColor = (selectColor) => {
+        setColor(selectColor)
+        const imagesOfColor = productDetails?.options?.find(option => option.color === selectColor)?.images;
+        setDisplayImage(imagesOfColor[0])
+        setImagesSlider(imagesOfColor)
     }
     const handleIncrementQuantity = () => {
         if (quantity > productDetails?.quantity) return
@@ -89,16 +123,17 @@ const ProductDetails = (props) => {
                         <div className='row'>
                             <div className='list-imgs-product col-lg-2'>
                                 <Slider {...settings} ref={sliderRef}>
-                                    {productDetails?.images.map((item, index) => {
+                                    {imagesSlider.map((item, index) => {
                                         return (
                                             <div>
                                                 <img src={item} onClick={() => { handleChangeImage(item) }} />
                                             </div>
                                         )
                                     })}
-
-                                    {/* Thêm ảnh từ các biến khác nếu cần */}
                                 </Slider>
+
+                                {/* Thêm ảnh từ các biến khác nếu cần */}
+
                                 <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
                                 <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                             </div>
@@ -128,9 +163,11 @@ const ProductDetails = (props) => {
                             <div className='d-inline '>Màu sắc</div>
                             <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Đen</div>
                             <div className='d-flex mt-2'>
-                                {productDetails?.color?.map((item, index) => {
+                                {productDetails?.options?.map((item, index) => {
                                     return (
-                                        <label>{item}</label>
+                                        <label onClick={() => { handleChooseColor(item.color) }}
+                                            className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
+                                            {item.color}</label>
                                     )
                                 })}
                             </div>
@@ -141,9 +178,12 @@ const ProductDetails = (props) => {
                                 <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
                             </div>
                             <div className='list-size-items d-flex mt-2'>
-                                {productDetails?.size.map((item, index) => {
+                                {allSizes.map((item, index) => {
+
                                     return (
-                                        <label key={`${item}-${index}`} className={`${size === item ? "active" : ""} size-items`} onClick={() => { handleChooseSize(item) }}>
+                                        <label key={`${item}-${index}`}
+                                            className={`${size === item && handleCheckSize(item) ? "active" : " "} ${handleCheckSize(item) ? " " : "inactive pe-none"} size-items`}
+                                            onClick={() => { handleChooseSize(item) }}>
                                             <span>{item}</span>
                                         </label>
 
@@ -208,7 +248,7 @@ const ProductDetails = (props) => {
                     <li>➤ Là ở nhiệt độ thấp, ≤ 110°C.</li>
                 </ul>
             </div>
-        </div>
+        </div >
 
     )
 }
