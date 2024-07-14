@@ -3,7 +3,7 @@ import productService from "../service/productService";
 const createNewProduct = async (req, res) => {
     try {
         const { title, price, size, color, quantity } = req.body;
-        if (!title || !price || !size || !color || !quantity) {
+        if (!title || !price) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1

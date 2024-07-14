@@ -3,12 +3,20 @@ import slugify from 'slugify'
 
 const handleCreateNewProduct = async (data) => {
     try {
+        let newProduct;
         data.slug = slugify(data.title);
-        data.size = data.size.split(",");
-        const newProduct = await Product.create({
-            title: data.title, price: data.price, slug: data.slug,
-            options: { size: data.size, color: data.color, quantity: data.quantity }
-        });
+        if (data.size) {
+            data.size = data.size.split(",");
+            newProduct = await Product.create({
+                title: data.title, price: data.price, slug: data.slug, description: data.description,
+                options: { size: data.size, color: data.color, quantity: data.quantity }
+            });
+        }
+        else {
+            newProduct = await Product.create({
+                title: data.title, price: data.price, slug: data.slug, description: data.description
+            });
+        }
         if (!newProduct) {
             return ({
                 EM: "Creating a new product failed!",
