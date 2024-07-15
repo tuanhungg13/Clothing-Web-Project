@@ -139,7 +139,6 @@ const handleRefreshAccessToken = async (cookie) => {
     try {
         const decode = jwt.verify(cookie.refreshToken, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decode._id, refreshToken: cookie.refreshToken });
-        console.log("check user 123", user)
         return ({
             EC: user ? 0 : 1,
             newAccessToken: user ? generateAccessToken(user._id, user.role) : "Refresh token not matched"

@@ -1,5 +1,11 @@
 const mongoose = require('mongoose'); // Erase if already required
 
+//createFE(.....)
+//apicretea
+//
+
+
+
 // Declare the Schema of the Mongo model
 var productSchema = new mongoose.Schema({
     title: {
@@ -27,8 +33,10 @@ var productSchema = new mongoose.Schema({
     options: [
         {
             color: { type: String, require: true },
-            quantity: { type: Number, require: true },
-            size: { type: Array, require: true },
+            sizeQuantity: [{
+                size: { type: String, require: true },
+                quantity: { type: Number, require: true }
+            }],
             images: Array
         }
     ],
@@ -41,7 +49,7 @@ var productSchema = new mongoose.Schema({
     },
     category: {
         type: mongoose.Types.ObjectId,
-        ref: "Category"
+        ref: "ProductCategory"
     },
     sold: {
         type: Number,

@@ -2,8 +2,8 @@ import productService from "../service/productService";
 
 const createNewProduct = async (req, res) => {
     try {
-        const { title, price, size, color, quantity } = req.body;
-        if (!title || !price) {
+        const { title, price, options } = req.body;
+        if (!title || !price || !options) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1
@@ -15,7 +15,7 @@ const createNewProduct = async (req, res) => {
                 EC: 1
             })
         }
-        const response = await productService.handleCreateNewProduct(req.body);
+        const response = await productService.handleCreateNewProduct(req.body, req.files);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -59,8 +59,9 @@ const getAProduct = async (req, res) => {
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
+            quantity: response.quantity,
             DT: response.DT,
-            quantity: response.quantity
+
         })
     } catch (error) {
         return res.status(500).json({
@@ -95,6 +96,7 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { pid } = req.params;
+        const { optId, sqttId } = req.query; //id của option và id của sizeQuantity
         if (!pid || Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 EM: "Missing require parameters!",
@@ -107,7 +109,7 @@ const updateProduct = async (req, res) => {
                 EC: 1
             })
         }
-        const response = await productService.handleUpdateProduct(pid, req.body);
+        const response = await productService.handleUpdateProduct(pid, optId, sqttId, req.body);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -147,33 +149,33 @@ const ratings = async (req, res) => {
     }
 }
 
-const updateOptions = async (req, res) => {
-    try {
-        const { pid } = req.params;
-        const { otpId } = req.query;
-        const { color, size, quantity } = req.body;
-        if ((!pid && !otpId) || (!req.files && !color && !size && !quantity)) {
-            return res.status(400).json({
-                EM: "Missing inputs!",
-                EC: 1
-            })
-        }
-        const response = await productService.handleUpdateOptions(pid, otpId, req.files, { color, size, quantity });
-        console.log("check response", response)
-        return res.status(200).json({
-            EM: response.EM,
-            EC: response.EC,
-            DT: response.DT
-        })
-    } catch (error) {
-        return res.status(500).json({
-            EM: `There is an error in the "updateOptions function" in productControllers.js: ${error.message} `,
-            EC: 1,
-        })
-    }
-}
+// const updateOptions = async (req, res) => {
+//     try {
+//         const { pid } = req.params;
+//         const { optId, sqttId } = req.query;
+//         const { color, size, quantity } = req.body;
+//         console.log("check req.body updateOption:", req.body)
+//         if ((!pid && !optId) || (!req.files && !color && !size && !quantity)) {
+//             return res.status(400).json({
+//                 EM: "Missing inputs!",
+//                 EC: 1
+//             })
+//         }
+//         const response = await productService.handleUpdateOptions(pid, optId, sqttId, req.files, req.body);
+//         return res.status(200).json({
+//             EM: response.EM,
+//             EC: response.EC,
+//             DT: response.DT
+//         })
+//     } catch (error) {
+//         return res.status(500).json({
+//             EM: `There is an error in the "updateOptions function" in productControllers.js: ${error.message} `,
+//             EC: 1,
+//         })
+//     }
+// }
 
 module.exports = {
     createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,
-    ratings, updateOptions
+    ratings
 }
