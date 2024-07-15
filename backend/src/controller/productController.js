@@ -60,8 +60,8 @@ const getAProduct = async (req, res) => {
             EM: response.EM,
             EC: response.EC,
             quantity: response.quantity,
+            size: response.size,
             DT: response.DT,
-
         })
     } catch (error) {
         return res.status(500).json({
@@ -128,7 +128,6 @@ const ratings = async (req, res) => {
     try {
         const { _id } = req.user;
         const { pid, star } = req.body;
-        console.log("check pid,start", pid, star)
         if (!pid || !star) {
             return res.status(400).json({
                 EM: "Missing require parameters",

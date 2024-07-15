@@ -51,15 +51,12 @@ const handleCreateNewProduct = async (data, files) => {
 const handleGetProducts = async (data) => {
     try {
         const queries = { ...data };
-        console.log("check req.query:", data)
         const excluderFields = ["sort", "limit", "page", "fields"];
         //Loại bỏ các trường sort, limit, page, fields khỏi queries;
         excluderFields.forEach(item => delete queries[item]);
         //Format lại các operators cho đúng cú pháp của mongodb;
         let queryString = JSON.stringify(queries);
-        console.log(queryString)
         queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, condition => `$${condition}`);
-        console.log("2:", queryString)
         queryString = JSON.parse(queryString);
 
         //Filter
@@ -117,6 +114,7 @@ const handleGetProducts = async (data) => {
 const handleGetAProduct = async (slug) => {
     try {
         const product = await Product.findOne({ slug: slug }).populate("category", "categoryName");
+        const allSizes = [...new Set(product.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
         const totalQuantity = product.options.reduce((total, option) => {
             return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
                 return sum + sizeQtt.quantity;
@@ -134,7 +132,8 @@ const handleGetAProduct = async (slug) => {
             EM: "Get a product successfully!",
             EC: 0,
             DT: product,
-            quantity: totalQuantity
+            quantity: totalQuantity,
+            size: allSizes
         }
     } catch (error) {
         return {
