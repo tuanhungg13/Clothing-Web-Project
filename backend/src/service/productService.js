@@ -113,7 +113,7 @@ const handleGetProducts = async (data) => {
 
 const handleGetAProduct = async (slug) => {
     try {
-        const product = await Product.findOne({ slug: slug }).populate("category", "categoryName");
+        const product = await Product.findOne({ slug: slug }).populate("category ratings.postedBy", "categoryName userName");
         const allSizes = [...new Set(product.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
         const totalQuantity = product.options.reduce((total, option) => {
             return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
@@ -196,6 +196,7 @@ const handleUpdateProduct = async (pid, optId, sqttId, data) => {
             ).populate("category", "categoryName");
         } else {
             // Nếu không có optId và sqttId, chỉ cập nhật thông tin cơ bản
+            if (data.description) data.description = JSON.parse(data.description)
             updateProduct = await Product.findByIdAndUpdate(
                 pid, data, { new: true }).populate("category", "categoryName");
         }
@@ -229,7 +230,7 @@ const handleRatings = async (_id, data) => {
     try {
         //Tìm sản phẩm và đẩy đánh giá người dùng vào mảng ratings của sản phẩm đó
         const rating = await Product.findByIdAndUpdate(data.pid, {
-            $push: { ratings: { star: data.star, comment: data.comment, postedBy: _id } }
+            $push: { ratings: { star: data.star, comment: data.comment, postedBy: _id, createdAt: Date.now() } }
         }, {
             new: true
         });
@@ -240,7 +241,7 @@ const handleRatings = async (_id, data) => {
                 DT: []
             }
         }
-        const updatedProduct = await Product.findById(data.pid);
+        const updatedProduct = await Product.findById(data.pid).populate("ratings.postedBy", "userName");
         //Số lượt đánh giá
         const ratingsCount = updatedProduct.ratings.length;
         //Tổng sao đán giá
