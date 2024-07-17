@@ -7,7 +7,8 @@ import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetProductDetails } from '../../service/productApiService';
-import { formatCurrency, renderStarFromNumber } from "../../untils/helpers"
+import { formatCurrency, renderStarFromNumber } from "../../untils/helpers";
+import Ratings from '../ratings/Ratings';
 
 const ProductDetails = (props) => {
     const [productDetails, setProductDetails] = useState();
@@ -18,6 +19,7 @@ const ProductDetails = (props) => {
     const [error, setError] = useState("");
     const [imagesSlider, setImagesSlider] = useState([]);
     const [allSizes, setAllSizes] = useState([]);
+    const [ratings, setRatings] = useState([])
     const settings = {
         dots: false,
         infinite: true,
@@ -30,15 +32,14 @@ const ProductDetails = (props) => {
         verticalSwiping: true
     };
     let { productId } = useParams();
-
     const fetchAProduct = async () => {
         try {
-            const productDetails = await apiGetProductDetails(productId);
-            console.log("check details:", productDetails);
-            setProductDetails(productDetails?.DT);
-            setDisplayImage(productDetails?.DT?.options[0]?.images[0])
-            const allImages = productDetails?.DT?.options.flatMap(option => option.images)
-            const sizes = [...new Set(productDetails?.DT?.options.flatMap(option => option.size))];
+            const dataProductDetails = await apiGetProductDetails(productId);
+            setProductDetails(dataProductDetails?.DT);
+            setRatings(dataProductDetails.DT.ratings)
+            setDisplayImage(dataProductDetails?.DT?.options[0]?.images[0])
+            const allImages = dataProductDetails?.DT?.options.flatMap(option => option.images)
+            const sizes = dataProductDetails?.size;
             setAllSizes(sizes)
             setImagesSlider(allImages)
         } catch (error) {
@@ -68,28 +69,38 @@ const ProductDetails = (props) => {
         setSize(size);
 
     }
-    const handleCheckSize = (size) => {
+    const handleCheckSize = (sizeSelect) => {
+        if (!color) return true
         if (color) {
-            //kiểm tra xem những size nào có trong màu đang chọn
-            return productDetails?.options?.find(option => option.color === color)?.size.includes(size);
+            const option = productDetails?.options?.find(option => option.color === color);
+            return option?.sizeQuantity?.some(item => item.size === sizeSelect && item.quantity > 0);
         }
-        return true
-
     }
-
     const handleCheckColor = (colorSelect) => {
-        if (!size) return true
-        const availableColors = [];
-        //kiểm tra xem màu sắc nào có size được chọn thì push vào mảng
-        productDetails?.options.forEach(option => {
-            if (option.size.includes(size)) {
-                availableColors.push(option.color);
-            }
-        })
-        //kiểm tra xem màu sắc nào có trong mảng vừa push
-        return availableColors.includes(colorSelect)
+        const colors = [];
+        if (!size) {
+            //duyệt các option
+            productDetails.options.forEach(option => {
+                //tìm trong sizeQuantity của option có size = size đang chọn không 
+                const totalQuantity = option.sizeQuantity.reduce((total, item) => total + item.quantity, 0)
+                if (totalQuantity > 0) {
+                    colors.push(option.color);
+                }
+            });
+        }
+        else {
+            //duyệt các option
+            productDetails.options.forEach(option => {
+                //tìm trong sizeQuantity của option có size = size đang chọn không 
+                if (option.sizeQuantity.some(sizeQtt => sizeQtt.size === size && sizeQtt.quantity > 0)) {
+                    //nếu có push màu của option đang duyệt vào mảng color tạo ở trên
+                    colors.push(option.color);
+                }
+            });
+        }
 
-
+        //kiểm tra xem các màu đang render ở trang product details có nằm trong màu ở mảng color không
+        return colors.includes(colorSelect);
     }
 
     //chọn màu sắc
@@ -101,17 +112,41 @@ const ProductDetails = (props) => {
     }
     const handleIncrementQuantity = () => {
         if (quantity > productDetails?.quantity) return
-        setQuantity(quantity + 1)
+        setQuantity(+quantity + 1)
     }
 
     const handleDecremantQuantity = () => {
+
         if (quantity <= 1) return
-        setQuantity(quantity - 1)
+        setQuantity(+quantity - 1)
     }
     const handleChangeQuantity = (event) => {
         if (productDetails?.quantity === 0) return
         setQuantity(event.target.value)
     }
+
+    const validDate = () => {
+        let isValid = true;
+        setError("");
+        if (size && color) {
+            const sizeOfColor = productDetails?.options?.find(option => option.color === color)?.sizeQuantity;
+            const quantityOfSize = sizeOfColor.find(item => item.size === size).quantity;
+            if (quantity > quantityOfSize) {
+                setError(`Sản phẩm màu ${color}, size: ${size} chỉ còn ${quantityOfSize} chiếc. Vui lòng chọn số lượng phù hợp!`)
+                isValid = false
+            }
+        }
+        else if (!color || !size || !quantity) {
+            isValid = false
+        }
+        return isValid
+    }
+    const handleAddToCart = () => {
+        const check = validDate()
+        if (check)
+            return
+    }
+
     return (
         <div className='product-details-page'>
             <div className='nav-title'>
@@ -145,7 +180,7 @@ const ProductDetails = (props) => {
                     <div className=' ps-4 info-product col-lg-4'>
                         <h3>{productDetails?.title}</h3>
                         <div>
-                            <div className='voteView me-1 pe-1 d-inline-block'>{productDetails?.totalRatings}</div>
+                            <div className='voteView me-1 pe-1 d-inline-block' style={{ color: '#ee4d2d' }}>{productDetails?.totalRatings}</div>
                             <div className='vote d-inline-block'>
                                 {renderStarFromNumber(productDetails?.totalRatings)}
                             </div>
@@ -161,13 +196,14 @@ const ProductDetails = (props) => {
 
                         <div className='info-color-product mt-3'>
                             <div className='d-inline '>Màu sắc</div>
-                            <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Đen</div>
+                            <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>{color}</div>
                             <div className='d-flex mt-2'>
                                 {productDetails?.options?.map((item, index) => {
                                     return (
                                         <label onClick={() => { handleChooseColor(item.color) }}
                                             className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
-                                            {item.color}</label>
+                                            <img src={item.images[0]} alt={item.color} />
+                                        </label>
                                     )
                                 })}
                             </div>
@@ -201,9 +237,11 @@ const ProductDetails = (props) => {
                                 handleIncrementQuantity()
 
                             }} />
+                            {error && <div>{error}</div>}
                         </div>
                         <div className='add-cart mt-3'>
-                            <button className='add-to-cart'>THÊM VÀO GIỎ HÀNG</button>
+                            <button className='add-to-cart' type='button' onClick={() => { handleAddToCart() }}>
+                                THÊM VÀO GIỎ HÀNG</button>
                             <button className='add-to-cart add-quick-cart'>MUA NGAY</button>
                         </div>
                         <div className='favourite mt-4 d-flex justify-content-center '>
@@ -217,37 +255,27 @@ const ProductDetails = (props) => {
                 </div>
             </div>
             <hr />
-            <div className='description-product'>
+            <div className='description-product mb-5'>
                 <h1>1. THÔNG TIN SẢN PHẨM</h1>
-                <ul>
-                    <li>➤ Màu sắc: đen, trắng</li>
-                    <li>➤ Chất liệu: tweed</li>
-                    <li>➤ Set đồ phù hợp phong cách năng động, thoải mái</li>
-                    <li>➤ Mô tả chung: Chất liệu tweed, ko co giãn, đứng phom, áo suông dáng ngắn, chân váy dáng suông dài, sản phẩm 1 lớp, chất liệu dày dặn đứng phom.
-                        Áo mở khuy trước, chân váy kéo khóa sau, chân váy dáng dài, xẻ sau đính khuy túi trước, áo cổ trụ phối tay bồng vải thô,
-                        thích hợp mặc set hoặc tách set mix áo cùng quần suông, chân váy cùng áo thun ôm, sản phẩm mặc dạo phố, công sở</li>
-                    <li>➤ Thông số size: XS, S, M, L, XL, XXL</li>
-                </ul>
-                <h1>2. ĐẶC ĐIỂM SẢN PHẨM</h1>
-                <ul>
-                    <li>➤ Set đồ được yêu thích bởi chất tweed cao cấp dày dặn, bề mặt nổi nhẹ chất dệt, chuẩn form, có cảm giác mềm mại trên da, tạo sự thoải mái cho người mặc.</li>
-                    <li>➤ Set đồ bao gồm một một thiết kế áo ở hữu form dáng ngắn nhẹ nhàng giúp tỉ lệ cơ thể nàng hoàn hảo và cuốn hút hơn, kết hợp với chi tiết tay áo phối vải thô nhẹ nhàng, thoải mái. Kết
-                        hợp cùng thiết kế chân váy có form dáng suông dễ dàng che khuyết điểm phần chân chưa hoàn hảo</li>
-                    <li>➤ Tính ứng dụng: Set đồ phù hợp mặc đi làm, đi chơi, đi hẹn hò dạo phố</li>
-                </ul>
+                {productDetails?.description?.map((item, index) => {
+                    return (
+                        <li key={`description-${index}`}>➤ {item}</li>
+                    )
+                })}
+                <h1 className='mt-4'>2. HƯỚNG DẪN BẢO QUẢN</h1>
+                <div>
 
-                <h1>3. HƯỚNG DẪN BẢO QUẢN SẢN PHẨM</h1>
-                <ul>
-                    <li>➤ Lộn trái sản phẩm khi giặt, không giặt chung sản phẩm trắng với quần áo tối màu.</li>
-                    <li>➤ Giặt với sản phẩm cùng màu.</li>
-                    <li>➤ Sản phẩm đậm màu hãng khuyến cáo nên giặt nước trắng 2 -3 lần đầu.</li>
-                    <li>➤ Không sử dụng hóa chất tẩy có chứa Clo, không ngâm sản phẩm.</li>
-                    <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường.</li>
-                    <li>➤ Không phơi trực tiếp dưới ánh nắng mặt trời.</li>
-                    <li>➤ Sấy khô ở nhiệt độ thấp.</li>
-                    <li>➤ Là ở nhiệt độ thấp, ≤ 110°C.</li>
-                </ul>
+                    <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường. Giặt với sản phẩm cùng màu </li>
+                    <li>➤ Không ngâm lâu trong xà phòng</li>
+                    <li>➤ Không sử dụng hóa chất tẩy</li>
+                    <li>➤ Phơi mặt trái của áo và phơi trong bóng râm  </li>
+                    <li>➤ Hạn chế sấy áo. Là áo ở nhiệt độ thường.  </li>
+                </div>
+
             </div>
+            <hr />
+
+            <Ratings ratings={ratings} />
         </div >
 
     )
