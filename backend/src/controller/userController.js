@@ -37,11 +37,14 @@ const login = async (req, res) => {
         }
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
-        res.cookie('refreshToken', response.newRefreshToken, { httpOnly: true, secure: true, maxAge: 604800000 })
+        if (response.EC === 0) {
+            res.cookie("accessToken", response.accessToken, { maxAge: 30000 })
+            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000 })
+        }
+
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
-            accessToken: response.accessToken,
             DT: response.DT
         })
 
@@ -71,9 +74,8 @@ const getUserById = async (req, res) => {
             DT: response.DT
         })
     } catch (error) {
-        console.log("Error from 'getUserById func' of userController.js: ", error);
         return res.status(500).json({
-            EM: 'There is an error in the "getUserById function" in userControllers.js',
+            EM: `There is an error in the "getUserById function" in userControllers.js : ${error.message}`,
             EC: 1,
         })
     }
@@ -83,18 +85,19 @@ const getUserById = async (req, res) => {
 const refreshAccessToken = async (req, res) => {
     try {
         const cookie = req.cookies;
-        console.log("check cookie:", cookie)
         if (!cookie && !cookie.refreshToken) throw new Error("Cookie not found");
         const response = await userService.handleRefreshAccessToken(cookie);
-        console.log("check response:", response)
+        if (response.EC === 0) {
+            res.cookie("accessToken", response.newAccessToken, { maxAge: 30000, httpOnly: true })
+            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000, httpOnly: true })
+        }
         return res.status(200).json({
             EC: response.EC,
-            newAccessToken: response.newAccessToken
+            EM: response.EM
         })
     } catch (error) {
-        console.log("Error from 'refreshAccessToken func' of userController.js: ", error)
         return res.status(500).json({
-            EM: 'There is an error in the "refreshAccessToken function" in userControllers.js',
+            EM: `There is an error in the "refreshAccessToken function" in userControllers.js: ${error.message}`,
             EC: 1
         })
     }
@@ -104,6 +107,7 @@ const logout = async (req, res) => {
     try {
         const cookie = req.cookies;
         res.clearCookie('refreshToken', { httpOnly: true, secure: true })
+        res.clearCookie('accessToken', { httpOnly: true })
         return res.status(200).json({
             EM: "Successfully logged out!",
             EC: 0

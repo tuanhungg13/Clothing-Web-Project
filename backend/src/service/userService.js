@@ -79,7 +79,7 @@ const handleLogin = async (loginData) => {
                 { email: loginData.loginValue },
                 { phoneNumber: loginData.loginValue }
             ]
-        })
+        }).populate("cart.product", "title price options")
         if (user) {
             // console.log("found user with phone/email")
             // console.log("rawData:", loginData);
@@ -118,7 +118,7 @@ const handleLogin = async (loginData) => {
 
 const handleGetUserById = async (_id) => {
     try {
-        const user = await User.findById(_id).select("-password -role -refreshToken");;
+        const user = await User.findById(_id).select("-password -role -refreshToken").populate("cart.product", "price title slug options");;
         return ({
             EM: user ? 'Successfully retrieved user data!' : 'User not found!',
             EC: user ? 0 : 1,
@@ -137,17 +137,32 @@ const handleGetUserById = async (_id) => {
 
 const handleRefreshAccessToken = async (cookie) => {
     try {
+
         const decode = jwt.verify(cookie.refreshToken, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decode._id, refreshToken: cookie.refreshToken });
+        if (user) {
+            const newAccessToken = generateAccessToken(user._id, user.role);
+            const newRefreshToken = generateRefreshToken(user._id)
+            user.refreshToken = newRefreshToken;
+            await user.save()
+            return {
+                EC: 0,
+                EM: "get accessToken successfully!",
+                newAccessToken,
+                newRefreshToken
+            }
+
+        }
         return ({
-            EC: user ? 0 : 1,
-            newAccessToken: user ? generateAccessToken(user._id, user.role) : "Refresh token not matched"
+            EC: 1,
+            EM: "Refresh token not matched!",
+            newAccessToken: "",
+            newRefreshToken: ""
         })
 
     } catch (error) {
-        console.log("Error from 'handleRefreshAccessToken function' of userService.js", error)
         return ({
-            EM: 'There is an error in the "handleRefreshAccessToken function" in userService.js',
+            EM: `There is an error in the "handleRefreshAccessToken function" in userService.js : ${error.message}`,
             EC: 1
         })
     }

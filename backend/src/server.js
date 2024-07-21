@@ -12,6 +12,7 @@ const corsOptions = {
     origin: process.env.REACT_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 
 app.use(cors(corsOptions))

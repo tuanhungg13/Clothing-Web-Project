@@ -9,13 +9,19 @@ import Nav from '../navigation/Nav';
 import avatar from "../../assets/img/avatar.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrent } from '../../redux/userSlice';
+import { Dropdown, Space } from 'antd';
+import Cookies from 'js-cookie';
+import CartMenu from '../cart/Cart';
+import { apiLogout } from '../../service/userApiService';
+import { logout } from "../../redux/userSlice";
 const Header = () => {
-    const { isLoggedIn, current } = useSelector(state => state.user);
+    const { isLoading, current } = useSelector(state => state.user.current);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (isLoggedIn) {
+        if (isLoggedIn === true) {
             dispatch(getCurrent())
         }
+        console.log("check isLoggin:", isLoggedIn)
     }, [dispatch, isLoggedIn])
 
     // const handleGetProfile = () =>{
@@ -23,6 +29,15 @@ const Header = () => {
     //         dispatch(getCurrent())
     //     }
     // }
+
+
+    const handleLogout = async () => {
+        const response = await apiLogout()
+        if (response.EC === 0) {
+            dispatch(logout())
+            Cookies.set("isLoggedIn", false)
+        }
+    }
     return (
         <>
             <div className='header-desktop container d-lg-flex d-none justify-content-evenly align-items-center' >
@@ -41,7 +56,6 @@ const Header = () => {
                 }
 
                 {isLoggedIn &&
-
                     <div className="account dropdown text-end">
                         <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src={avatar} alt="mdo" className="rounded-circle border" />
@@ -51,12 +65,17 @@ const Header = () => {
                             <li><a className="dropdown-item" href="#">Thông tin đơn hàng</a></li>
                             <li><a className="dropdown-item" href="#">Lịch sử mua hàng</a></li>
                             <li><hr className="dropdown-divider" /></li>
-                            <li><a className="dropdown-item" href="#">Đăng xuất</a></li>
+                            <li><button className='border-0' type='button'
+                                onClick={() => { handleLogout() }}>Đăng xuất</button></li>
                         </ul>
                     </div>
                 }
 
-                <button><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px' }} /> Giỏ hàng</button>
+                <Dropdown overlay={<CartMenu trigger={['click']} />}>
+                    <Space>
+                        <button><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px', marginRight: "10px" }} /><label>{current ? current.cart.length : 0}</label> Giỏ hàng</button>
+                    </Space>
+                </Dropdown>
             </div>
 
 

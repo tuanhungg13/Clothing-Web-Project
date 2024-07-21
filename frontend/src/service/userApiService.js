@@ -15,7 +15,17 @@ export const apiLogin = (loginValue, password) => {
         axios({
             url: "/user/login",
             method: "POST",
-            data: loginValue, password
+            data: loginValue, password,
+            withCredentials: true
+        })
+    )
+}
+
+export const apiLogout = () => {
+    return (
+        axios({
+            url: "/user/logout",
+            method: "POST"
         })
     )
 }

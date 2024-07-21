@@ -160,7 +160,7 @@ const ProductDetails = (props) => {
                                 <Slider {...settings} ref={sliderRef}>
                                     {imagesSlider.map((item, index) => {
                                         return (
-                                            <div>
+                                            <div key={`img-${index}`}>
                                                 <img src={item} onClick={() => { handleChangeImage(item) }} />
                                             </div>
                                         )
@@ -200,7 +200,7 @@ const ProductDetails = (props) => {
                             <div className='d-flex mt-2'>
                                 {productDetails?.options?.map((item, index) => {
                                     return (
-                                        <label onClick={() => { handleChooseColor(item.color) }}
+                                        <label onClick={() => { handleChooseColor(item.color) }} key={`color-${index}`}
                                             className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
                                             <img src={item.images[0]} alt={item.color} />
                                         </label>
@@ -275,7 +275,7 @@ const ProductDetails = (props) => {
             </div>
             <hr />
 
-            <Ratings ratings={ratings} />
+            <Ratings ratings={ratings} totalRatings={productDetails?.totalRatings} />
         </div >
 
     )

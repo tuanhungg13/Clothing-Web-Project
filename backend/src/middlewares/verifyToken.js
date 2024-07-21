@@ -11,7 +11,6 @@ const verifyAccessToken = (req, res, next) => {
                         EC: 1
                     })
                 }
-                console.log("check decode: ", decode);
                 req.user = decode;
                 next();
             })
@@ -24,9 +23,8 @@ const verifyAccessToken = (req, res, next) => {
         }
 
     } catch (error) {
-        console.log("Error from 'verifyAccessToken funct' from verifyToken.js :", error)
         return res.status(500).json({
-            EM: "Error from 'verifyAccessToken funct' from verifyToken.js ",
+            EM: `Error from 'verifyAccessToken funct' from verifyToken.js : ${error.message} `,
             EC: 1
         })
     }

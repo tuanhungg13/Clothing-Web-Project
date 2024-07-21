@@ -4,6 +4,8 @@ import './Login.scss';
 import { apiLogin } from '../../service/userApiService';
 import { login } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+
 const Login = () => {
     const [loginValue, setLoginValue] = useState("");
     const [password, setPassword] = useState("");
@@ -36,7 +38,7 @@ const Login = () => {
             const response = await apiLogin({ loginValue, password })
             console.log("check login:", response)
             if (response.EC === 0) {
-                dispatch(login({ isLoggedIn: true, token: response.accessToken, userData: response.DT }))
+                dispatch(login({ userData: response.DT }))
                 navigation('/')
             }
             else {
@@ -45,6 +47,7 @@ const Login = () => {
         }
         return
     }
+
     return (
         <div className='login-page container'>
             <div className='form-login m-auto'>
