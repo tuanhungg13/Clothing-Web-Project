@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
         if (response.EC === 0) {
-            res.cookie("accessToken", response.accessToken, { maxAge: 30000 })
+            res.cookie("accessToken", response.accessToken, { maxAge: 900000 })
             res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000 })
         }
 
@@ -88,12 +88,12 @@ const refreshAccessToken = async (req, res) => {
         if (!cookie && !cookie.refreshToken) throw new Error("Cookie not found");
         const response = await userService.handleRefreshAccessToken(cookie);
         if (response.EC === 0) {
-            res.cookie("accessToken", response.newAccessToken, { maxAge: 30000, httpOnly: true })
-            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000, httpOnly: true })
+            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000 })
         }
         return res.status(200).json({
             EC: response.EC,
-            EM: response.EM
+            EM: response.EM,
+            accessToken: response.newAccessToken
         })
     } catch (error) {
         return res.status(500).json({
@@ -219,6 +219,7 @@ const addToCart = async (req, res) => {
     try {
         const { _id } = req.user;
         const { pid, quantity, color, size } = req.body;
+        console.log("check addToCart:", pid, quantity, color, size)
         if (!pid || !quantity || !color || !size) {
             return res.status(400).json({
                 EM: "Missing inputs!",
