@@ -1,5 +1,5 @@
 import axios from "axios";
-import Cookies from 'js-cookie'
+
 // Đặt cấu hình mặc định lúc tạo ra instance
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SERVER_URL,
@@ -10,14 +10,15 @@ const instance = axios.create({
 // Thêm một bộ đón chặn request
 instance.interceptors.request.use(function (config) {
     // Làm gì đó trước khi request dược gửi đi
-    const accessToken = Cookies.get('accessToken')
-    if (accessToken) {
-        config.headers = { Authorization: `Bearer ${accessToken}` }
-        return config
+    let localStorageData = window.localStorage.getItem("persist:profile")
+    if (localStorageData && typeof localStorageData === "string") {
+        localStorageData = JSON.parse(localStorageData)
+        if (localStorageData.accessToken) {
+            const accessToken = JSON.parse(localStorageData?.accessToken)
+            config.headers = { Authorization: `Bearer ${accessToken}` }
+            return config
+        }
     }
-    // else if () {
-
-    // }
     return config;
 }, function (error) {
     // Làm gì đó với lỗi request
@@ -33,9 +34,21 @@ instance.interceptors.response.use(function (response) {
     console.log("accessToken expiry!", error)
     if (error && error.response && error.response.status === 401) {
         try {
-            console.log("call api accessToken");
-            await instance.post('/user/refreshAccessToken');
-
+            const response = await instance.post('/user/refreshAccessToken');
+            if (response && response.EC === 0) {
+                const newAccessToken = response.accessToken;
+                // Cập nhật accessToken trong localStorage
+                let localStorageData = window.localStorage.getItem("persist:profile");
+                if (localStorageData && typeof localStorageData === "string") {
+                    localStorageData = JSON.parse(localStorageData);
+                    localStorageData.accessToken = JSON.stringify(newAccessToken);
+                    window.localStorage.setItem("persist:profile", JSON.stringify(localStorageData));
+                }
+                // Gửi lại request gốc với accessToken mới
+                const originalRequest = error.config;
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return instance(originalRequest);
+            }
         } catch (error) {
             console.log("Failed to refresh access token", error);
         }

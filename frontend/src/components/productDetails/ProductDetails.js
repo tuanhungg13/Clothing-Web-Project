@@ -9,8 +9,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetProductDetails } from '../../service/productApiService';
 import { formatCurrency, renderStarFromNumber } from "../../untils/helpers";
 import Ratings from '../ratings/Ratings';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { apiAddToCart } from '../../service/userApiService';
+import { getCurrent } from '../../redux/userSlice';
+import Cookies from "js-cookie";
+import { getCartFromCookies } from '../../redux/cartSlice';
 
 const ProductDetails = (props) => {
+    const dispatch = useDispatch()
     const [productDetails, setProductDetails] = useState();
     const [displayImage, setDisplayImage] = useState("");
     const [size, setSize] = useState("");
@@ -20,6 +27,7 @@ const ProductDetails = (props) => {
     const [imagesSlider, setImagesSlider] = useState([]);
     const [allSizes, setAllSizes] = useState([]);
     const [ratings, setRatings] = useState([])
+    const isLoggedIn = useSelector(state => state.user.isLoggedIn)
     const settings = {
         dots: false,
         infinite: true,
@@ -34,12 +42,12 @@ const ProductDetails = (props) => {
     let { productId } = useParams();
     const fetchAProduct = async () => {
         try {
-            const dataProductDetails = await apiGetProductDetails(productId);
-            setProductDetails(dataProductDetails?.DT);
-            setRatings(dataProductDetails.DT.ratings)
-            setDisplayImage(dataProductDetails?.DT?.options[0]?.images[0])
-            const allImages = dataProductDetails?.DT?.options.flatMap(option => option.images)
-            const sizes = dataProductDetails?.size;
+            const responseProduct = await apiGetProductDetails(productId);
+            setProductDetails(responseProduct?.DT);
+            setRatings(responseProduct.DT.ratings)
+            setDisplayImage(responseProduct?.DT?.options[0]?.images[0])
+            const allImages = responseProduct?.DT?.options.flatMap(option => option.images)
+            const sizes = responseProduct?.size;
             setAllSizes(sizes)
             setImagesSlider(allImages)
         } catch (error) {
@@ -141,12 +149,69 @@ const ProductDetails = (props) => {
         }
         return isValid
     }
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         const check = validDate()
         if (check)
-            return
-    }
+            if (isLoggedIn) {
+                const addToCart = await apiAddToCart({ pid: productDetails._id, color, size, quantity })
+                dispatch(getCurrent())
+                if (addToCart) {
+                    alert("THÊM THÀNH CÔNG!")
+                }
+            }
+            // Người dùng chưa đăng nhập
+            else {
+                // Lấy dữ liệu giỏ hàng hiện tại từ cookies
+                let cart = Cookies.get("PRODUCT_CART_NEW");
+                if (cart) {
+                    console.log("thêm: ", cart)
+                    // Nếu cookie đã có dữ liệu, giải mã nó
+                    cart = JSON.parse(cart);
+                    console.log("thêm khi parse: ", cart)
+                } else {
+                    // Nếu không có dữ liệu, khởi tạo giỏ hàng rỗng
+                    cart = {};
+                }
+                const productKey = `${productDetails._id}-${color}-${size}`;
+                console.log("check key:", productKey)
+                // Thêm sản phẩm vào giỏ hàng
+                if (cart[productKey]) {
+                    console.log("check cart cũ:", cart[productKey])
+                    cart[productKey] = {
+                        product: {
+                            images: productDetails?.options?.find(option => option.color === color)?.images[0],
+                            title: productDetails.title,
+                            slug: productDetails.slug,
+                            price: productDetails.price
+                        },
+                        id: productDetails._id,
+                        quantity: +quantity + cart[productKey].quantity,
+                        color: color,
+                        size: size
+                    }
+                }
+                else {
+                    cart[productKey] = {
+                        product: {
+                            images: productDetails?.options?.find(option => option.color === color)?.images[0],
+                            title: productDetails.title,
+                            slug: productDetails.slug,
+                            price: productDetails.price
+                        },
+                        id: productDetails._id,
+                        quantity: quantity,
+                        color: color,
+                        size: size
+                    }
 
+                };
+
+                // Lưu lại giỏ hàng vào cookies (cập nhật hoặc tạo mới nếu không có)
+                Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
+                dispatch((getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) })))
+                alert("THÊM VÀO GIỎ HÀNG!");
+            }
+    }
     return (
         <div className='product-details-page'>
             <div className='nav-title'>

@@ -9,19 +9,23 @@ import Nav from '../navigation/Nav';
 import avatar from "../../assets/img/avatar.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrent } from '../../redux/userSlice';
-import { Dropdown, Space } from 'antd';
-import Cookies from 'js-cookie';
 import CartMenu from '../cart/Cart';
 import { apiLogout } from '../../service/userApiService';
 import { logout } from "../../redux/userSlice";
+import Cookies from 'js-cookie'
+import { getCartFromCookies } from '../../redux/cartSlice';
+
 const Header = () => {
-    const { isLoading, current } = useSelector(state => state.user.current);
+    const { isLoggedIn, current } = useSelector(state => state.user);
     const dispatch = useDispatch();
     useEffect(() => {
+        const cookiesCart = Cookies.get("PRODUCT_CART_NEW");
+        if (cookiesCart) {
+            dispatch(getCartFromCookies({ cart: JSON.parse(cookiesCart) }))
+        }
         if (isLoggedIn === true) {
             dispatch(getCurrent())
         }
-        console.log("check isLoggin:", isLoggedIn)
     }, [dispatch, isLoggedIn])
 
     // const handleGetProfile = () =>{
@@ -35,7 +39,6 @@ const Header = () => {
         const response = await apiLogout()
         if (response.EC === 0) {
             dispatch(logout())
-            Cookies.set("isLoggedIn", false)
         }
     }
     return (
@@ -71,11 +74,7 @@ const Header = () => {
                     </div>
                 }
 
-                <Dropdown overlay={<CartMenu trigger={['click']} />}>
-                    <Space>
-                        <button><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px', marginRight: "10px" }} /><label>{current ? current.cart.length : 0}</label> Giỏ hàng</button>
-                    </Space>
-                </Dropdown>
+                <CartMenu />
             </div>
 
 

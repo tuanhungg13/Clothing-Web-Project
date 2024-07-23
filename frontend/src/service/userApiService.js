@@ -38,3 +38,16 @@ export const apiGetCurrent = () => { //lấy thông tin người dùng
         })
     )
 }
+
+export const apiAddToCart = (data) => {
+    return (
+        axios({
+            url: '/user/addToCart',
+            method: "PUT",
+            data: data,
+            headers: {
+                'Content-Type': 'application/json' // Đảm bảo rằng dữ liệu được gửi dưới dạng JSON
+            }
+        })
+    )
+}

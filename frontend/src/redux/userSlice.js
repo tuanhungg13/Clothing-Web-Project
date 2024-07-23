@@ -1,22 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiGetCurrent } from "../service/userApiService";
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
     name: "user",
     initialState: {
         isLoggedIn: false,
-        current: null
+        current: null,
+        accessToken: null
     },
     reducers: {
         login: (state, action) => {
             console.log("check action login:", action);
             state.isLoggedIn = true;
             state.current = action.payload.userData
-            // state.token = action.payload.token;
+            state.accessToken = action.payload.accessToken;
         },
         logout: (state, action) => {
             state.isLoggedIn = false;
-            state.current = null
+            state.current = null;
+            state.accessToken = null;
         }
     },
     extraReducers: (builder) => {
@@ -42,10 +44,10 @@ export const { login, logout } = userSlice.actions
 
 export const getCurrent = createAsyncThunk("user/getCurrent", async (data, { rejectWithValue }) => {
     const response = await apiGetCurrent();
-    console.log("check responseUser:", response)
     if (response.EC === 1) {
         return rejectWithValue(response)
     }
     return response
 })
 
+export default userSlice.reducer

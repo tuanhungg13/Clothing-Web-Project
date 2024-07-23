@@ -12,6 +12,7 @@ import Header from './components/header/Header';
 import Nav from './components/navigation/Nav';
 import SidebarProduct from "./components/sidebar/SidebarProduct";
 import ProductPage from "./pages/public/productPage";
+import { useDispatch } from "react-redux";
 function App() {
   return (
     <BrowserRouter>
