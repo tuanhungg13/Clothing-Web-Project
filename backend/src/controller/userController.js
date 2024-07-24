@@ -38,12 +38,12 @@ const login = async (req, res) => {
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
         if (response.EC === 0) {
-            res.cookie("accessToken", response.accessToken, { maxAge: 900000 })
             res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000 })
         }
 
         return res.status(200).json({
             EM: response.EM,
+            accessToken: response.accessToken,
             EC: response.EC,
             DT: response.DT
         })
@@ -240,7 +240,32 @@ const addToCart = async (req, res) => {
     }
 }
 
+const removeFromCart = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { pid, color, size } = req.body;
+        if (!pid || !color || !size) {
+            return res.status(400).json({
+                EM: "Missing inputs!",
+                EC: 1
+            })
+        }
+        const response = await userService.handleRemoveFromCart(_id, req.body);
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "removeFromCart function" in userControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
 module.exports = {
-    register, login, getUserById, refreshAccessToken, logout, getAllUsers, updateUser, deleteUser, updateUserByAdmin,
-    addToCart
+    register, login, getUserById, refreshAccessToken, logout,
+    getAllUsers, updateUser, deleteUser, updateUserByAdmin,
+    addToCart, removeFromCart
 }

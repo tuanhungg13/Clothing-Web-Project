@@ -11,6 +11,7 @@ router.put('/current', verifyAccessToken, controllers.updateUser);
 router.post('/refreshAccessToken', controllers.refreshAccessToken);
 router.post('/logout', controllers.logout)
 router.put('/addToCart', verifyAccessToken, controllers.addToCart)
+router.put("/removeFromCart", verifyAccessToken, controllers.removeFromCart)
 //admin
 router.get('/list-users', [verifyAccessToken, isAdmin], controllers.getAllUsers)
 router.put('/list-users', [verifyAccessToken, isAdmin], controllers.updateUserByAdmin)

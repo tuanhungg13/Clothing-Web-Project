@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import Cookies from 'js-cookie'
 import { getCartFromCookies } from "../../redux/cartSlice";
+import { apiRemoveFromCart } from "../../service/userApiService";
+import { getCurrent } from "../../redux/userSlice";
+
 const CartMenu = (props) => {
     const cartItems = useSelector(state => state?.user?.current?.cart || []);
     const cartFromCookies = useSelector(state => state?.cart?.cartFromCookies || []);
@@ -19,10 +22,6 @@ const CartMenu = (props) => {
     //Nếu ko đăng nhập thì hiển thị cart lưu ở cookies
     const displayCart = isLoggedIn ? cartItems : Object.values(cartFromCookies);
     const dispatch = useDispatch();
-    useEffect(() => {
-        console.log("check cookies:", cartFromCookies);
-        console.log("check displaCart:", displayCart)
-    }, [])
     const getImgOfProduct = (item) => {
         let img;
         if (isLoggedIn) {
@@ -38,15 +37,25 @@ const CartMenu = (props) => {
         return formatCurrency(total)
     }
 
-    const handleRemoveCartItems = (cartItems) => {
+    const handleRemoveCartItems = async (e, cartItem) => {
+        e.stopPropagation();
         if (isLoggedIn) {
-
+            const removeItem = await apiRemoveFromCart({ pid: cartItem.product._id, color: cartItem.color, size: cartItem.size })
+            if (removeItem.EC === 0) {
+                dispatch(getCurrent());
+            }
+            return
         }
         else {
+            //copy lại mảng cart
             let cartCopy = [...displayCart];
-            cartCopy = cartCopy.filter(item => item._id !== cartItems._id || item.color !== cartItems.color || item.size !== cartItems.size);
+            //lọc ra những item khác vs item bị xóa
+            cartCopy = cartCopy.filter(item => !(item._id === cartItem._id && item.color === cartItem.color && item.size === cartItem.size));
+            //chuyển từ mảng về object
             const cartCookies = { ...cartCopy }
+            //set lại cookies sau khi xóa
             Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cartCookies), { expires: 30 });
+            //dispatch để cập nhật lạ redux
             dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }))
         }
     }
@@ -79,7 +88,7 @@ const CartMenu = (props) => {
                                     </div>
                                 </div>
                                 <button type="button" className='border-0' style={{ backgroundColor: "transparent" }}
-                                    onClick={() => { handleRemoveCartItems(item) }}
+                                    onClick={(e) => { handleRemoveCartItems(e, item) }}
                                     onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "lightgray"; }}
                                     onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
                                 >

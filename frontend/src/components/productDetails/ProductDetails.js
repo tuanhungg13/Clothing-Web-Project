@@ -28,6 +28,7 @@ const ProductDetails = (props) => {
     const [allSizes, setAllSizes] = useState([]);
     const [ratings, setRatings] = useState([])
     const isLoggedIn = useSelector(state => state.user.isLoggedIn)
+    const sliderRef = useRef();
     const settings = {
         dots: false,
         infinite: true,
@@ -37,7 +38,7 @@ const ProductDetails = (props) => {
         slidesToScroll: 1,
         autoplaySpeed: 2000,
         vertical: true,
-        verticalSwiping: true
+        verticalSwiping: true,
     };
     let { productId } = useParams();
     const fetchAProduct = async () => {
@@ -59,8 +60,6 @@ const ProductDetails = (props) => {
         fetchAProduct()
     }, [])
 
-
-    const sliderRef = useRef();
     const prevSlide = () => {
         sliderRef.current.slickPrev();
     };
@@ -222,7 +221,7 @@ const ProductDetails = (props) => {
                     <div className='imgs-product col-lg-8'>
                         <div className='row'>
                             <div className='list-imgs-product col-lg-2'>
-                                <Slider {...settings} ref={sliderRef}>
+                                <Slider {...settings}>
                                     {imagesSlider.map((item, index) => {
                                         return (
                                             <div key={`img-${index}`}>

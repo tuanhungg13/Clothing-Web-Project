@@ -1,4 +1,4 @@
-import User from "../models/users"
+import User, { findById, findByIdAndUpdate } from "../models/users"
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../middlewares/jwt';
 import jwt from 'jsonwebtoken';
@@ -271,38 +271,64 @@ const handleUpdateUserByAdmin = async (_id, data) => {
 const handleAddToCart = async (_id, data) => {
     try {
         const user = await User.findById(_id);
-        const alreadyProduct = user?.cart?.find(item => item.product.toString() === data.pid);
+        let cart;
+        const alreadyProduct = user?.cart?.find(item => item.product.toString() === data.pid && item.color === data.color && item.size === data.size);
         if (alreadyProduct) {
-            if (alreadyProduct.color === data.color && alreadyProduct.size === data.size) {
-                const cart = await User.updateOne({
-                    cart: { $elemMatch: alreadyProduct }
-                }, { $inc: { "cart.$.quantity": data.quantity } }, { new: true })
-                return {
-                    EM: "Add to cart successfully!",
-                    EC: 0,
-                    DT: cart
-                }
+            console.log("trùng +")
+            cart = await User.updateOne({
+                _id,
+                "cart.product": data.pid,
+                "cart.color": data.color,
+                "cart.size": data.size
+            },
+                { $inc: { "cart.$.quantity": data.quantity } }, { new: true })
+        }
+        else {
+            console.log("mới")
+            cart = await User.findByIdAndUpdate(_id, {
+                $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
+            }, { new: true })
+        }
+        if (!cart) {
+            return {
+                EM: "Add to cart failed!",
+                EC: 1,
+                DT: {}
             }
-            else {
-                const cart = await User.findByIdAndUpdate(_id, {
-                    $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
-                }, { new: true })
+        }
+        return {
+            EM: "Add to cart successfully!",
+            EC: 0,
+            DT: cart
+        }
+    } catch (error) {
+        return ({
+            EM: `There is an error in the "handleAddToCart function" in userService.js: ${error.message}`,
+            EC: 1,
+        })
+    }
+}
+
+const handleRemoveFromCart = async (_id, data) => {
+    try {
+        const user = await User.findById(_id).select("cart");
+        const alreadyProduct = user?.cart?.find(item => (item.product.toString() === data.pid && item.color === data.color && item.size === data.size));
+        if (alreadyProduct) {
+            const removeItem = await User.findByIdAndUpdate(_id, {
+                $pull: { cart: { product: data.pid, color: data.color, size: data.size } }
+            }, { new: true })
+            if (removeItem) {
                 return {
-                    EM: "Add to cart successfully!",
+                    EM: "Remove items successfully!",
                     EC: 0,
-                    DT: cart
+                    DT: removeItem
                 }
             }
         }
-        else {
-            const cart = await User.findByIdAndUpdate(_id, {
-                $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
-            }, { new: true })
-            return {
-                EM: "Add to cart successfully!",
-                EC: 0,
-                DT: cart
-            }
+        return {
+            EM: "Items not found!",
+            EC: 1,
+            DT: ""
         }
     } catch (error) {
         return ({
@@ -314,5 +340,5 @@ const handleAddToCart = async (_id, data) => {
 
 module.exports = {
     handleRegister, handleLogin, handleGetUserById, handleRefreshAccessToken, handleGetAllUsers,
-    handleUpdateUser, handleDeleteUser, handleUpdateUserByAdmin, handleAddToCart
+    handleUpdateUser, handleDeleteUser, handleUpdateUserByAdmin, handleAddToCart, handleRemoveFromCart
 }
