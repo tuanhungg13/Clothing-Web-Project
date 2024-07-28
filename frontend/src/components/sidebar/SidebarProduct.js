@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './SidebarProduct.scss';
 import { Slider } from 'antd';
 import { useDispatch, useSelector } from "react-redux"
-import { fetchProductCategories } from "./prodCategorySlice"
+import { fetchProductCategories } from '../../redux/prodCategorySlice';
 const SidebarProduct = (props) => {
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedOption, setSelectedOption] = useState();

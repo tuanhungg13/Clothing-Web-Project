@@ -118,7 +118,7 @@ const handleLogin = async (loginData) => {
 
 const handleGetUserById = async (_id) => {
     try {
-        const user = await User.findById(_id).select("-password -role -refreshToken").populate("cart.product", "price title slug options");;
+        const user = await User.findById(_id).select("-password -refreshToken").populate("cart.product", "price title slug options");;
         return ({
             EM: user ? 'Successfully retrieved user data!' : 'User not found!',
             EC: user ? 0 : 1,

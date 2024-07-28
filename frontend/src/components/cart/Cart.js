@@ -61,11 +61,11 @@ const CartMenu = (props) => {
     }
     return (
         <div className="dropdown">
-            <button className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button className=" border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px', marginRight: "10px" }} />
-                <label>{displayCart ? displayCart.length : 0}</label> Giỏ hàng
+                <label className="d-inline">{displayCart ? displayCart.length : 0}</label>
             </button >
-            <ul className="dropdown-menu px-3" style={{ width: "500px" }}>
+            <ul className="dropdown-menu dropdown-menu-end px-3" style={{ width: "40vw" }} >
                 <div className="mx-3">
                     <h3>GIỎ HÀNG</h3>
                     <label>Bạn đang có {cartItems?.length} sản phẩm trong giỏ hàng</label>

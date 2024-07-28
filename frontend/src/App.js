@@ -1,18 +1,24 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Home from "./pages/public/homePage/Home";
 import Instruction from "./components/instructionPage/Instruction";
 import Announcement from "./components/announcement/Announcement";
-import ProductDetails from "./components/productDetails/ProductDetails"
-import Login from "./components/login/Login";
-import Register from "./components/register/Register";
+import ProductDetails from "./pages/public/productDetails/ProductDetails";
+import Login from "./pages/public/login/Login";
+import Register from "./pages/public/register/Register";
 import Header from './components/header/Header';
 import Nav from './components/navigation/Nav';
-import SidebarProduct from "./components/sidebar/SidebarProduct";
 import ProductPage from "./pages/public/productPage";
 import ScrollToTop from "./components/scroll";
+import AdminLayOut from "./pages/admin/AdminLayOut";
+import Dashboard from "./pages/admin/Dashboard";
+import CreateProduct from "./pages/admin/CreateProduct";
+import ManageProducts from './pages/admin/ManageProducts';
+import ManageOrder from "./pages/admin/ManageOrder";
+import ManageUsers from "./pages/admin/ManageUsers";
+
 function App() {
   return (
     <BrowserRouter>
@@ -22,7 +28,13 @@ function App() {
         <Nav />
 
         <Routes>
-
+          <Route path="/admin" element={<AdminLayOut />}>
+            <Route path="thong-ke" element={<Dashboard />} />
+            <Route path="tao-san-pham" element={<CreateProduct />} />
+            <Route path="quan-li-san-pham" element={<ManageProducts />} />
+            <Route path="quan-li-don-hang" element={<ManageOrder />} />
+            <Route path="quan-li-nguoi-dung" element={<ManageUsers />} />
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
@@ -34,13 +46,12 @@ function App() {
           {/* <Route path="/sale" element={<ProductOnSale />} /> */}
           <Route path="/huong-dan-mua-hang" element={<Instruction />} />
           <Route path="/thong-bao" element={<Announcement />} />
-          <Route path="/sidebar" element={<SidebarProduct />} />
           {/* Xử lý các trang ngoại lệ */}
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
 
-    </BrowserRouter>
+    </BrowserRouter >
 
   );
 }

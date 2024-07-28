@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Home.scss';
 import poster1 from '../../../assets/img/poster_4.jpg';
 import poster2 from '../../../assets/img/poster_5.jpg';
@@ -18,10 +18,13 @@ import style08 from "../../../assets/img/product08.webp";
 import style09 from "../../../assets/img/product09.webp";
 import style10 from "../../../assets/img/product10.webp";
 import { NavLink } from 'react-router-dom';
-import SliderComponent from "../../../components/slider/Slider";
+import Banner from "../../../components/banner/Banner";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
 import { fetchBestSellingProduct, fetchNewProducts } from '../../../redux/displayProductSlice';
 import { useDispatch } from 'react-redux';
+import SliderComponent from '../../../components/slider/Slider';
+
+
 const Home = () => {
     const background = [poster1, poster2, poster3, poster4, poster5, poster6];
     const listStyle = [style01, style02, style03, style04, style05, style06, style07, style08, style09, style10]
@@ -34,7 +37,7 @@ const Home = () => {
         <>
             {/* background-header */}
             <div className="slideshow-container">
-                <SliderComponent images={background} show={1} width={"100vw"} height={"100vh"} maxWidth={"100%"} auto={true} dots={true} arrows={false} />
+                <Banner images={background} />
             </div>
             <div>
                 <div className='container'>
@@ -75,7 +78,7 @@ const Home = () => {
                         <div className='container-outfit'>
                             <div className='content-outfit'>
                                 <div className='list-outfit' >
-                                    <SliderComponent images={listStyle} show={6} width={"15vw"} height={"20vw"} maxWidth={"20vw"} auto={false} dots={false} arrows={true} />
+                                    <SliderComponent vertical={false} />
 
                                 </div>
                                 <div className='buttons'>

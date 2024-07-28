@@ -8,7 +8,7 @@ export const apiRegister = (email, phoneNumber, userName, password) => {
 
 export const apiLogin = (loginValue, password) => {
     return (
-        axios.post("/user/login", { loginValue, password }
+        axios.post("/user/login", loginValue, password
         )
     )
 }

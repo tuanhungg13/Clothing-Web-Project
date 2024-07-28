@@ -6,18 +6,21 @@ import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "reac
 import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
-import { apiGetProductDetails } from '../../service/productApiService';
-import { formatCurrency, renderStarFromNumber } from "../../untils/helpers";
-import Ratings from '../ratings/Ratings';
+import { apiGetProductDetails } from '../../../service/productApiService';
+
+import { formatCurrency, renderStarFromNumber } from '../../../untils/helpers';
+import Ratings from "../../../components/ratings/Ratings"
+
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { apiAddToCart } from '../../service/userApiService';
-import { getCurrent } from '../../redux/userSlice';
+import { apiAddToCart } from '../../../service/userApiService';
+import { getCurrent } from '../../../redux/userSlice';
 import Cookies from "js-cookie";
-import { getCartFromCookies } from '../../redux/cartSlice';
-
+import { getCartFromCookies } from '../../../redux/cartSlice';
 const ProductDetails = (props) => {
     const dispatch = useDispatch()
+    const [displayItems, setDisplayItems] = useState(5)
+    const [vertical, setVertical] = useState(true)
     const [productDetails, setProductDetails] = useState();
     const [displayImage, setDisplayImage] = useState("");
     const [size, setSize] = useState("");
@@ -34,10 +37,10 @@ const ProductDetails = (props) => {
         infinite: true,
         arrows: false,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: displayItems,
         slidesToScroll: 1,
         autoplaySpeed: 2000,
-        vertical: true,
+        vertical: vertical,
         verticalSwiping: true,
     };
     let { productId } = useParams();
@@ -55,10 +58,25 @@ const ProductDetails = (props) => {
             console.error("Error fetching product details:", error);
         }
     }
+    const handleResize = () => {
+        if (window.innerWidth > 576) {
+            setDisplayItems(5);
+            setVertical(true);
+        } else {
+            setDisplayItems(1);
+            setVertical(false)
+        }
+    };
 
     useEffect(() => {
         fetchAProduct()
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, [])
+
+
 
     const prevSlide = () => {
         sliderRef.current.slickPrev();
@@ -213,15 +231,12 @@ const ProductDetails = (props) => {
     }
     return (
         <div className='product-details-page'>
-            <div className='nav-title'>
-                <FaHome className='mb-1' /> <IoMdArrowDropright />Sản phẩm <IoMdArrowDropright /> Áo phông <IoMdArrowDropright /> Áo phông unisex
-            </div>
             <div className='container '>
-                <div className='row'>
+                <div className='row mt-5'>
                     <div className='imgs-product col-lg-8'>
                         <div className='row'>
-                            <div className='list-imgs-product col-lg-2'>
-                                <Slider {...settings}>
+                            <div className={`${displayItems === 5 ? " list-imgs-product col-2" : "col-12 list-imgs-product-sm"} `}>
+                                <Slider {...settings} ref={sliderRef}>
                                     {imagesSlider.map((item, index) => {
                                         return (
                                             <div key={`img-${index}`}>
@@ -236,8 +251,8 @@ const ProductDetails = (props) => {
                                 <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
                                 <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                             </div>
-                            <div className='display-img-product col-lg-10' >
-                                <img src={displayImage} alt='' />
+                            <div className='display-img-product col-sm-10 d-sm-block d-none' >
+                                <img src={displayImage} alt='' style={{ width: "100%" }} />
                             </div>
                         </div>
                     </div>
@@ -317,29 +332,30 @@ const ProductDetails = (props) => {
                     </div>
 
                 </div>
-            </div>
-            <hr />
-            <div className='description-product mb-5'>
-                <h1>1. THÔNG TIN SẢN PHẨM</h1>
-                {productDetails?.description?.map((item, index) => {
-                    return (
-                        <li key={`description-${index}`}>➤ {item}</li>
-                    )
-                })}
-                <h1 className='mt-4'>2. HƯỚNG DẪN BẢO QUẢN</h1>
-                <div>
+                <hr />
+                <div className='description-product mb-5'>
+                    <h1>1. THÔNG TIN SẢN PHẨM</h1>
+                    {productDetails?.description?.map((item, index) => {
+                        return (
+                            <li key={`description-${index}`}>➤ {item}</li>
+                        )
+                    })}
+                    <h1 className='mt-4'>2. HƯỚNG DẪN BẢO QUẢN</h1>
+                    <div>
 
-                    <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường. Giặt với sản phẩm cùng màu </li>
-                    <li>➤ Không ngâm lâu trong xà phòng</li>
-                    <li>➤ Không sử dụng hóa chất tẩy</li>
-                    <li>➤ Phơi mặt trái của áo và phơi trong bóng râm  </li>
-                    <li>➤ Hạn chế sấy áo. Là áo ở nhiệt độ thường.  </li>
+                        <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường. Giặt với sản phẩm cùng màu </li>
+                        <li>➤ Không ngâm lâu trong xà phòng</li>
+                        <li>➤ Không sử dụng hóa chất tẩy</li>
+                        <li>➤ Phơi mặt trái của áo và phơi trong bóng râm  </li>
+                        <li>➤ Hạn chế sấy áo. Là áo ở nhiệt độ thường.  </li>
+                    </div>
+
                 </div>
+                <hr />
 
+                <Ratings ratings={ratings} totalRatings={productDetails?.totalRatings} />
             </div>
-            <hr />
 
-            <Ratings ratings={ratings} totalRatings={productDetails?.totalRatings} />
         </div >
 
     )

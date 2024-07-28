@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
-import './Register.scss';
-import { apiRegister } from '../../service/userApiService';
+import { apiRegister } from '../../../service/userApiService';
 const Register = () => {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -70,9 +69,13 @@ const Register = () => {
     }
     return (
         <div className='register-page container'>
-            <div className='form-register m-auto'>
+            <div className='form-register '>
                 <h2 className='text-center mt-4'>Đăng ký</h2>
-                <div className='content-right col-12 d-flex flex-column gap-2 py-3'>
+                <div className='content-right col-lg-5 col-12 d-flex flex-column gap-2 p-3 m-auto'
+                    style={{
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1)",
+                        border: "1px solid gray"
+                    }}>
                     <div className='form-group'>
                         <input className={`form-control ${errors.email ? " is-invalid" : ""}`} type='text' placeholder='Email'
                             value={email} onChange={(event) => setEmail(event.target.value)}

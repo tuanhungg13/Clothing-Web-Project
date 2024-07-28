@@ -1,5 +1,5 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { prodCategorySlice } from '../components/sidebar/prodCategorySlice';
+import { prodCategorySlice } from './prodCategorySlice';
 import storage from 'redux-persist/lib/storage'
 import { productSlice } from './displayProductSlice';
 import { persistStore, persistReducer } from 'redux-persist';
