@@ -33,12 +33,35 @@ export const apiAddToCart = (data) => {
 
 export const apiRemoveFromCart = (data) => {
     return (
-        axios.put(
-            '/user/removeFromCart', { pid: data.pid, color: data.color, size: data.size }, {
+        axios.put('/user/removeFromCart', { pid: data.pid, color: data.color, size: data.size }, {
             headers: {
                 'Content-Type': 'application/json' // Đảm bảo rằng dữ liệu được gửi dưới dạng JSON
             }
         }
         )
+    )
+}
+
+
+//admin
+
+export const apiGetAllUsers = (params) => {
+    return (
+        axios.get("/user/",
+            { params })
+    )
+}
+
+export const apiUpdateByAdmin = (params, data) => {
+    return (
+        axios.put("/user/",
+            data,
+            { params })
+    )
+}
+
+export const apiDeleteByAdmin = (params) => {
+    return (
+        axios.delete("/user/", { params })
     )
 }

@@ -8,7 +8,6 @@ const DisplayProduct = (props) => {
     const navigation = useNavigate();
     const dispatch = useDispatch();
 
-
     const handleGetDetailsProduct = (item) => {
         navigation(`/${item.slug}`)
     }
@@ -30,7 +29,7 @@ const DisplayProduct = (props) => {
                                         <div className={`${item.discount !== 0 ? "price-real d-inline" : "price"}`}>{formatCurrency(item.price)}</div>
                                         <button type='button' className='mt-2'>Thêm vào giỏ hàng</button>
                                     </div>
-                                    {item.quantity === 0 && <label className='label-sold'>Hết hàng</label>}
+                                    {item.stock === 0 && <label className='label-sold'>Hết hàng</label>}
                                     {item.discount !== 0 && item.quantity !== 0 && <label className='label-sale'>-{item.discount}%</label>}
 
                                 </div>

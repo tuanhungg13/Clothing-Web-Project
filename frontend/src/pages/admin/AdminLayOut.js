@@ -13,7 +13,7 @@ const AdminLayOut = () => {
                     <SidebarAdmin />
                 </div>
 
-                <div className="col-10" style={{ border: "1px solid red", height: "600px" }}>
+                <div className="col-10 ps-3 pt-3" style={{ border: "1px solid red", height: "600px" }}>
                     <Outlet />
                 </div>
             </div>

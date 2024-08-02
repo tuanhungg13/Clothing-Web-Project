@@ -9,6 +9,12 @@ const handleCreateNewProduct = async (data, files) => {
         if (data.description) {
             data.description = JSON.parse(data.description)
         }
+        //tính số lượng tất cả sản phẩm
+        const stock = data.options.reduce((total, option) => {
+            return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
+                return sum + sizeQtt.quantity;
+            }, 0);
+        }, 0);
         const optionsWithImages = data.options.map((option, index) => ({
             ...option,
             images: files[`options[${index}][images]`].map(file => file.path)
@@ -20,6 +26,7 @@ const handleCreateNewProduct = async (data, files) => {
             description: data.description,
             brand: data.brand,
             options: optionsWithImages,
+            stock: stock,
             discount: data.discount,
             expiry: data.expiry,
             category: data.category
@@ -92,14 +99,12 @@ const handleGetProducts = async (data) => {
                 EM: "Get products failed!",
                 EC: 1,
                 DT: [],
-                counts
             }
         }
         return ({
             EM: "Get products successfully!",
             EC: 0,
             DT: listProduct,
-            counts
         })
     } catch (error) {
         return {
@@ -115,25 +120,20 @@ const handleGetAProduct = async (slug) => {
     try {
         const product = await Product.findOne({ slug: slug }).populate("category ratings.postedBy", "categoryName userName");
         const allSizes = [...new Set(product.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
-        const totalQuantity = product.options.reduce((total, option) => {
-            return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
-                return sum + sizeQtt.quantity;
-            }, 0);
-        }, 0);
         if (!product) {
             return {
                 EM: "Get a product failed!",
                 EC: 1,
                 DT: {},
-                quantity: 0
             }
         }
         return {
             EM: "Get a product successfully!",
             EC: 0,
-            DT: product,
-            quantity: totalQuantity,
-            size: allSizes
+            DT: {
+                ...product.toObject(),
+                allSizes: allSizes
+            }
         }
     } catch (error) {
         return {
@@ -194,6 +194,12 @@ const handleUpdateProduct = async (pid, optId, sqttId, data) => {
                     ]
                 }
             ).populate("category", "categoryName");
+            updateProduct.stock = updateProduct.options.reduce((total, option) => {
+                return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
+                    return sum + sizeQtt.quantity;
+                }, 0);
+            }, 0);
+            await updateProduct.save()
         } else {
             // Nếu không có optId và sqttId, chỉ cập nhật thông tin cơ bản
             if (data.description) data.description = JSON.parse(data.description)
@@ -264,99 +270,7 @@ const handleRatings = async (_id, data) => {
     }
 }
 
-// const handleUpdateOptions = async (pid, optId, sqttId, images, data) => {
-//     try {
-//         //đẩy mới 1 mục option {color, quantity, size, images}
-//         let updateOption;
-//         if (data.color && data.sizeQuantity && images && !optId) {
-//             images = images.map(item => item.path)
-//             data.sizeQuantity = JSON.parse(data.sizeQuantity)
-//             console.log("check data size:", data.sizeQuantity)
-//             updateOption = await Product.findByIdAndUpdate(pid, {
-//                 $push: {
-//                     options: {
-//                         images: images,
-//                         color: data.color,
-//                         sizeQuantity: data.sizeQuantity,
-//                     }
-//                 },
 
-//             }, { new: true }).populate("category", "categoryName")
-
-//         }
-//         //thêm ảnh , color, số lượng, size vào mục đã có sẵn 
-//         if ((images || data.color) && optId) {
-//             //tìm vị trí màu sắc đã có rồi thêm ảnh vào
-//             updateOption = await Product.findOneAndUpdate(
-//                 { _id: pid, 'options._id': optId },
-//                 {
-//                     color: data.color,
-//                     $push: {
-//                         'options.$.images': { $each: images.map(item => item.path) }
-//                         , "options.$.sizeQuantity": { size: data.size, quantity: data.quantity }
-//                     }
-//                 },
-//                 { new: true }
-//             ).populate("category", "categoryName")
-//         }
-//         if ((images || data.color) && (data.size || data.quantity) && optId) {
-//             //tìm vị trí màu sắc đã có rồi thêm ảnh vào
-//             updateOption = await Product.findOneAndUpdate(
-//                 { _id: pid, 'options._id': optId },
-//                 {
-//                     color: data.color,
-//                     $push: {
-//                         'options.$.images': { $each: images.map(item => item.path) }
-//                         , "options.$.sizeQuantity": { size: data.size, quantity: data.quantity }
-//                     }
-//                 },
-//                 { new: true }
-//             ).populate("category", "categoryName")
-//         }
-
-
-//         //cập nhật số lượng của size
-//         if (data.quantity && optId && sqttId) {
-//             updateOption = await Product.findOneAndUpdate(
-//                 {
-//                     _id: pid,
-//                     'options.sizeQuantity._id': sqttId
-//                 },
-//                 {
-//                     $set: {
-//                         'options.$[opt].sizeQuantity.$[sqtt].quantity': data.quantity
-//                     }
-//                 },
-//                 {
-//                     new: true,
-//                     arrayFilters: [
-//                         { 'opt._id': optId },
-//                         { 'sqtt._id': sqttId }
-//                     ]
-//                 }
-//             );
-//         }
-
-//         if (!updateOption) {
-//             return {
-//                 EM: "Upload image failed!",
-//                 EC: 1,
-//                 DT: {}
-//             }
-//         }
-//         return {
-//             EM: "Upload image successfully!",
-//             EC: 0,
-//             DT: updateOption
-//         }
-//     } catch (error) {
-//         return ({
-//             EM: `There is an error in the "handleUpdateOptions function" in productService.js: ${error.message} `,
-//             EC: 1,
-//             DT: {}
-//         })
-//     }
-// }
 
 module.exports = {
     handleCreateNewProduct, handleGetAProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,

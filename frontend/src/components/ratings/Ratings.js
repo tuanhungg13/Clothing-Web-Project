@@ -38,7 +38,7 @@ const Ratings = (props) => {
                                         style={{ width: "80px", height: "60px" }} />
                                     <div className="col-10">
                                         <div>
-                                            <label>{item.postedBy.userName}</label>
+                                            <label>{item.postedBy?.userName}</label>
                                             <div>{renderStarFromNumber(item.star)}</div>
                                             <label>{item.createdAt} | </label>
                                             <span> Phân loại hàng: đen, L</span>

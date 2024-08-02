@@ -51,8 +51,6 @@ const ProductDetails = (props) => {
             setRatings(responseProduct.DT.ratings)
             setDisplayImage(responseProduct?.DT?.options[0]?.images[0])
             const allImages = responseProduct?.DT?.options.flatMap(option => option.images)
-            const sizes = responseProduct?.size;
-            setAllSizes(sizes)
             setImagesSlider(allImages)
         } catch (error) {
             console.error("Error fetching product details:", error);
@@ -293,8 +291,7 @@ const ProductDetails = (props) => {
                                 <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
                             </div>
                             <div className='list-size-items d-flex mt-2'>
-                                {allSizes.map((item, index) => {
-
+                                {productDetails?.allSizes?.map((item, index) => {
                                     return (
                                         <label key={`${item}-${index}`}
                                             className={`${size === item && handleCheckSize(item) ? "active" : " "} ${handleCheckSize(item) ? " " : "inactive pe-none"} size-items`}
