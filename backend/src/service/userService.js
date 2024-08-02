@@ -54,7 +54,7 @@ const handleRegister = async (rawUserData) => {
                 errors: errors
             }
         }
-        const hashPassword = handleHashPassword(rawUserData);
+        const hashPassword = handleHashPassword(rawUserData.password);
         rawUserData.password = hashPassword
         const newUser = await User.create(rawUserData)
         return ({
@@ -169,19 +169,52 @@ const handleRefreshAccessToken = async (cookie) => {
 
 }
 
-const handleGetAllUsers = async () => {
+const handleGetAllUsers = async (data) => {
     try {
-        const listUsers = await User.find().select('-password -refreshToken')
+        const queries = { ...data };
+        const excluderFields = ["sort", "limit", "page"];
+        //Loại bỏ các trường sort, limit, page, fields khỏi queries;
+        excluderFields.forEach(item => delete queries[item]);
+        //Format lại các operators cho đúng cú pháp của mongodb;
+        let queryString = JSON.stringify(queries);
+        queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, condition => `$${condition}`);
+        queryString = JSON.parse(queryString);
+
+        //Filter
+        if (queries?.userName) {
+            queryString.userName = { $regex: queries.userName, $options: "i" }
+        }
+        let queryCommand = User.find(queryString)
+
+        //sort
+        if (data.sort) {
+            const sortBy = data.sort.split(",").join(" ")
+            queryCommand = queryCommand.sort(sortBy);
+        }
+
+        //pagination page
+        const page = +data.page || 1;
+        const limit = +data.limit || process.env.LIMIT_ITEM;
+        const offset = (page - 1) * limit;
+        queryCommand = queryCommand.skip(offset).limit(limit)
+
+        //Excute query
+        const listUsers = await queryCommand.exec();
+        const counts = await User.find(queryString).countDocuments();
+        let totalPages = Math.ceil(counts / limit);
+
         if (!listUsers) {
             return ({
                 EM: "get the list of failed users!",
                 EC: 1,
+                totalPages: 0,
                 DT: []
             })
         }
         return ({
             EM: "get the list of successful users!",
             EC: 0,
+            totalPages,
             DT: listUsers
         })
     } catch (error) {

@@ -154,10 +154,11 @@ const updateUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const response = await userService.handleGetAllUsers();
+        const response = await userService.handleGetAllUsers(req.query);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
+            totalPages: response.totalPages,
             DT: response.DT
         })
 
@@ -171,14 +172,14 @@ const getAllUsers = async (req, res) => {
 }
 const deleteUser = async (req, res) => {
     try {
-        const { _id } = req.query;
-        if (!_id) {
+        const { uid } = req.query;
+        if (!uid) {
             return res.status(400).json({
                 EM: '_id not found!',
                 EC: 1
             })
         }
-        const response = await userService.handleDeleteUser(_id)
+        const response = await userService.handleDeleteUser(uid)
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -193,15 +194,15 @@ const deleteUser = async (req, res) => {
 
 const updateUserByAdmin = async (req, res) => {
     try {
-        const { _id } = req.query;
+        const { uid } = req.query;
         const { isBlocked, role } = req.body;
-        if (!_id || (!isBlocked && !role)) {
+        if (!uid || (!isBlocked && !role)) {
             return res.status(400).json({
                 EM: "Missing require parameters!",
                 EC: 1
             })
         }
-        const response = await userService.handleUpdateUserByAdmin(_id, { isBlocked, role });
+        const response = await userService.handleUpdateUserByAdmin(uid, { isBlocked, role });
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,

@@ -13,9 +13,9 @@ router.post('/logout', controllers.logout)
 router.put('/addToCart', verifyAccessToken, controllers.addToCart)
 router.put("/removeFromCart", verifyAccessToken, controllers.removeFromCart)
 //admin
-router.get('/list-users', [verifyAccessToken, isAdmin], controllers.getAllUsers)
-router.put('/list-users', [verifyAccessToken, isAdmin], controllers.updateUserByAdmin)
-router.delete('/list-users', [verifyAccessToken, isAdmin], controllers.deleteUser)
+router.get('/', [verifyAccessToken, isAdmin], controllers.getAllUsers)
+router.put('/', [verifyAccessToken, isAdmin], controllers.updateUserByAdmin)
+router.delete('/', [verifyAccessToken, isAdmin], controllers.deleteUser)
 
 
 module.exports = router;

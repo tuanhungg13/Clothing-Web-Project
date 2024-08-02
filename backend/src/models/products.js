@@ -40,6 +40,9 @@ var productSchema = new mongoose.Schema({
             images: Array
         }
     ],
+    stock: {
+        type: Number
+    },
     discount: {
         type: Number,
         default: 0
@@ -71,6 +74,13 @@ var productSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+//tạo trường ảo lấy tất cả size
+// productSchema.virtual('allSizes').get(function () {
+//     return [...new Set(this.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
+// });
+// productSchema.set('toJSON', { virtuals: true });
+// productSchema.set('toObject', { virtuals: true });
 
 //Export the model
 module.exports = mongoose.model('Product', productSchema);

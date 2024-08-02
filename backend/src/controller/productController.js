@@ -59,8 +59,6 @@ const getAProduct = async (req, res) => {
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
-            quantity: response.quantity,
-            size: response.size,
             DT: response.DT,
         })
     } catch (error) {
