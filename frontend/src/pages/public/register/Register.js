@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { apiRegister } from '../../../service/userApiService';
+import InputField from '../../../components/input/InputField';
 const Register = () => {
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [payload, setPayload] = useState({
+        email: "",
+        phoneNumber: "",
+        userName: "",
+        password: "",
+        confirmPassword: ""
+    })
     const [errors, setErrors] = useState({
         email: "",
         phoneNumber: "",
-        name: "",
+        userNname: "",
         password: "",
         confirmPassword: ""
     })
@@ -18,54 +21,45 @@ const Register = () => {
     const validDate = () => {
         let isValid = true;
         const newErrors = {};
-        if (!email) {
-            newErrors.email = "Bạn chưa nhập email!";
+        if (!payload.email) {
+            newErrors.email = "Vui lòng nhập email!";
             isValid = false;
         }
-        if (!phoneNumber) {
-            newErrors.phoneNumber = "Bạn chưa nhập số điện thoại!";
+        if (!payload.phoneNumber) {
+            newErrors.phoneNumber = "Vui lòng nhập số điện thoại!";
             isValid = false;
         }
-        if (!name) {
-            newErrors.name = "Bạn chưa nhập họ và tên!";
+        if (!payload.userName) {
+            newErrors.userName = "Vui lòng nhập họ và tên!";
             isValid = false;
         }
-        if (!password) {
-            newErrors.password = "Bạn chưa nhập mật khẩu!";
+        if (!payload.password) {
+            newErrors.password = "Vui lòng nhập mật khẩu!";
             isValid = false;
         }
-        if (!confirmPassword) {
-            newErrors.confirmPassword = "Bạn chưa xác nhận lại mật khẩu!";
+        if (!payload.confirmPassword) {
+            newErrors.confirmPassword = "Vui lòng nhập xác nhận lại mật khẩu!";
             isValid = false;
         }
-        else if (password !== confirmPassword) {
+        else if (payload.password !== payload.confirmPassword) {
             newErrors.confirmPassword = "Mật khẩu không khớp!";
             isValid = false
         }
         setErrors(newErrors);
         return isValid
     }
-    const setEmpty = () => {
-        setEmail("");
-        setPhoneNumber("");
-        setName("");
-        setPassword("");
-        setConfirmPassword("");
-    }
     const handleRegister = async () => {
         const checkValidate = validDate();
         if (checkValidate) {
-            const response = await apiRegister(email, phoneNumber, name, password)
-            console.log("check register", response)
-            if (response.EC === 1) {
+            const response = await apiRegister(payload)
+            if (response.EC === 0) {
+                setPayload({})
                 navigation("/login")
             }
             else {
                 setErrors(response.errors)
             }
-
         }
-        return
     }
     return (
         <div className='register-page container'>
@@ -76,39 +70,44 @@ const Register = () => {
                         boxShadow: "0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1)",
                         border: "1px solid gray"
                     }}>
-                    <div className='form-group'>
-                        <input className={`form-control ${errors.email ? " is-invalid" : ""}`} type='text' placeholder='Email'
-                            value={email} onChange={(event) => setEmail(event.target.value)}
-                        />
-                        {errors.email && <div className='invalid-feedback'>{errors.email}</div>}
-                    </div>
+                    <InputField
+                        nameKey={"email"}
+                        value={payload.email}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
 
-                    <div className='form-group'>
-                        <input className={`form-control ${errors.phoneNumber ? " is-invalid" : ""}`} type='text' placeholder='Số điện thoại'
-                            value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)}
-                        />
-                        {errors.phoneNumber && <div className='invalid-feedback'>{errors.phoneNumber}</div>}
-                    </div>
+                    <InputField
+                        nameKey={"phoneNumber"}
+                        placeholder={"Số điện thoại"}
+                        value={payload.phoneNumber}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
 
-                    <div className='form-group'>
-                        <input className={`form-control ${errors.name ? " is-invalid" : ""}`} type='text' placeholder='Họ tên'
-                            value={name} onChange={(event) => setName(event.target.value)} />
-                        {errors.name && <div className='invalid-feedback'>{errors.name}</div>}
-                    </div>
+                    <InputField
+                        nameKey={"userName"}
+                        placeholder={"Họ và tên"}
+                        value={payload.userName}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
 
-                    <div className='form-group'>
-                        <input className={`form-control ${errors.password ? " is-invalid" : ""}`} type='password' placeholder='Mật khẩu'
-                            value={password} onChange={(event) => setPassword(event.target.value)} />
-                        {errors.password && <div className='invalid-feedback'>{errors.password}</div>}
-                    </div>
+                    <InputField
+                        nameKey={"password"}
+                        placeholder={"Mật khẩu"}
+                        value={payload.password}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
 
-                    <div className='form-group'>
-                        <input className={`form-control ${errors.confirmPassword ? " is-invalid" : ""}`} type='password' placeholder='Xác nhận mật khẩu'
-                            value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}
-                        // onKeyDown={(event) => { handleEnterPress(event) }}
-                        />
-                        {errors.confirmPassword && <div className='invalid-feedback'>{errors.confirmPassword}</div>}
-                    </div>
+                    <InputField
+                        nameKey={"confirmPassword"}
+                        placeholder={"Nhập lại mật khẩu"}
+                        value={payload.confirmPassword}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
                     <button className='btn btn-primary mt-2'
                         onClick={() => handleRegister()}
                     >Register</button>

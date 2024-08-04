@@ -1,21 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { apiUpdateByAdmin } from "../../service/userApiService";
+import SelectField from "../input/SelectField";
 import { toast } from "react-toastify";
 
 const ModalEditUser = (props) => {
     const modalRef = useRef(null);
-    const [role, setRole] = useState("");
-    const [isBlocked, setIsBlocked] = useState("");
+    const [payload, setPayload] = useState({})
     useEffect(() => {
         if (props.showModalEditUser) {
-            setRole(props.dataUser.role);
-            setIsBlocked(props.dataUser.isBlocked);
+            setPayload(props.dataUser);
             modalRef.current.focus()
         }
     }, [props.showModalEditUser])
 
     const handleConfirmEdit = async () => {
-        const response = await apiUpdateByAdmin({ uid: props.dataUser._id }, { role, isBlocked });
+        const response = await apiUpdateByAdmin({ uid: payload._id }, payload);
         if (response.EC === 0) {
             toast.success("Thay đổi thông tin người dùng thành công!");
             await props.fetchUsers();
@@ -25,6 +24,7 @@ const ModalEditUser = (props) => {
         }
         props.onClose();
     }
+
 
     const handleOnKeyDown = (event) => {
         if (event.key === "Enter") {
@@ -68,21 +68,23 @@ const ModalEditUser = (props) => {
                         <div className="mt-3 row px-0">
                             <div className="col-8 me-3">
                                 <label>Chức vụ</label>
-                                <select class="form-select" aria-label="Default select example" value={role}
-                                    onChange={(event) => { setRole(event.target.value) }}>
-                                    <option value={"user"}>Nguời dùng</option>
-                                    <option value={"admin"}>Quản trị viên</option>
-                                </select>
+                                <SelectField
+                                    nameKey={"role"}
+                                    value={payload.role}
+                                    setValue={setPayload}
+                                    options={["user", "admin"]}
+                                />
                             </div>
 
 
                             <div className="col-3">
                                 <label>Chặn</label>
-                                <select class="form-select" aria-label="Default select example" value={isBlocked}
-                                    onChange={(event) => { setIsBlocked(event.target.value) }}>
-                                    <option value={true}>True</option>
-                                    <option value={false}>False</option>
-                                </select>
+                                <SelectField
+                                    nameKey={"isBlocked"}
+                                    value={payload.isBlocked}
+                                    setValue={setPayload}
+                                    options={[true, false]}
+                                />
                             </div>
 
                         </div>
