@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { apiGetProducts } from "../../service/productApiService";
 import ReactPaginate from "react-paginate";
 import ModalProductDetails from "../../components/modal/ModalProductDetails";
-import { FaStar } from "react-icons/fa"
+import { FaStar } from "react-icons/fa";
+import { NavLink } from "react-router-dom"
 const ManageProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -49,7 +50,12 @@ const ManageProducts = () => {
     }
     return (
         <div>
-            <h2>Quản lí sản phẩm</h2>
+            <div className="d-flex justify-content-between">
+                <h2>Quản lí sản phẩm</h2>
+                <button className="btn btn-success me-3">
+                    <NavLink className={"text-light text-decoration-none"} to={"/admin/tao-san-pham"}>Tạo sản phẩm</NavLink>
+                </button>
+            </div>
             <hr style={{ marginTop: "13px" }} />
             <table className="table">
                 <thead>

@@ -7,10 +7,9 @@ import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetProductDetails } from '../../../service/productApiService';
-
+import InputField from '../../../components/input/InputField';
 import { formatCurrency, renderStarFromNumber } from '../../../untils/helpers';
 import Ratings from "../../../components/ratings/Ratings"
-
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { apiAddToCart } from '../../../service/userApiService';
@@ -139,7 +138,6 @@ const ProductDetails = (props) => {
     }
 
     const handleDecremantQuantity = () => {
-
         if (quantity <= 1) return
         setQuantity(+quantity - 1)
     }
@@ -307,7 +305,7 @@ const ProductDetails = (props) => {
                             <input type='button' className='minus-quantity border' value={'-'} onClick={() => {
                                 handleDecremantQuantity()
                             }} />
-                            <input type='text' className='text-center border-top border-bottom w-25' value={quantity}
+                            <input type='number' className='text-center border-top border-bottom w-25' value={quantity}
                                 onChange={(event) => { handleChangeQuantity(event) }} />
                             <input type='button' value={'+'} className='plus-quantity border' onClick={() => {
                                 handleIncrementQuantity()

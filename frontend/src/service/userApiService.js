@@ -1,15 +1,14 @@
 import axios from "../untils/axios";
 
-export const apiRegister = (email, phoneNumber, userName, password) => {
+export const apiRegister = (data) => {
     return (
-        axios.post("/user/register", { email, phoneNumber, userName, password })
+        axios.post("/user/register", data)
     )
 }
 
-export const apiLogin = (loginValue, password) => {
+export const apiLogin = (data) => {
     return (
-        axios.post("/user/login", loginValue, password
-        )
+        axios.post("/user/login", data)
     )
 }
 
