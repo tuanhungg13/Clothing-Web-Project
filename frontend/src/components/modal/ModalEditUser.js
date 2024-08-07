@@ -72,7 +72,7 @@ const ModalEditUser = (props) => {
                                     nameKey={"role"}
                                     value={payload.role}
                                     setValue={setPayload}
-                                    options={["user", "admin"]}
+                                    options={[{ role: "user" }, { role: "admin" }]}
                                 />
                             </div>
 
@@ -83,7 +83,7 @@ const ModalEditUser = (props) => {
                                     nameKey={"isBlocked"}
                                     value={payload.isBlocked}
                                     setValue={setPayload}
-                                    options={[true, false]}
+                                    options={[{ isBlocked: true }, { isBlocked: false }]}
                                 />
                             </div>
 

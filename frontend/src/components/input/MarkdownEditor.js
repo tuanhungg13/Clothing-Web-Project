@@ -3,11 +3,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const MarkdownEditor = (props) => {
     const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent());
-        }
-    };
     return (
         <div className='pe-3'>
             <label>{props.label}</label>
@@ -31,7 +26,6 @@ const MarkdownEditor = (props) => {
                 }}
                 onChange={(e) => { props.setValue(prev => ({ ...prev, [props.nameKey]: e.target.getContent() })) }}
             />
-            <button onClick={log}>Log editor content</button>
             {props.errors[props.nameKey] && <small className='text-danger'>{props.errors[props.nameKey]}</small>}
         </div>
     );

@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './SidebarProduct.scss';
 import { Slider } from 'antd';
-import { useDispatch, useSelector } from "react-redux"
-import { fetchProductCategories } from '../../redux/prodCategorySlice';
+import { useSelector } from "react-redux"
 const SidebarProduct = (props) => {
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedOption, setSelectedOption] = useState();
     const [selectedSize, setSlectedSize] = useState();
     const categories = useSelector(state => state.productCategories.categories)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(fetchProductCategories());
-        console.log("check: ", categories)
-    }, []);
-
     const onChangeSliderRange = (value) => {
         console.log('onChange: ', value);
         setPriceRange(value);

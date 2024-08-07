@@ -20,8 +20,14 @@ import CreateProduct from "./pages/admin/CreateProduct";
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrder from "./pages/admin/ManageOrder";
 import ManageUsers from "./pages/admin/ManageUsers";
-
+import { useDispatch } from "react-redux";
+import { fetchProductCategories } from "./redux/prodCategorySlice";
+import { useEffect } from "react";
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchProductCategories());
+  }, []);
   return (
     <BrowserRouter>
       <ScrollToTop />

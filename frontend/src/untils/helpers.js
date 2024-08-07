@@ -20,4 +20,11 @@ export const renderStarFromNumber = (number) => {
         stars.push(<FaRegStar style={{ marginTop: "-5px", color: '#ee4d2d' }} key={`no-star-${stars.length}`} />)   //[1,1,1,0.3,0]
     }
     return stars
-} 
+}
+
+export const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
