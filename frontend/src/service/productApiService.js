@@ -14,4 +14,13 @@ const apiGetProductDetails = (slug) => {
     })
 }
 
-export { apiGetProducts, apiGetProductDetails }
+const apiCreateProduct = (data) => {
+    return axios.post("/product/create", data, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+    )
+}
+
+export { apiGetProducts, apiGetProductDetails, apiCreateProduct }

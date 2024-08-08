@@ -9,13 +9,15 @@ import { toBase64 } from "../../untils/helpers";
 import { useSelector } from "react-redux";
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
+import { apiCreateProduct } from "../../service/productApiService";
+import { toast } from "react-toastify";
 const CreateProduct = () => {
     const categories = useSelector(state => state.productCategories.categories)
     const [payload, setPayload] = useState({
         title: "",
         price: "",
         description: "",
-        categoryName: "",
+        category: "",
         brand: "",
         options: [],
         discount: "",
@@ -25,7 +27,7 @@ const CreateProduct = () => {
         title: "",
         price: "",
         description: "",
-        categoryName: "",
+        category: "",
         brand: "",
         options: [{}],
         discount: "",
@@ -84,8 +86,8 @@ const CreateProduct = () => {
             newError.description = "Vui lòng nhập mô tả sản phẩm!";
             isValid = false;
         }
-        if (!payload.categoryName) {
-            newError.categoryName = "Vui chọn danh mục sản phẩm!";
+        if (!payload.category) {
+            newError.category = "Vui chọn danh mục sản phẩm!";
             isValid = false;
         }
 
@@ -104,6 +106,12 @@ const CreateProduct = () => {
                 optionError.images = "Vui lòng chọn ảnh sản phẩm!"
                 isValid = false;
             }
+            option.images.forEach(file => {
+                if (file.type !== "image/jpeg" && file.type !== "image/png" && file.type !== "jpg") {
+                    isValid = false;
+                    optionError.images = "Sai định dạng ảnh (chỉ hỗ trợ .jepg || .png || .jpg)"
+                }
+            })
 
             option.sizeQuantity.forEach(sizeQtt => {
                 if (!sizeQtt.size) {
@@ -121,7 +129,6 @@ const CreateProduct = () => {
         return isValid
     }
     const handleSizeQuantityChange = (optionIndex, sizeIndex, event) => {
-        console.log("check sizeqtt:", options[optionIndex].sizeQuantity)
         setOptions(prevOptions => {
             const newOptions = [...prevOptions];
             newOptions[optionIndex].sizeQuantity[sizeIndex]["quantity"] = +event.target.value;
@@ -146,7 +153,7 @@ const CreateProduct = () => {
         });
         const base64Files = await Promise.all(files.map(async file => {
             const base64 = await toBase64(file);
-            return base64;
+            return { name: file.name, path: base64 };
         }));
         setPreviewImg(prev => {
             const newPreviewImg = [...prev];
@@ -154,6 +161,15 @@ const CreateProduct = () => {
             return newPreviewImg;
         })
     };
+
+    const handleDelteImg = (img, index) => {
+        let previewImgCopy = [...previewImg];
+        let optionCopy = [...options];
+        previewImgCopy[index].images = previewImgCopy[index].images.filter(item => item.name !== img.name);
+        optionCopy[index].images = optionCopy[index].images.filter(item => item.name !== img.name)
+        setOptions(optionCopy)
+        setPreviewImg(previewImgCopy);
+    }
     const sizes = [
         {
             label: "S",
@@ -176,15 +192,35 @@ const CreateProduct = () => {
             value: "XXL"
         },
     ];
-    const handleCreateProduct = () => {
+    const handleCreateProduct = async () => {
         setPayload(prevPayload => ({
             ...prevPayload,
             options
         }));
         if (validate()) {
             console.log("check payload:", payload)
-            // const formData = new FormData;
-
+            const formData = new FormData;
+            // Thêm các trường không phải tệp vào FormData
+            // for (let [key, value] of Object.entries(payload)) {
+            //     if (key === 'options') {
+            //         // Xử lý options như chuỗi JSON
+            //         formData.append(key, JSON.stringify(value));
+            //     } else {
+            //         formData.append(key, value);
+            //     }
+            // }
+            // options.forEach((option, optionIndex) => {
+            //     option.images.forEach((file, fileIndex) => {
+            //         formData.append(`option[${optionIndex}][images]`, file);
+            //     });
+            // });
+            // const createProduct = await apiCreateProduct(formData);
+            // if (createProduct.EC === 0) {
+            //     toast.success("Tạo sản phẩm thành công!")
+            // }
+            // else {
+            //     toast.error("Tạo sản phẩm không thành công!")
+            // }
         }
     }
     return (
@@ -226,14 +262,16 @@ const CreateProduct = () => {
                 <div className="row me-0 mb-3">
                     <div className="col-6">
                         <label>Danh mục</label>
-                        <SelectField
-                            nameKey={"categoryName"}
-                            value={payload.categoryName}
-                            setValue={setPayload}
-                            options={categories}
-                            errors={errors}
-
-                        />
+                        <select className="form-select" aria-label="Default select example" value={payload.category}
+                            onChange={(event) => { setPayload(prev => ({ ...prev, category: event.target.value })) }}>
+                            <option value={""}>Chọn danh mục</option>
+                            {categories.map((option, index) => {
+                                return (
+                                    <option value={option._id} key={`categoryOpt - ${index}`}>{option.categoryName}</option>
+                                )
+                            })}
+                        </select>
+                        {errors.category && <small className="text-danger ms-1">{errors.category}</small>}
                     </div>
                     <div className="col-3">
                         <label>Giảm giá</label>
@@ -272,7 +310,7 @@ const CreateProduct = () => {
                     <label>Chi tiết sản phẩm</label>
                     <div className="d-flex flex-wrap">
                         {options.map((option, optionIndex) => (
-                            <div className="border boder-dark px-3 py-2 mt-3 ms-3 col-sm-5 col-12" key={`opt-${optionIndex}`} style={{ position: "relative" }}>
+                            <div className="border boder-dark px-3 py-2 mt-3 ms-3 col-sm-5 col-12" key={`opt - ${optionIndex}`} style={{ position: "relative" }}>
                                 <div className="row">
                                     <label className="me-2 col-3">Màu sắc</label>
                                     <input value={option.color} className="col-6" type="text" onChange={(e) => handleColorChange(optionIndex, e)} />
@@ -305,12 +343,12 @@ const CreateProduct = () => {
 
                                     {option.sizeQuantity?.map((sizeQtt, sizeIndex) => {
                                         return (
-                                            <div className="row mt-1" key={`sizeQtt-${optionIndex}-${sizeIndex}`}>
+                                            <div className="row mt-1" key={`sizeQtt - ${optionIndex} - ${sizeIndex}`}>
                                                 <label className="col-3 mt-1">{sizeQtt.size}</label>
                                                 {sizeQtt.size &&
                                                     <div className=" col-8 d-flex">
                                                         <span className="col-1 mt-1">:</span>
-                                                        <input type="number" className={`form-control ${!sizeQtt.quantity || sizeQtt.quantity < 0 ? "is-invalid" : ""}`} value={sizeQtt.quantity} placeholder="Số lượng"
+                                                        <input type="number" className={`form - control ${!sizeQtt.quantity || sizeQtt.quantity < 0 ? "is-invalid" : ""}`} value={sizeQtt.quantity} placeholder="Số lượng"
                                                             onChange={(e) => { handleSizeQuantityChange(optionIndex, sizeIndex, e) }}
                                                         />
                                                     </div>}
@@ -327,9 +365,15 @@ const CreateProduct = () => {
                                     <input id="images" className="col-12 mb-3 mt-1" type="file" multiple onChange={(e) => { handleImageChange(optionIndex, e) }} />
                                     {errors.options[optionIndex] && errors.options[optionIndex].images && <small className="text-danger">{errors.options[optionIndex].images}</small>}
                                     <div className="d-flex flex-wrap">
-                                        {previewImg[optionIndex]?.images?.map(img => {
+                                        {previewImg[optionIndex]?.images?.map((img, index) => {
                                             return (
-                                                <img src={img} alt="" className="me-1" style={{ width: "25%" }} />
+                                                <div key={`prevImg-${index}`} style={{ position: "relative", width: "25%" }} >
+                                                    <img src={img.path} alt="" className="me-1" style={{ width: "100%" }} />
+                                                    <button className="border-0 bg-transparent" style={{ position: "absolute", top: "-5px", right: "0" }}
+                                                        onClick={() => { handleDelteImg(img, optionIndex) }}>
+                                                        <TiDelete />
+                                                    </button>
+                                                </div>
                                             )
                                         })}
                                     </div>

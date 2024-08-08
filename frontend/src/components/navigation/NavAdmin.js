@@ -7,6 +7,7 @@ import { MdOutlineProductionQuantityLimits, MdMenu } from "react-icons/md";
 import { CiViewList } from "react-icons/ci";
 import { FaUsers } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
+import { IoBagAddOutline } from "react-icons/io5";
 
 const NavAdmin = () => {
     const dataNav = [
@@ -18,24 +19,30 @@ const NavAdmin = () => {
         },
         {
             id: "2",
+            path: "/admin/tao-san-pham",
+            name: "Tạo sản phẩm",
+            icon: <IoBagAddOutline />
+        },
+        {
+            id: "3",
             path: "/admin/quan-li-san-pham",
             name: "Quản lí sản phẩm",
             icon: <MdOutlineProductionQuantityLimits />
         },
         {
-            id: "3",
+            id: "4",
             path: "/admin/quan-li-don-hang",
             name: "Quản lí đơn hàng",
             icon: <CiViewList />
         },
         {
-            id: "4",
+            id: "5",
             path: "/admin/quan-li-nguoi-dung",
             name: "Quản lí người dùng",
             icon: <FaUsers />
         },
         {
-            id: "5",
+            id: "6",
             path: "/admin/thong-bao",
             name: "Thông báo",
             icon: <FaRegBell />
@@ -47,7 +54,7 @@ const NavAdmin = () => {
                 <div className="topnav d-sm-flex flex-column text-none " >
                     {dataNav.map(item => {
                         return (
-                            <NavLink to={item.path} className="w-100 text-start border-top" key={`adminNav-${item.id}`}>
+                            <NavLink to={item.path} className="w-100 text-start border-top" key={`navADM-${item.id}`}>
                                 <span className="me-2">{item.icon}</span> {item.name}
                             </NavLink>
                         )

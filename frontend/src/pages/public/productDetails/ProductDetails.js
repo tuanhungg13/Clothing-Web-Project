@@ -20,14 +20,13 @@ const ProductDetails = (props) => {
     const dispatch = useDispatch()
     const [displayItems, setDisplayItems] = useState(5)
     const [vertical, setVertical] = useState(true)
-    const [productDetails, setProductDetails] = useState();
+    const [productDetails, setProductDetails] = useState({});
     const [displayImage, setDisplayImage] = useState("");
     const [size, setSize] = useState("");
     const [color, setColor] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [error, setError] = useState("");
     const [imagesSlider, setImagesSlider] = useState([]);
-    const [allSizes, setAllSizes] = useState([]);
     const [ratings, setRatings] = useState([])
     const isLoggedIn = useSelector(state => state.user.isLoggedIn)
     const sliderRef = useRef();
@@ -329,22 +328,7 @@ const ProductDetails = (props) => {
                 </div>
                 <hr />
                 <div className='description-product mb-5'>
-                    <h1>1. THÔNG TIN SẢN PHẨM</h1>
-                    {productDetails?.description?.map((item, index) => {
-                        return (
-                            <li key={`description-${index}`}>➤ {item}</li>
-                        )
-                    })}
-                    <h1 className='mt-4'>2. HƯỚNG DẪN BẢO QUẢN</h1>
-                    <div>
-
-                        <li>➤ Giặt máy ở chế độ nhẹ, nhiệt độ thường. Giặt với sản phẩm cùng màu </li>
-                        <li>➤ Không ngâm lâu trong xà phòng</li>
-                        <li>➤ Không sử dụng hóa chất tẩy</li>
-                        <li>➤ Phơi mặt trái của áo và phơi trong bóng râm  </li>
-                        <li>➤ Hạn chế sấy áo. Là áo ở nhiệt độ thường.  </li>
-                    </div>
-
+                    {productDetails.description}
                 </div>
                 <hr />
 

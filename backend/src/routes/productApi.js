@@ -8,10 +8,10 @@ import uploader from "../config/cloudinary"
 
 router.post("/create", [verifyAccessToken, isAdmin],
     uploader.fields([
-        { name: "options[0][images]", maxCount: 10 },
-        { name: "options[1][images]", maxCount: 10 },
-        { name: "options[2][images]", maxCount: 10 },
-        { name: "options[2][images]", maxCount: 10 }
+        { name: "option[0][images]", maxCount: 10 },
+        { name: "option[1][images]", maxCount: 10 },
+        { name: "option[2][images]", maxCount: 10 },
+        { name: "option[3][images]", maxCount: 10 }
     ]),
     controllers.createNewProduct);
 router.get("/", controllers.getProducts);

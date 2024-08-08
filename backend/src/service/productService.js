@@ -6,9 +6,6 @@ const handleCreateNewProduct = async (data, files) => {
         let newProduct;
         data.slug = slugify(data.title);
         data.options = JSON.parse(data.options)
-        if (data.description) {
-            data.description = JSON.parse(data.description)
-        }
         //tính số lượng tất cả sản phẩm
         const stock = data.options.reduce((total, option) => {
             return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
@@ -17,7 +14,7 @@ const handleCreateNewProduct = async (data, files) => {
         }, 0);
         const optionsWithImages = data.options.map((option, index) => ({
             ...option,
-            images: files[`options[${index}][images]`].map(file => file.path)
+            images: files[`option[${index}][images]`].map(file => file.path)
         }));
         newProduct = await Product.create({
             title: data.title,
