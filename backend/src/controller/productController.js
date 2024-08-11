@@ -3,7 +3,7 @@ import productService from "../service/productService";
 const createNewProduct = async (req, res) => {
     try {
         const { title, price, options, description, category } = req.body;
-        if (!title || !price || !options || !description || !category) {
+        if (!title || !price || !options || !description || !category || !req.file) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1
@@ -94,20 +94,20 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { pid } = req.params;
-        const { optId, sqttId } = req.query; //id của option và id của sizeQuantity
-        if (!pid || Object.keys(req.body).length === 0) {
+        const { title, price, options, description, category } = req.body;
+        if (!pid || !title || !price || !options || !description || !category) {
             return res.status(400).json({
                 EM: "Missing require parameters!",
                 EC: 1
             })
         }
-        if ((!req.body.discount && req.body.expiryDiscount) || (req.body.discount && !req.body.expiryDiscount)) {
-            return res.status(400).json({
-                EM: "Missing discount and expiration date!",
-                EC: 1
-            })
-        }
-        const response = await productService.handleUpdateProduct(pid, optId, sqttId, req.body);
+        // if ((!req.body.discount && req.body.expiryDiscount) || (req.body.discount && !req.body.expiryDiscount)) {
+        //     return res.status(400).json({
+        //         EM: "Missing discount and expiration date!",
+        //         EC: 1
+        //     })
+        // }
+        const response = await productService.handleUpdateProduct(pid, req.body, req.files);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,

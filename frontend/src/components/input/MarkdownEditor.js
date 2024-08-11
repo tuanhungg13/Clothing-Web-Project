@@ -4,12 +4,12 @@ import { Editor } from '@tinymce/tinymce-react';
 const MarkdownEditor = (props) => {
     const editorRef = useRef(null);
     return (
-        <div className='pe-3'>
+        <div className=''>
             <label>{props.label}</label>
             <Editor
                 apiKey={process.env.REACT_APP_MARKDOWN_KEY}
                 onInit={(_evt, editor) => editorRef.current = editor}
-                initialValue="<p>This is the initial content of the editor.</p>"
+                initialValue={props.value}
                 init={{
                     height: 400,
                     menubar: true,

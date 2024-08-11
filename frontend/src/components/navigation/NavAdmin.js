@@ -1,14 +1,13 @@
 import React from "react";
 import Nav from "./Nav";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/img/logoStore.jpg";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { MdOutlineProductionQuantityLimits, MdMenu } from "react-icons/md";
 import { CiViewList } from "react-icons/ci";
 import { FaUsers } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
 import { IoBagAddOutline } from "react-icons/io5";
-
+import logo from "../../assets/img/logoStore.jpg"
 const NavAdmin = () => {
     const dataNav = [
         {
@@ -51,6 +50,10 @@ const NavAdmin = () => {
     return (
         <>
             <div className="container-nav d-none d-sm-block bg-transparent">
+                <div className="d-flex justify-content-center mb-3">
+                    <img src={logo} alt="lg" className="w-50" />
+
+                </div>
                 <div className="topnav d-sm-flex flex-column text-none " >
                     {dataNav.map(item => {
                         return (
@@ -62,28 +65,22 @@ const NavAdmin = () => {
 
                 </div>
             </div>
-            <div className="btn-toggler d-lg-none d-block ">
-                <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <MdMenu />
-                </button>
-                <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="offcanvasNavbarLabel"><img src={logo} alt='' /></h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div className="offcanvas-body pt-0">
-                        <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <div className="btn-toggler d-sm-none d-block ">
+                <div class="container-fluid m-auto">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="true" aria-label="Toggle navigation">
+                        <MdMenu />
+                    </button>
+                    <img src={logo} alt="lg" className="mb-1 ms-2" style={{ width: "50px" }} />
+                    <div class="container-nav navbar-collapse collapse show" id="navbarsExample01">
+                        <div className="topnav d-flex flex-column text-none " >
                             {dataNav.map(item => {
                                 return (
-                                    <li className="nav-item">
-                                        <NavLink to={item.path} className="w-100 text-start border-top" key={`adminNav-${item.id}`}>
-                                            <span className="me-2">{item.icon}</span> {item.name}
-                                        </NavLink>
-                                    </li>
-
+                                    <NavLink to={item.path} className="w-100 text-start border-top text-decoration-none text-dark" key={`navADM-${item.id}`}>
+                                        <span className="me-2">{item.icon}</span> {item.name}
+                                    </NavLink>
                                 )
                             })}
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>

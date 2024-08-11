@@ -17,6 +17,11 @@ router.post("/create", [verifyAccessToken, isAdmin],
 router.get("/", controllers.getProducts);
 router.get("/:slug", controllers.getAProduct);
 router.delete("/delete/:pid", [verifyAccessToken, isAdmin], controllers.deleteProduct);
-router.put("/update/:pid/", [verifyAccessToken, isAdmin], controllers.updateProduct);
+router.put("/update/:pid", [verifyAccessToken, isAdmin], uploader.fields([
+    { name: "option[0][images]", maxCount: 10 },
+    { name: "option[1][images]", maxCount: 10 },
+    { name: "option[2][images]", maxCount: 10 },
+    { name: "option[3][images]", maxCount: 10 }
+]), controllers.updateProduct);
 router.post("/rating", verifyAccessToken, controllers.ratings);
 module.exports = router

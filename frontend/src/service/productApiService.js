@@ -23,4 +23,12 @@ const apiCreateProduct = (data) => {
     )
 }
 
-export { apiGetProducts, apiGetProductDetails, apiCreateProduct }
+const apiUpdateProduct = (pid, data) => {
+    return axios.put(`/product/update/${pid}`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+}
+
+export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct }

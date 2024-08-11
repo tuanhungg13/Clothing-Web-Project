@@ -8,12 +8,12 @@ const AdminLayOut = () => {
     if (!isLoggedIn || !current || current.role !== "admin") return (<Navigate to={"/"} />)
     return (
         <div className="">
-            <div className="d-flex">
-                <div className="col-2" style={{ border: "1px solid black", height: "600px" }}>
+            <div className="d-flex row mx-0">
+                <div className="col-sm-2 mt-3">
                     <SidebarAdmin />
                 </div>
 
-                <div className="col-10 ps-3 pt-3" style={{ border: "1px solid red", height: "600px" }}>
+                <div className="col-sm-10 pt-3" style={{ marginTop: "5px" }}>
                     <Outlet />
                 </div>
             </div>

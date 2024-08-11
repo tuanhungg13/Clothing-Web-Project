@@ -23,7 +23,7 @@ var productSchema = new mongoose.Schema({
         lowercase: true
     },
     description: {
-        type: Array,
+        type: String,
         required: true,
     },
     brand: {

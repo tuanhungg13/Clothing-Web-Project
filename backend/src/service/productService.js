@@ -3,7 +3,6 @@ import slugify from 'slugify'
 
 const handleCreateNewProduct = async (data, files) => {
     try {
-        let newProduct;
         data.slug = slugify(data.title);
         data.options = JSON.parse(data.options)
         //tính số lượng tất cả sản phẩm
@@ -16,7 +15,7 @@ const handleCreateNewProduct = async (data, files) => {
             ...option,
             images: files[`option[${index}][images]`].map(file => file.path)
         }));
-        newProduct = await Product.create({
+        const newProduct = await Product.create({
             title: data.title,
             price: data.price,
             slug: data.slug,
@@ -163,46 +162,42 @@ const handleDeleteProduct = async (pid) => {
     }
 }
 
-const handleUpdateProduct = async (pid, optId, sqttId, data) => {
+const handleUpdateProduct = async (pid, data, files) => {
     try {
+        data.options = JSON.parse(data.options)
         if (data.title) {
-            dataUpdate.slug = slugify(data.title);
+            data.slug = slugify(data.title);
         }
-        let updateProduct;
-
-        // Nếu có optId và sqttId, cập nhật cả quantity của sizeQuantity trong options
-        if (optId && sqttId) {
-            updateProduct = await Product.findOneAndUpdate(
-                {
-                    _id: pid,
-                    'options._id': optId,
-                    'options.sizeQuantity._id': sqttId
-                },
-                {
-                    $set: {
-                        'options.$[opt].sizeQuantity.$[sqtt].quantity': data.quantity
-                    }
-                },
-                {
-                    new: true,
-                    arrayFilters: [
-                        { 'opt._id': optId },
-                        { 'sqtt._id': sqttId }
-                    ]
-                }
-            ).populate("category", "categoryName");
-            updateProduct.stock = updateProduct.options.reduce((total, option) => {
-                return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
-                    return sum + sizeQtt.quantity;
-                }, 0);
+        const stock = data.options.reduce((total, option) => {
+            return total + option.sizeQuantity.reduce((sum, sizeQtt) => {
+                return sum + sizeQtt.quantity;
             }, 0);
-            await updateProduct.save()
-        } else {
-            // Nếu không có optId và sqttId, chỉ cập nhật thông tin cơ bản
-            if (data.description) data.description = JSON.parse(data.description)
-            updateProduct = await Product.findByIdAndUpdate(
-                pid, data, { new: true }).populate("category", "categoryName");
-        }
+        }, 0);
+        console.log("check files:", files)
+        console.log('Options:', data.options);
+        const optionsWithImages = data.options.map((option, index) => {
+            // Lọc bỏ các image rỗng hoặc không hợp lệ
+            const filteredImages = (option.images || []).filter(image => image && typeof image === 'string');
+            return {
+                ...option,
+                images: [
+                    ...filteredImages,
+                    ...(files[`option[${index}][images]`]?.length > 0 ? files[`option[${index}][images]`].map(file => file.path) : [])
+                ]
+            }
+        })
+        const updateProduct = await Product.findByIdAndUpdate(pid, {
+            title: data.title,
+            price: +data.price,
+            slug: data.slug,
+            description: data.description,
+            brand: data.brand,
+            options: optionsWithImages,
+            stock: stock,
+            discount: +data.discount,
+            expiry: data.expiry,
+            category: data.category._id
+        }, { new: true });
 
         if (!updateProduct) {
             return {
