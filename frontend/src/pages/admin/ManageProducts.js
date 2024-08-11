@@ -4,7 +4,7 @@ import ReactPaginate from "react-paginate";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import UpdateProduct from "./UpdateProduct";
-import ModalProductDetails from "../../components/modal/ModalProductDetails"
+import ModalDeleteProduct from "../../components/modal/ModalDeleteProduct";
 const ManageProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -30,17 +30,18 @@ const ManageProducts = () => {
         fetchProducts();
     }
 
-    const handleViewProduct = (item) => {
-        setDataProduct(item);
-        // setShowModalProduct(true);
-
-    }
-
     const handleEditProduct = (item) => {
         const productData = JSON.parse(JSON.stringify(item)) //deep copy
         setEdit(true)
         setDataProduct(productData);
-        console.log("check item", products)
+    }
+
+    const handleDeleteProduct = (item) => {
+        setShowModalProduct(true);
+        setDataProduct({
+            pid: item._id,
+            title: item.title
+        })
     }
 
     const handleCloseModal = () => {
@@ -102,7 +103,7 @@ const ManageProducts = () => {
                                                 <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2" onClick={() => { handleEditProduct(item) }}>
                                                     Sửa
                                                 </button>
-                                                <button className="btn btn-danger" >
+                                                <button className="btn btn-danger" onClick={() => { handleDeleteProduct(item) }}>
                                                     Xóa
                                                 </button>
                                             </td>
@@ -137,12 +138,12 @@ const ManageProducts = () => {
                             />
                         }
                     </div>
-                    {/* <ModalProductDetails
-
-                showModalProduct={showModalProduct}
-                onClose={handleCloseModal}
-                dataProduct={dataProduct}
-            /> */}
+                    <ModalDeleteProduct
+                        showModalProductDelete={showModalProduct}
+                        onClose={handleCloseModal}
+                        dataProduct={dataProduct}
+                        fetchProducts={fetchProducts}
+                    />
                 </div>}
         </>
     )

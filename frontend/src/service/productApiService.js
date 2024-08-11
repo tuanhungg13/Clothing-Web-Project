@@ -23,12 +23,16 @@ const apiCreateProduct = (data) => {
     )
 }
 
-const apiUpdateProduct = (pid, data) => {
-    return axios.put(`/product/update/${pid}`, data, {
+const apiUpdateProduct = (data) => {
+    return axios.put(`/product/update`, data, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     })
 }
+const apiDeleteProduct = (data) => {
+    console.log("check data", data)
+    return axios.delete(`/product/delete`, { data: { pid: data.pid } })
+}
 
-export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct }
+export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct, apiDeleteProduct }

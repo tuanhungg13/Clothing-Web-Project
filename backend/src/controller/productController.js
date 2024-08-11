@@ -71,7 +71,7 @@ const getAProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const { pid } = req.params;
+        const { pid } = req.body;
         if (!pid) {
             return res.status(400).json({
                 EM: "pid not found!",
@@ -93,8 +93,7 @@ const deleteProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { pid } = req.params;
-        const { title, price, options, description, category } = req.body;
+        const { pid, title, price, options, description, category } = req.body;
         if (!pid || !title || !price || !options || !description || !category) {
             return res.status(400).json({
                 EM: "Missing require parameters!",
