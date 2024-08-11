@@ -45,6 +45,7 @@ const CreateProduct = () => {
     const [previewImg, setPreviewImg] = useState([{
         images: []
     }])
+    const sizes = ["S", "M", "L", "XL", "XXL"];
 
     const handleAddOption = () => {
         setOptions([...options,
@@ -128,6 +129,33 @@ const CreateProduct = () => {
         setErrors({ ...newError })
         return isValid
     }
+
+    const handleAddSize = (optionIndex, size) => {
+        setOptions(prevOptions => {
+            // Sao chép options cũ để tránh đột biến trực tiếp vào state
+            const newOptions = JSON.parse(JSON.stringify(prevOptions));
+            const currentSizeQuantity = newOptions[optionIndex].sizeQuantity;
+            // Tìm chỉ số của kích thước trong sizeQuantity
+            const sizeIndex = currentSizeQuantity.findIndex(sq => sq.size === size);
+
+            if (sizeIndex !== -1) {
+                // Nếu kích thước đã tồn tại, xóa nó
+                currentSizeQuantity.splice(sizeIndex, 1);
+            } else {
+                // Nếu kích thước chưa tồn tại, thêm mới vào
+                currentSizeQuantity.push({
+                    size: size,
+                    quantity: ""
+                });
+            }
+            return newOptions; // Trả về options mới đã ghi đè
+        });
+    };
+    const handleCheckSizeSelect = (optionIndex, size) => {
+        const isSizeSelected = options[optionIndex].sizeQuantity.some(sq => sq.size === size);
+        return isSizeSelected
+    }
+
     const handleSizeQuantityChange = (optionIndex, sizeIndex, event) => {
         setOptions(prevOptions => {
             const newOptions = [...prevOptions];
@@ -170,28 +198,6 @@ const CreateProduct = () => {
         setOptions(optionCopy)
         setPreviewImg(previewImgCopy);
     }
-    const sizes = [
-        {
-            label: "S",
-            value: "S"
-        },
-        {
-            label: "M",
-            value: "M"
-        },
-        {
-            label: "L",
-            value: "L"
-        },
-        {
-            label: "XL",
-            value: "XL"
-        },
-        {
-            label: "XXL",
-            value: "XXL"
-        },
-    ];
     const handleCreateProduct = async () => {
         setPayload(prevPayload => ({
             ...prevPayload,
@@ -201,35 +207,35 @@ const CreateProduct = () => {
             console.log("check payload:", payload)
             const formData = new FormData;
             // Thêm các trường không phải tệp vào FormData
-            // for (let [key, value] of Object.entries(payload)) {
-            //     if (key === 'options') {
-            //         // Xử lý options như chuỗi JSON
-            //         formData.append(key, JSON.stringify(value));
-            //     } else {
-            //         formData.append(key, value);
-            //     }
-            // }
-            // options.forEach((option, optionIndex) => {
-            //     option.images.forEach((file, fileIndex) => {
-            //         formData.append(`option[${optionIndex}][images]`, file);
-            //     });
-            // });
-            // const createProduct = await apiCreateProduct(formData);
-            // if (createProduct.EC === 0) {
-            //     toast.success("Tạo sản phẩm thành công!")
-            // }
-            // else {
-            //     toast.error("Tạo sản phẩm không thành công!")
-            // }
+            for (let [key, value] of Object.entries(payload)) {
+                if (key === 'options') {
+                    // Xử lý options như chuỗi JSON
+                    formData.append(key, JSON.stringify(value));
+                } else {
+                    formData.append(key, value);
+                }
+            }
+            options.forEach((option, optionIndex) => {
+                option.images.forEach((file, fileIndex) => {
+                    formData.append(`option[${optionIndex}][images]`, file);
+                });
+            });
+            const createProduct = await apiCreateProduct(formData);
+            if (createProduct.EC === 0) {
+                toast.success("Tạo sản phẩm thành công!")
+            }
+            else {
+                toast.error("Tạo sản phẩm không thành công!")
+            }
         }
     }
     return (
-        <div>
+        <div style={{ marginTop: "6px" }}>
             <h2>Tạo sản phẩm</h2>
             <hr />
             <div>
                 <div className="row me-0 mb-3">
-                    <div className="col-6">
+                    <div className="col-sm-6 col-12">
                         <label>Tên sản phẩm</label>
                         <InputField
                             nameKey={"title"}
@@ -238,7 +244,7 @@ const CreateProduct = () => {
                             errors={errors}
                         />
                     </div>
-                    <div className="col-3">
+                    <div className="col-sm-3 col-12 mt-sm-0 mt-3">
                         <label>Giá bán</label>
                         <InputField
                             nameKey={"price"}
@@ -247,7 +253,7 @@ const CreateProduct = () => {
                             errors={errors}
                         />
                     </div>
-                    <div className="col-3 pe-5">
+                    <div className="col-sm-3 col-12 pe-sm-5 mt-sm-0 mt-3">
                         <label>Thương hiệu</label>
                         <SelectField
                             nameKey={"brand"}
@@ -260,7 +266,7 @@ const CreateProduct = () => {
                     </div>
                 </div>
                 <div className="row me-0 mb-3">
-                    <div className="col-6">
+                    <div className="col-sm-6 col-12">
                         <label>Danh mục</label>
                         <select className="form-select" aria-label="Default select example" value={payload.category}
                             onChange={(event) => { setPayload(prev => ({ ...prev, category: event.target.value })) }}>
@@ -273,7 +279,7 @@ const CreateProduct = () => {
                         </select>
                         {errors.category && <small className="text-danger ms-1">{errors.category}</small>}
                     </div>
-                    <div className="col-3">
+                    <div className="col-sm-3 col-6  mt-sm-0 mt-3">
                         <label>Giảm giá</label>
                         <InputField
                             nameKey={"discount"}
@@ -282,8 +288,8 @@ const CreateProduct = () => {
                             errors={errors}
                         />
                     </div>
-                    <div className="col-3">
-                        <label>Ngày hết hạn giảm giá</label>
+                    <div className="col-sm-3 col-6  mt-sm-0 mt-3">
+                        <label className="mb-1">Ngày hết hạn giảm giá</label>
                         <DatePicker
                             showTime
                             value={payload.expiry || ""}
@@ -310,7 +316,7 @@ const CreateProduct = () => {
                     <label>Chi tiết sản phẩm</label>
                     <div className="d-flex flex-wrap">
                         {options.map((option, optionIndex) => (
-                            <div className="border boder-dark px-3 py-2 mt-3 ms-3 col-sm-5 col-12" key={`opt - ${optionIndex}`} style={{ position: "relative" }}>
+                            <div className="border boder-dark px-3 py-2 mt-3 col-sm-5 col-12" key={`opt - ${optionIndex}`} style={{ position: "relative" }}>
                                 <div className="row">
                                     <label className="me-2 col-3">Màu sắc</label>
                                     <input value={option.color} className="col-6" type="text" onChange={(e) => handleColorChange(optionIndex, e)} />
@@ -318,37 +324,27 @@ const CreateProduct = () => {
                                 </div>
                                 <div className="mt-2">
                                     <label>Kích thước & số lượng: </label>
-                                    <Select
-                                        mode="multiple"
-                                        allowClear
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        placeholder="Chọn size"
-                                        onChange={(value) => {
-                                            const newSizeQuantity = value.map(size => ({
-                                                size: size,
-                                                quantity: ""
-                                            }));
-                                            setOptions(prevOptions => {
-                                                //copy options cũ, ghi đè gtri sizeQuantity, trả về options mới đã ghi đè
-                                                const newOptions = [...prevOptions];
-                                                newOptions[optionIndex].sizeQuantity = newSizeQuantity;
-                                                return newOptions;
-                                            });
-                                        }}
-                                        options={sizes}
-                                    />
+                                    <div className="mb-3">
+                                        {sizes?.map((size, sizeIndex) => {
+                                            return (
+                                                <button value={size} key={`sizeProd-${sizeIndex}`}
+                                                    className={`me-3 btn border ${handleCheckSizeSelect(optionIndex, size) ? "btn-secondary" : "btn-light"} `}
+                                                    onClick={() => { handleAddSize(optionIndex, size) }} >
+                                                    {size}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
                                     {errors.options[optionIndex] && errors.options[optionIndex].sizeQuantity && <small className="text-danger">{errors.options[optionIndex].sizeQuantity}</small>}
 
                                     {option.sizeQuantity?.map((sizeQtt, sizeIndex) => {
                                         return (
                                             <div className="row mt-1" key={`sizeQtt - ${optionIndex} - ${sizeIndex}`}>
-                                                <label className="col-3 mt-1">{sizeQtt.size}</label>
+                                                <label className="col-3 mt-1 ps-4 btn btn-light border">{sizeQtt.size}</label>
                                                 {sizeQtt.size &&
                                                     <div className=" col-8 d-flex">
-                                                        <span className="col-1 mt-1">:</span>
-                                                        <input type="number" className={`form - control ${!sizeQtt.quantity || sizeQtt.quantity < 0 ? "is-invalid" : ""}`} value={sizeQtt.quantity} placeholder="Số lượng"
+                                                        <span className="col-1 mt-2">:</span>
+                                                        <input type="number" className={`form-control ${!sizeQtt.quantity || sizeQtt.quantity < 0 ? "is-invalid" : ""}`} value={sizeQtt.quantity} placeholder="Số lượng"
                                                             onChange={(e) => { handleSizeQuantityChange(optionIndex, sizeIndex, e) }}
                                                         />
                                                     </div>}
@@ -380,13 +376,13 @@ const CreateProduct = () => {
                                 </div>
                             </div>
                         ))}
-                        <button className="ms-3 w-25 border-0 mt-2" onClick={() => { handleAddOption() }}>
+                        <button className=" col-sm-1 col-12 btn" onClick={() => { handleAddOption() }}>
                             <IoIosAddCircleOutline style={{ fontSize: "50px" }} />
                         </button>
                     </div>
 
-
-                    <button onClick={() => { handleCreateProduct() }}>Tạo</button>
+                    <hr className="mt-3" />
+                    <button className="btn btn-success mt-2 w-100" onClick={() => { handleCreateProduct() }}>Tạo</button>
                 </div>
             </div>
         </div>
