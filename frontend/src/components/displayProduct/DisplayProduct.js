@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./DisplayProduct.scss";
-import { useDispatch, useSelector } from 'react-redux';
 import { formatCurrency } from "../../untils/helpers";
 import { useNavigate } from 'react-router-dom';
 const DisplayProduct = (props) => {
-    const products = useSelector(state => state.displayProduct[props.display]);
+    const [products, setProducts] = useState([])
     const navigation = useNavigate();
-    const dispatch = useDispatch();
-
+    useEffect(() => {
+        setProducts(props.productList)
+    }, [props.productList])
     const handleGetDetailsProduct = (item) => {
         navigation(`/${item.slug}`)
     }

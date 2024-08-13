@@ -57,7 +57,8 @@ const NavAdmin = () => {
                 <div className="topnav d-sm-flex flex-column text-none " >
                     {dataNav.map(item => {
                         return (
-                            <NavLink to={item.path} className="w-100 text-start border-top" key={`navADM-${item.id}`}>
+                            <NavLink to={item.path} className="w-100 text-start border-top" key={`navADM-${item.id}`}
+                                style={{ borderRight: 0 }} >
                                 <span className="me-2">{item.icon}</span> {item.name}
                             </NavLink>
                         )

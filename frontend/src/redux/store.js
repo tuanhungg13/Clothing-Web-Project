@@ -1,7 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { prodCategorySlice } from './prodCategorySlice';
 import storage from 'redux-persist/lib/storage'
-import { productSlice } from './displayProductSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 import userSlice from './userSlice';
 import cartSlice from './cartSlice';
@@ -9,13 +8,12 @@ import cartSlice from './cartSlice';
 const userConfig = {
     key: "profile",
     storage,
-    whitelist: ["isLoggedIn", "accessToken"]
+    whitelist: ["isLoggedIn", "accessToken", "current"]
 }
 
 export const store = configureStore({
     reducer: {
         productCategories: prodCategorySlice.reducer,
-        displayProduct: productSlice.reducer,
         user: persistReducer(userConfig, userSlice),
         cart: cartSlice.reducer
     },

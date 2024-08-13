@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './SidebarProduct.scss';
 import { Slider } from 'antd';
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
+import { apiGetProducts } from '../../service/productApiService';
 const SidebarProduct = (props) => {
-    const [priceRange, setPriceRange] = useState([0, 3000000]);
-    const [selectedOption, setSelectedOption] = useState();
-    const [selectedSize, setSlectedSize] = useState();
-    const categories = useSelector(state => state.productCategories.categories)
+    const categories = useSelector(state => state.productCategories.categories);
+    const sizes = [{ name: "S" }, { name: "M" }, { name: "L" }, { name: "XL" }, { name: "XXL" }]
     const onChangeSliderRange = (value) => {
-        console.log('onChange: ', value);
-        setPriceRange(value);
+        props.setPriceRange(value);
     };
 
     const formatCurrency = (amount) => {
         return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    const handleChooseOption = (option) => {
-        setSelectedOption(option);
+    const handleSelectCategory = (category) => {
+        props.setSelectedCategory(category);
     };
 
-    const handleChooseSize = (size) => {
-        setSlectedSize(size);
+    const handleSelectSize = (size) => {
+        props.setSlectedSize(size);
     }
     return (
         <div className='sidebar-product'>
@@ -38,7 +36,8 @@ const SidebarProduct = (props) => {
                                 {categories.map((item, index) => {
                                     return (
                                         <li key={item._id}>
-                                            <input type='checkbox' onChange={() => handleChooseOption()} /> {item.categoryName}
+                                            <input type='checkbox' value={item._id} checked={props.selectedCategory === item._id}
+                                                onChange={() => handleSelectCategory(item._id)} /> {item.categoryName}
                                         </li>
                                     )
                                 })}
@@ -61,19 +60,19 @@ const SidebarProduct = (props) => {
                                     min={0}
                                     max={3000000}
                                     draggableTrack // Cho phép kéo thanh slider để chọn khoảng giá
-                                    defaultValue={priceRange} // Giá trị mặc định của slider
+                                    defaultValue={props.priceRange} // Giá trị mặc định của slider
                                     onChange={onChangeSliderRange} // Hàm được gọi khi slider thay đổi
                                 />
                                 <div className='price-slider d-flex justify-content-between'>
-                                    <div >{formatCurrency(priceRange[0])}đ</div>
-                                    <div>{formatCurrency(priceRange[1])}đ</div>
+                                    <div >{formatCurrency(props.priceRange[0])}đ</div>
+                                    <div>{formatCurrency(props.priceRange[1])}đ</div>
                                 </div>
                                 <div className='d-flex justify-content-between mt-3'>
                                     <div>Sắp xếp</div>
-                                    <select className="" aria-label="Default select example" style={{ width: '120px' }}>
-                                        <option >Mặc định</option>
-                                        <option value="1">Giá giảm dần</option>
-                                        <option value="2">Giá tăng dần</option>
+                                    <select className="" aria-label="Default select example" style={{ width: '120px' }} >
+                                        <option value={"-createdAt"}>Mặc định</option>
+                                        <option value="-price">Giá giảm dần</option>
+                                        <option value="price">Giá tăng dần</option>
                                     </select>
                                 </div>
                             </div>
@@ -90,24 +89,14 @@ const SidebarProduct = (props) => {
                         </button>
                         <div className="collapse" id="orders-collapse">
                             <ul className="size-product btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'S'} onChange={() => handleChooseSize('S')} /> S
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'XS'} onChange={() => handleChooseSize('XS')} /> XS
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'M'} onChange={() => handleChooseSize('M')} /> M
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'L'} onChange={() => handleChooseSize('L')} /> L
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'XL'} onChange={() => handleChooseSize('XL')} /> XL
-                                </li>
-                                <li>
-                                    <input type='checkbox' checked={selectedSize === 'XXL'} onChange={() => handleChooseSize('XXL')} /> XXL
-                                </li>
+                                {sizes && sizes.length > 0 && sizes.map((size, index) => {
+                                    <li key={`sizeSelect-${index}`}>
+                                        <input type='checkbox' value={size.name} checked={props.selectedSize === size.name} onChange={() => handleSelectSize(size.name)} />
+                                        <span>{size.name}</span>
+                                    </li>
+                                })}
+
+
                             </ul>
                         </div>
                     </li>

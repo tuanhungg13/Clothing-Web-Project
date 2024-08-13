@@ -22,7 +22,6 @@ const ManageProducts = () => {
             setProducts(response.DT);
             setTotalPages(response.totalPages);
         }
-        console.log(response)
     }
 
     const handlePageClick = (event) => {
@@ -55,7 +54,7 @@ const ManageProducts = () => {
             {edit && <UpdateProduct dataProduct={dataProduct} setEdit={setEdit} setDataProduct={setDataProduct} />}
 
             {!edit &&
-                <div>
+                <div style={{ marginTop: "3px" }}>
                     <div className="d-flex justify-content-between">
                         <h2>Quản lí sản phẩm</h2>
                         <button className="btn btn-success me-3">

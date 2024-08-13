@@ -50,47 +50,49 @@ const ManageUsers = () => {
     };
 
     return (
-        <div>
+        <div style={{ marginTop: "11px" }}>
             <h2>Quản lí người dùng</h2>
             <hr style={{ marginTop: "13px" }} />
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Sđt</th>
-                        <th scope="col">Địa chỉ</th>
-                        <th scope="col">Chức vụ</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users?.map((item, index) => {
-                        return (
-                            <tr key={item._id}>
-                                <th scope="row">{((currentPage - 1) * limit) + index + 1}</th>
-                                <td>{item.userName}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phoneNumber}</td>
-                                <td>{item.address}</td>
-                                <td>{item.role === 'admin' ? "Quản trị viên" : "Người dùng"}</td>
-                                <td className={`${item.isBlocked ? "text-danger" : "text-success"}`}>{item.isBlocked ? "Chặn" : "Bình thường"}</td>
-                                <td>
-                                    <button className="btn btn-secondary me-2" onClick={() => { handleEditUser(item) }}>
-                                        Sửa
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => { handleDeletedUser(item) }}>
-                                        Xóa
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })}
+            <div className="table-responsive">
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Sđt</th>
+                            <th scope="col">Địa chỉ</th>
+                            <th scope="col">Chức vụ</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users?.map((item, index) => {
+                            return (
+                                <tr key={item._id}>
+                                    <th scope="row">{((currentPage - 1) * limit) + index + 1}</th>
+                                    <td>{item.userName}</td>
+                                    <td>{item.email}</td>
+                                    <td>{item.phoneNumber}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item?.role === 'admin' ? "Quản trị viên" : "Người dùng"}</td>
+                                    <td className={`${item.isBlocked ? "text-danger" : "text-success"}`}>{item.isBlocked ? "Chặn" : "Bình thường"}</td>
+                                    <td>
+                                        <button className="btn btn-secondary me-2" onClick={() => { handleEditUser(item) }}>
+                                            Sửa
+                                        </button>
+                                        <button className="btn btn-danger" onClick={() => { handleDeletedUser(item) }}>
+                                            Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
 
             <div className="user-footer mt-2">
                 {totalPages > 1 &&

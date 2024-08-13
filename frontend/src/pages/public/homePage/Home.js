@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import poster1 from '../../../assets/img/poster_4.jpg';
 import poster2 from '../../../assets/img/poster_5.jpg';
@@ -20,19 +20,23 @@ import style10 from "../../../assets/img/product10.webp";
 import { NavLink } from 'react-router-dom';
 import Banner from "../../../components/banner/Banner";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
-import { fetchBestSellingProduct, fetchNewProducts } from '../../../redux/displayProductSlice';
-import { useDispatch } from 'react-redux';
 import SliderComponent from '../../../components/slider/Slider';
-
+import { apiGetProducts } from '../../../service/productApiService';
 
 const Home = () => {
     const background = [poster1, poster2, poster3, poster4, poster5, poster6];
-    const listStyle = [style01, style02, style03, style04, style05, style06, style07, style08, style09, style10]
-    const dispatch = useDispatch();
+    const [productBestSeller, setProductBestSeller] = useState([])
+    const [newProduct, setNewProduct] = useState([])
+    const limit = 15
     useEffect(() => {
-        dispatch(fetchBestSellingProduct({ sort: "-sold" }));
-        dispatch(fetchNewProducts({ sort: "-createdAt" }))
+        fetchProducts()
     }, [])
+    const fetchProducts = async () => {
+        const responseProdBestSeller = await apiGetProducts({ limit: limit, page: 1, sort: "-sold" })
+        const responseNewProduct = await apiGetProducts({ limit: limit, page: 1, sort: "-createdAt" })
+        if (responseProdBestSeller.EC === 0) setProductBestSeller(responseProdBestSeller.DT);
+        if (responseNewProduct.EC === 0) setNewProduct(responseNewProduct.DT);
+    }
     return (
         <>
             {/* background-header */}
@@ -47,7 +51,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className='container-product d-flex justify-content-center flex-wrap row mt-5'>
-                        <DisplayProduct display={"productBestSeller"} />
+                        <DisplayProduct productList={productBestSeller} />
                         <div className='product-other'>
                             Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
                         </div>
@@ -63,7 +67,7 @@ const Home = () => {
                     </div>
                     <div className='container-product d-flex justify-content-center flex-wrap row '>
                         <div className='product-other'>
-                            <DisplayProduct display={"newProducts"} />
+                            <DisplayProduct productList={newProduct} />
 
                             Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
                         </div>
@@ -78,7 +82,7 @@ const Home = () => {
                         <div className='container-outfit'>
                             <div className='content-outfit'>
                                 <div className='list-outfit' >
-                                    <SliderComponent vertical={false} />
+                                    <SliderComponent />
 
                                 </div>
                                 <div className='buttons'>

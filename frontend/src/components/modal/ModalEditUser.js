@@ -6,6 +6,10 @@ import { toast } from "react-toastify";
 const ModalEditUser = (props) => {
     const modalRef = useRef(null);
     const [payload, setPayload] = useState({})
+    const [errors, setErrors] = useState({
+        isBlocked: "",
+        role: ""
+    })
     useEffect(() => {
         if (props.showModalEditUser) {
             setPayload(props.dataUser);
@@ -13,18 +17,39 @@ const ModalEditUser = (props) => {
         }
     }, [props.showModalEditUser])
 
-    const handleConfirmEdit = async () => {
-        const response = await apiUpdateByAdmin({ uid: payload._id }, payload);
-        if (response.EC === 0) {
-            toast.success("Thay đổi thông tin người dùng thành công!");
-            await props.fetchUsers();
+    const validate = () => {
+        const newError = {};
+        let isValid = true;
+        if (payload.isBlocked === "") {
+            newError.isBlocked = "Vui lòng xác nhận chặn người dùng hay không!";
+            isValid = false;
         }
-        else {
-            toast.error("Thay đổi thông tin người dùng không thành công!");
+        if (!payload.role) {
+            newError.role = "Vui lòng chọn chức vụ người dùng!";
+            isValid = false;
         }
+        setErrors(newError);
+        return isValid;
+    }
+    const handleCloseModal = () => {
         props.onClose();
+        setErrors({})
     }
 
+    const handleConfirmEdit = async () => {
+        const checkValid = validate();
+        if (checkValid) {
+            const response = await apiUpdateByAdmin({ uid: payload._id }, payload);
+            if (response.EC === 0) {
+                toast.success("Thay đổi thông tin người dùng thành công!");
+                await props.fetchUsers();
+            }
+            else {
+                toast.error("Thay đổi thông tin người dùng không thành công!");
+            }
+            handleCloseModal()
+        }
+    }
 
     const handleOnKeyDown = (event) => {
         if (event.key === "Enter") {
@@ -35,12 +60,12 @@ const ModalEditUser = (props) => {
     }
     return (
         <div className={`modal fade ${props.showModalEditUser ? 'show' : ''}`} tabIndex="-1" style={{ display: props.showModalEditUser ? 'block' : 'none' }}
-            ref={modalRef} onKeyDown={(event) => { handleOnKeyDown(event) }} onClick={props.onClose}>
+            ref={modalRef} onKeyDown={(event) => { handleOnKeyDown(event) }} onClick={handleCloseModal}>
             <div className="modal-dialog">
                 <div className="modal-content" onClick={(event) => { event.stopPropagation() }}>
                     <div className="modal-header">
                         <h1 className="modal-title fs-5">Chỉnh sửa thông tin người dùng</h1>
-                        <button type="button" className="btn-close" onClick={props.onClose} aria-label="Close"></button>
+                        <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
                     </div>
 
 
@@ -73,18 +98,20 @@ const ModalEditUser = (props) => {
                                     value={payload.role}
                                     setValue={setPayload}
                                     options={[{ role: "user" }, { role: "admin" }]}
+                                    errors={errors}
                                 />
                             </div>
 
 
                             <div className="col-3">
                                 <label>Chặn</label>
-                                <SelectField
-                                    nameKey={"isBlocked"}
-                                    value={payload.isBlocked}
-                                    setValue={setPayload}
-                                    options={[{ isBlocked: true }, { isBlocked: false }]}
-                                />
+                                <select className="form-select" aria-label="Default select example" value={payload.isBlocked}
+                                    onChange={(event) => { setPayload(prev => ({ ...prev, isBlocked: event.target.value })) }}>
+                                    <option value={""}>Chọn</option>
+                                    <option value={true}>True</option>
+                                    <option value={false}>False</option>
+                                </select>
+                                {errors.isBlocked && <small className="text-danger">{errors.isBlocked}</small>}
                             </div>
 
                         </div>

@@ -230,7 +230,7 @@ const CreateProduct = () => {
         }
     }
     return (
-        <div style={{ marginTop: "6px" }}>
+        <div style={{ marginTop: "8px" }}>
             <h2>Tạo sản phẩm</h2>
             <hr />
             <div>
