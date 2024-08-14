@@ -23,6 +23,8 @@ import ManageUsers from "./pages/admin/ManageUsers";
 import { useDispatch } from "react-redux";
 import { fetchProductCategories } from "./redux/prodCategorySlice";
 import { useEffect } from "react";
+import OrderPage from "./pages/public/OrderPage";
+import CartDetailsPage from "./pages/public/CartDetailsPage";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -47,9 +49,10 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/" element={<Home />} />
-
+          <Route path="/thanh-toan" element={<OrderPage />} />
           <Route path="/san-pham" element={<ProductPage />} />
           <Route path="/:productId" element={<ProductDetails />} />
+          <Route path="/chi-tiet-gio-hang" element={<CartDetailsPage />} />
 
           {/* <Route path="/sale" element={<ProductOnSale />} /> */}
           <Route path="/huong-dan-mua-hang" element={<Instruction />} />

@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { formatCurrency } from "../../untils/helpers";
-import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import Cookies from 'js-cookie'
 import { getCartFromCookies } from "../../redux/cartSlice";
 import { apiRemoveFromCart } from "../../service/userApiService";
 import { getCurrent } from "../../redux/userSlice";
 
-const CartMenu = (props) => {
+const CartMenu = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart || []);
     const cartFromCookies = useSelector(state => state?.cart?.cartFromCookies || []);
     // Kết hợp cartItems từ Redux và cartFromCookies
-
     const isLoggedIn = useSelector(state => state.user.isLoggedIn);
     const navigation = useNavigate()
 
@@ -104,8 +102,9 @@ const CartMenu = (props) => {
                         <label style={{ fontSize: "15px" }}>TỔNG TIỀN TẠM TÍNH:</label>
                         <div>{calculateTotalPrice()}</div>
                     </div>
-                    <button type="button" className="w-100 my-3 " style={{ backgroundColor: "black", height: "40px", color: "white" }}>TIẾN HÀNH ĐẶT HÀNG</button>
-                    <NavLink className="d-flex justify-content-center" style={{ color: "black" }}>Chi tiết giỏ hàng</NavLink>
+                    <button type="button" className="w-100 my-3 " style={{ backgroundColor: "black", height: "40px", color: "white" }}>
+                        <NavLink className={"text-white text-decoration-none"} to={"/thanh-toan"}>TIẾN HÀNH ĐẶT HÀNG</NavLink></button>
+                    <NavLink className="d-flex justify-content-center" style={{ color: "black" }} to={"/chi-tiet-gio-hang"}>Chi tiết giỏ hàng</NavLink>
                 </div>
 
             </ul>

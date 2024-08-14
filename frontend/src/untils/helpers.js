@@ -1,8 +1,8 @@
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-
-
-
-
+import { apiAddToCart } from "../service/userApiService";
+import Cookies from "js-cookie"
+import { getCurrent } from "../redux/userSlice";
+import { getCartFromCookies } from "../redux/cartSlice";
 export const formatCurrency = (amount) => {
     if (!amount) return
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -28,3 +28,65 @@ export const toBase64 = file => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = reject;
 });
+
+export const addToCart = async (dispatch, isLoggedIn, product, color, size, quantity) => {
+    if (isLoggedIn) {
+        const addToCart = await apiAddToCart({ pid: product._id, color: color, size: size, quantity: quantity })
+        if (addToCart.EC === 0) {
+            dispatch(getCurrent())
+            alert("THÊM THÀNH CÔNG!")
+        }
+    }
+    // Người dùng chưa đăng nhập
+    else {
+        // Lấy dữ liệu giỏ hàng hiện tại từ cookies
+        let cart = Cookies.get("PRODUCT_CART_NEW");
+        if (cart) {
+            // Nếu cookie đã có dữ liệu, giải mã nó
+            cart = JSON.parse(cart);
+        } else {
+            // Nếu không có dữ liệu, khởi tạo giỏ hàng rỗng
+            cart = {};
+        }
+        const productKey = `${product._id}-${color}-${size}`;
+
+        // Thêm sản phẩm vào giỏ hàng
+        if (cart[productKey]) {
+            console.log("trùng", cart)
+            cart[productKey] = {
+                product: {
+                    title: product.title,
+                    price: product.price,
+                    images: product?.options?.find(option => option.color === color)?.images[0] || product.images,
+                    slug: product.slug,
+                    _id: product._id
+                },
+                _id: productKey,
+                quantity: +quantity + cart[productKey].quantity,
+                color: color,
+                size: size
+            }
+        }
+        else {
+            // Thêm sản phẩm mới vào giỏ hàng
+            cart[productKey] = {
+                product: {
+                    title: product.title,
+                    price: product.price,
+                    images: product?.options?.find(option => option.color === color)?.images[0] || product.images,
+                    slug: product.slug,
+                    _id: product._id
+                },
+                _id: `${product._id}-${color}-${size}`,
+                quantity,
+                color,
+                size,
+            };
+        }
+        // Cập nhật lại cookies sau khi thêm vào giỏ hàng
+        Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
+        // Cập nhật Redux state (nếu cần)
+        dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
+        alert("THÊM VÀO GIỎ HÀNG!");
+    }
+}
