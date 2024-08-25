@@ -4,7 +4,7 @@ import logo from "../assets/img/logoStore.jpg";
 import { Radio } from 'antd';
 import { IoIosArrowBack } from "react-icons/io";
 import { NavLink } from "react-router-dom";
-const UserInfor = (payload, setPayload, errors) => {
+const UserInfor = ({ payload, setPayload, errors }) => {
     return (
         <div className="d-flex flex-column container">
             <img src={logo} className="w-25" alt="logo" />
@@ -15,7 +15,7 @@ const UserInfor = (payload, setPayload, errors) => {
                     <InputField
                         nameKey={"userName"}
                         placeholder="Họ và tên"
-                        value={payload?.userName}
+                        value={payload.userName}
                         setValue={setPayload}
                         errors={errors}
                     />

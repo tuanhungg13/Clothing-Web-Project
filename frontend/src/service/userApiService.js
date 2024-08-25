@@ -26,7 +26,11 @@ export const apiGetCurrent = () => { //lấy thông tin người dùng
 
 export const apiAddToCart = (data) => {
     return (
-        axios.put('/user/addToCart', { pid: data.pid, color: data.color, size: data.size, quantity: data.quantity })
+        axios.put('/user/addToCart', { pid: data.pid, color: data.color, size: data.size, quantity: data.quantity }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
     )
 }
 

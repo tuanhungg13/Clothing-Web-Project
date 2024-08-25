@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { apiGetProducts } from "../../service/productApiService";
 import ReactPaginate from "react-paginate";
 import { FaStar } from "react-icons/fa";
@@ -16,13 +16,14 @@ const ManageProducts = () => {
     useEffect(() => {
         fetchProducts()
     }, [currentPage])
-    const fetchProducts = async () => {
+
+    const fetchProducts = useCallback(async () => {
         const response = await apiGetProducts({ sort: "-createdAt", page: currentPage, limit });
         if (response.EC === 0) {
             setProducts(response.DT);
             setTotalPages(response.totalPages);
         }
-    }
+    }, [currentPage]);
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
@@ -51,7 +52,7 @@ const ManageProducts = () => {
         <>
 
 
-            {edit && <UpdateProduct dataProduct={dataProduct} setEdit={setEdit} setDataProduct={setDataProduct} />}
+            {edit && <UpdateProduct dataProduct={dataProduct} setEdit={setEdit} setDataProduct={setDataProduct} fetchProducts={fetchProducts} />}
 
             {!edit &&
                 <div style={{ marginTop: "3px" }}>

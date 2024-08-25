@@ -11,6 +11,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { MdPublishedWithChanges } from "react-icons/md";
 import { RiContactsBookLine } from "react-icons/ri";
 import { addToCart } from "../../untils/helpers";
+import { hanldeDeleteCartItem } from "../../untils/helpers";
 const CartDetailsPage = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart);
     const cartFromCookies = useSelector(state => state?.cart?.cartFromCookies);
@@ -21,7 +22,7 @@ const CartDetailsPage = () => {
     useEffect(() => {
         //Nếu người dùng đăng nhập hiển thị cart của người dùng lưu trong csdl
         //Nếu ko đăng nhập thì hiển thị cart lưu ở cookies
-
+        console.log("chạy cc")
         if (isLoggedIn) {
             setDisplayCart(cartItems)
         }
@@ -47,28 +48,8 @@ const CartDetailsPage = () => {
         return formatCurrency(total)
     }
 
-    const handleRemoveCartItems = async (e, cartItem) => {
-        e.stopPropagation();
-        console.log("xóa")
-        if (isLoggedIn) {
-            const removeItem = await apiRemoveFromCart({ pid: cartItem.product._id, color: cartItem.color, size: cartItem.size })
-            if (removeItem.EC === 0) {
-                dispatch(getCurrent());
-            }
-            return
-        }
-        else {
-            //copy lại mảng cart
-            let cartCopy = [...displayCart];
-            //lọc ra những item khác vs item bị xóa
-            cartCopy = cartCopy.filter(item => !(item._id === cartItem._id && item.color === cartItem.color && item.size === cartItem.size));
-            //chuyển từ mảng về object
-            const cartCookies = { ...cartCopy }
-            //set lại cookies sau khi xóa
-            Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cartCookies), { expires: 30 });
-            //dispatch để cập nhật lạ redux
-            dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }))
-        }
+    const handleRemoveCartItems = async (cartItem) => {
+        hanldeDeleteCartItem(dispatch, isLoggedIn, cartItem, displayCart);
     }
 
     const handleChangeQuantityInCre = (item, index) => {
@@ -81,17 +62,15 @@ const CartDetailsPage = () => {
             return
         }
         else {
-            let quantity = item.quantity
             setDisplayCart(prev => {
                 const prevCopy = [...prev];
                 // Tạo một bản sao của đối tượng item tại vị trí index
-                const updatedItem = { ...prevCopy[index], quantity: quantity + 1 };
+                const updatedItem = { ...prevCopy[index], quantity: item.quantity + 1 };
 
                 // Gán lại giá trị cho updatedItems tại vị trí index
                 prevCopy[index] = updatedItem;
                 return prevCopy
             })
-            console.log("check product cart", item.product)
             addToCart(dispatch, isLoggedIn, item.product, item.color, item.size, 1)
         }
         setErrors(newError);
@@ -106,12 +85,13 @@ const CartDetailsPage = () => {
             setDisplayCart(prev => {
                 const prevCopy = [...prev];
                 // Tạo một bản sao của đối tượng item tại vị trí index
-                const updatedItem = { ...prevCopy[index], quantity: prevCopy[index].quantity - 1 };
+                const updatedItem = { ...prevCopy[index], quantity: item.quantity - 1 };
                 // Gán lại giá trị cho updatedItems tại vị trí index
                 prevCopy[index] = updatedItem;
 
                 return prevCopy
             })
+            addToCart(dispatch, isLoggedIn, item.product, item.color, item.size, -1)
             newError[item._id] = ""
             setErrors(newError)
         }
@@ -157,7 +137,7 @@ const CartDetailsPage = () => {
                                             </div>
                                         </div>
                                         <button type="button" className='border-0' style={{ backgroundColor: "transparent" }}
-                                            onClick={(e) => { handleRemoveCartItems(e, item) }}
+                                            onClick={(e) => { handleRemoveCartItems(item) }}
                                             onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "lightgray"; }}
                                             onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
                                         >

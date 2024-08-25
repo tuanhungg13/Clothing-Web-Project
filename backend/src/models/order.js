@@ -8,6 +8,10 @@ var orderSchema = new mongoose.Schema({
         size: String,
         quantity: Number,
     }],
+    totalPrice: {
+        type: Number,
+        require: true
+    },
     status: {
         type: String,
         default: "Đang xử lí",

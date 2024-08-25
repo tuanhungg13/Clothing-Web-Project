@@ -3,6 +3,7 @@ import { apiAddToCart } from "../service/userApiService";
 import Cookies from "js-cookie"
 import { getCurrent } from "../redux/userSlice";
 import { getCartFromCookies } from "../redux/cartSlice";
+import { apiRemoveFromCart } from "../service/userApiService";
 export const formatCurrency = (amount) => {
     if (!amount) return
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -32,9 +33,8 @@ export const toBase64 = file => new Promise((resolve, reject) => {
 export const addToCart = async (dispatch, isLoggedIn, product, color, size, quantity) => {
     if (isLoggedIn) {
         const addToCart = await apiAddToCart({ pid: product._id, color: color, size: size, quantity: quantity })
-        if (addToCart.EC === 0) {
+        if (addToCart && addToCart.EC === 0) {
             dispatch(getCurrent())
-            alert("THÊM THÀNH CÔNG!")
         }
     }
     // Người dùng chưa đăng nhập
@@ -52,7 +52,6 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
 
         // Thêm sản phẩm vào giỏ hàng
         if (cart[productKey]) {
-            console.log("trùng", cart)
             cart[productKey] = {
                 product: {
                     title: product.title,
@@ -87,6 +86,28 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
         Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
         // Cập nhật Redux state (nếu cần)
         dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
-        alert("THÊM VÀO GIỎ HÀNG!");
+    }
+}
+
+
+export const hanldeDeleteCartItem = async (dispatch, isLoggedIn, cartItem, displayCart) => {
+    if (isLoggedIn) {
+        const removeItem = await apiRemoveFromCart({ pid: cartItem.product._id, color: cartItem.color, size: cartItem.size })
+        if (removeItem.EC === 0) {
+            dispatch(getCurrent());
+        }
+        return
+    }
+    else {
+        //copy lại mảng cart
+        let cartCopy = [...displayCart];
+        //lọc ra những item khác vs item bị xóa
+        cartCopy = cartCopy.filter(item => !(item._id === cartItem._id && item.color === cartItem.color && item.size === cartItem.size));
+        //chuyển từ mảng về object
+        const cartCookies = { ...cartCopy }
+        //set lại cookies sau khi xóa
+        Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cartCookies), { expires: 30 });
+        //dispatch để cập nhật lạ redux
+        dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }))
     }
 }

@@ -4,7 +4,6 @@ import SelectField from "../../components/input/SelectField";
 import MarkdownEditor from "../../components/input/MarkdownEditor";
 import { TiDelete } from "react-icons/ti";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Select } from 'antd';
 import { toBase64 } from "../../untils/helpers";
 import { useSelector } from "react-redux";
 import { DatePicker } from 'antd';
@@ -12,7 +11,7 @@ import { apiUpdateProduct } from "../../service/productApiService";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 
-const UpdateProduct = (props) => {
+const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) => {
     const categories = useSelector(state => state.productCategories.categories)
     const [payload, setPayload] = useState({
         title: "",
@@ -49,10 +48,10 @@ const UpdateProduct = (props) => {
 
 
     useEffect(() => {
-        setPayload(props.dataProduct);
-        setOptions([...props.dataProduct.options])
-        setPreviewImg([...props.dataProduct.options])
-    }, [props.dataProduct])
+        setPayload(dataProduct);
+        setOptions(dataProduct.options)
+        setPreviewImg(dataProduct.options)
+    }, [dataProduct])
 
     const handleAddOption = () => {
         setOptions([...options,
@@ -123,21 +122,17 @@ const UpdateProduct = (props) => {
                     optionError.images = "Sai định dạng ảnh (chỉ hỗ trợ .jepg || .png || .jpg)"
                 }
             })
-            console.log("check sizeQuantity", option.sizeQuantity)
             option.sizeQuantity.forEach(sizeQtt => {
                 if (!sizeQtt.size) {
-                    console.log(`loi option ${index} size`)
                     isValid = false;
                 }
                 if (+sizeQtt.quantity < 0) {
-                    console.log(`loi option ${index} quantity`)
                     isValid = false;
                 }
             });
 
             newError.options[index] = optionError;
         });
-        console.log("Check error:", newError)
         setErrors(newError)
         return isValid
     }
@@ -228,7 +223,6 @@ const UpdateProduct = (props) => {
         };
         const checkValid = validate()
         if (checkValid) {
-            console.log("check payload:", updatedPayload)
             const formData = new FormData;
             // Thêm các trường không phải tệp vào FormData
             for (let [key, value] of Object.entries(updatedPayload)) {
@@ -247,6 +241,7 @@ const UpdateProduct = (props) => {
             const updateProduct = await apiUpdateProduct(updatedPayload._id, formData);
             if (updateProduct.EC === 0) {
                 toast.success("Cập nhật sản phẩm thành công!")
+                fetchProducts()
             }
             else {
                 toast.error("Cập nhật sản phẩm không thành công!")
@@ -254,8 +249,8 @@ const UpdateProduct = (props) => {
         }
     }
     const handleBackPage = () => {
-        props.setEdit(false);
-        props.setDataProduct({})
+        setEdit(false);
+        setDataProduct({})
     }
 
     return (

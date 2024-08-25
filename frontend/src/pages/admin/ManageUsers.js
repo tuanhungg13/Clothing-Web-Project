@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { apiGetAllUsers } from "../../service/userApiService";
 import ReactPaginate from 'react-paginate';
 import ModalEditUser from "../../components/modal/ModalEditUser"
@@ -15,14 +15,14 @@ const ManageUsers = () => {
     useEffect(() => {
         fetchUsers()
     }, [currentPage])
-    const fetchUsers = async () => {
+
+    const fetchUsers = useCallback(async () => {
         const response = await apiGetAllUsers({ sort: "-createdAt", page: currentPage, limit: limit });
         if (response.EC === 0) {
             setUsers(response.DT);
             setTotalPages(response.totalPages);
         }
-        return users
-    }
+    }, [currentPage])
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);

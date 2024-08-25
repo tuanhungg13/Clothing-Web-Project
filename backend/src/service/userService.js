@@ -1,4 +1,4 @@
-import User, { findById, findByIdAndUpdate } from "../models/users"
+import User from "../models/users"
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../middlewares/jwt';
 import jwt from 'jsonwebtoken';
