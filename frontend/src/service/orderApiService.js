@@ -4,4 +4,8 @@ const apiCreateOrder = (data) => {
     return axios.post("/order/", data)
 }
 
-export { apiCreateOrder }
+const apiGetOrders = (data) => {
+    return axios.get("/order/", data)
+}
+
+export { apiCreateOrder, apiGetOrders }

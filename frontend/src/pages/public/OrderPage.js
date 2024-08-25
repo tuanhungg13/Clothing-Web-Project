@@ -94,7 +94,6 @@ const OrderPage = () => {
     }
 
     const handleChangeQuantityReduce = (item, index) => {
-        const newError = {}
         if (item.quantity < 1) {
             return
         }
@@ -147,6 +146,7 @@ const OrderPage = () => {
                 const response = await apiCreateOrder({
                     products: displayCart,
                     note: payload.note,
+                    totalPrice: totalPrice,
                     orderBy: {
                         address: payload.address,
                         email: payload.email,

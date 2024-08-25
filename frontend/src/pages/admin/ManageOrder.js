@@ -1,13 +1,39 @@
-import React, { useState, } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-
+import { apiGetOrders } from "../../service/orderApiService";
+import ModalProcessOrder from "../../components/modal/ModalProcessOrder";
 const ManageOrder = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const limit = 10;
-    const [orders, setOrders] = useState([])
+    const [orders, setOrders] = useState([]);
+    const [showModalOrder, setShowModalOrder] = useState(false)
+    const [dataOrder, setDataOrder] = useState({})
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
+    }
+    useEffect(() => {
+        fetchOrders()
+        console.log("order")
+    }, [currentPage])
+    const fetchOrders = useCallback(async () => {
+        const response = await apiGetOrders({ page: currentPage, limit, sort: "-createdAt" });
+        if (response.EC === 0) {
+            setOrders(response.DT);
+            setTotalPages(response.totalPages);
+        }
+    }, [currentPage])
+
+
+    const handleUpdateOrder = (item) => {
+        setShowModalOrder(true)
+        const orderData = JSON.parse(JSON.stringify(item));
+        setDataOrder(orderData)
+    }
+
+    const handleCloseModal = () => {
+        setShowModalOrder(false)
+        setDataOrder({})
     }
     return (
         <div style={{ marginTop: "3px" }}>
@@ -43,7 +69,8 @@ const ManageOrder = () => {
                                     </td>
                                     <td>{item.totalPrice}</td>
                                     <td>
-                                        <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2" >
+                                        <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2"
+                                            onClick={() => { handleUpdateOrder(item) }} >
                                             Sửa
                                         </button>
                                         <button className="btn btn-danger" >
@@ -81,6 +108,12 @@ const ManageOrder = () => {
                     />
                 }
             </div>
+
+            <ModalProcessOrder
+                dataOrder={dataOrder}
+                showModalOrder={showModalOrder}
+                onClose={handleCloseModal}
+            />
         </div>
     )
 }

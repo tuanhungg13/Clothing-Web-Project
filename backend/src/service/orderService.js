@@ -49,7 +49,7 @@ const handleGetOrders = async (data) => {
             queryString.title = { $regex: queries.title, $options: "i" }
             console.log("3:", queryString)
         }
-        let queryCommand = Order.find(queryString);
+        let queryCommand = Order.find(queryString).populate("products.product", "title price options");
 
         //sort
         if (data.sort) {
