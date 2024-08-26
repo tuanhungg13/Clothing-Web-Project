@@ -88,7 +88,7 @@ const handleGetOrders = async (data) => {
         })
     } catch (error) {
         return {
-            EM: `There is an error in the "handleGetOrders function" in billService.js: ${error.message} `,
+            EM: `There is an error in the "handleGetOrders function" in orderService.js: ${error.message} `,
             EC: 1,
             DT: {},
             counts: ""
@@ -96,7 +96,59 @@ const handleGetOrders = async (data) => {
     }
 }
 
+const handleUpdateOrderByAdmin = async (data) => {
+    try {
+        const updateOrderByAdmin = await Order.findByIdAndUpdate(data.oid, {
+            status: data.status
+        }, { new: true })
+        if (!updateOrderByAdmin) {
+            return ({
+                EM: "Update order by admin failed!",
+                EC: 1,
+                DT: {}
+            })
+        }
+        return ({
+            EM: "Update order by admin successfully!",
+            EC: 0,
+            DT: updateOrderByAdmin
+        })
+    } catch (error) {
+        return {
+            EM: `There is an error in the "handleUpdateOrderByAdmin function" in orderService.js: ${error.message} `,
+            EC: 1,
+            DT: {},
+        }
+    }
+}
+
+const handleUpdateOrderByUser = async (data) => {
+    try {
+        const updateOrderByUser = await Order.findByIdAndUpdate(data.oid, {
+            status: data.status
+        }, { new: true })
+        if (!updateOrderByUser) {
+            return ({
+                EM: "Update order by user failed!",
+                EC: 1,
+                DT: {}
+            })
+        }
+        return ({
+            EM: "Update order by user successfully!",
+            EC: 0,
+            DT: updateOrderByUser
+        })
+    } catch (error) {
+        return {
+            EM: `There is an error in the "handleUpdateOrderByAdmin function" in orderService.js: ${error.message} `,
+            EC: 1,
+            DT: {},
+        }
+    }
+}
+
 module.exports = {
-    handleCreateNewOrder, handleGetOrders
+    handleCreateNewOrder, handleGetOrders, handleUpdateOrderByAdmin, handleUpdateOrderByUser
 }
 

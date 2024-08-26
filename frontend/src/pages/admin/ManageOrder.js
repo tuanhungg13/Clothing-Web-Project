@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { apiGetOrders } from "../../service/orderApiService";
 import ModalProcessOrder from "../../components/modal/ModalProcessOrder";
+import { formatCurrency } from "../../untils/helpers";
 const ManageOrder = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -52,7 +53,7 @@ const ManageOrder = () => {
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Trạng thái </th>
                             <th scope="col">Tổng tiền</th>
-
+                            <th scope="col">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +68,7 @@ const ManageOrder = () => {
                                     <td className={`${item.status === "Hủy" ? "text-danger" : `${item.status === "Đang xử lí" ? "text-warning" : "text-success"}`}`}>
                                         {item.status}
                                     </td>
-                                    <td>{item.totalPrice}</td>
+                                    <td>{formatCurrency(item.totalPrice)}</td>
                                     <td>
                                         <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2"
                                             onClick={() => { handleUpdateOrder(item) }} >
@@ -113,6 +114,7 @@ const ManageOrder = () => {
                 dataOrder={dataOrder}
                 showModalOrder={showModalOrder}
                 onClose={handleCloseModal}
+                fetchOrders={fetchOrders}
             />
         </div>
     )

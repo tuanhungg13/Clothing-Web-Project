@@ -5,6 +5,7 @@ import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken';
 
 router.post("/", controllers.createNewOrder);
 router.get('/', [verifyAccessToken, isAdmin], controllers.getOrders);
-
+router.put("/admin", [verifyAccessToken, isAdmin], controllers.updateOrderByAdmin)
+router.put("/user", [verifyAccessToken], controllers.updateOrderByUser)
 
 module.exports = router

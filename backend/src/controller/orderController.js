@@ -49,10 +49,60 @@ const getOrders = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "getBills function" in billControllers.js: ${error.message} `,
+            EM: `There is an error in the "getOrders function" in orderControllers.js: ${error.message} `,
             EC: 1,
         })
     }
 }
 
-module.exports = { createNewOrder, getOrders }
+
+const updateOrderByAdmin = async (req, res) => {
+    try {
+        const { oid } = req.body;
+        if (!oid) {
+            return res.status(400).json({
+                EM: "Missing input!",
+                EC: 1
+            })
+        }
+        const response = await orderService.handleUpdateOrderByAdmin(req.body)
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT,
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "updateOrderByAdmin function" in orderControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
+
+const updateOrderByUser = async (req, res) => {
+    try {
+        const { oid } = req.body;
+        if (!oid) {
+            return res.status(400).json({
+                EM: "Missing input!",
+                EC: 1
+            })
+        }
+        const response = await orderService.handleUpdateOrderByUser(req.body)
+        return res.status(200).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT,
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "updateOrderByUser function" in orderControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+}
+
+module.exports = { createNewOrder, getOrders, updateOrderByAdmin, updateOrderByUser }

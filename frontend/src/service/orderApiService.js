@@ -8,4 +8,12 @@ const apiGetOrders = (data) => {
     return axios.get("/order/", data)
 }
 
-export { apiCreateOrder, apiGetOrders }
+const apiUpdateOrderByAdmin = (data) => {
+    return axios.put("/order/admin", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
+export { apiCreateOrder, apiGetOrders, apiUpdateOrderByAdmin }
