@@ -63,15 +63,15 @@ const Header = () => {
                             <img src={avatar} alt="mdo" className="rounded-circle border" />
                         </a>
                         <ul className="dropdown-menu text-small">
-                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={"/profile"}>Thông tin tài khoản</NavLink></li>
+                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
                             {current?.role === "admin" ? <li>
                                 <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/thong-ke"}> Quản lý cửa hàng</NavLink>
 
                             </li>
                                 :
                                 <>
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark " to={""} >Thông tin đơn hàng</NavLink></li>
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark" >Lịch sử mua hàng</NavLink></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/${current._id}`} >Thông tin đơn hàng</NavLink></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/lich-su-mua-hang`}>Lịch sử mua hàng</NavLink></li>
                                 </>
                             }
 

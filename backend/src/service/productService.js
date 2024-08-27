@@ -173,8 +173,6 @@ const handleUpdateProduct = async (pid, data, files) => {
                 return sum + sizeQtt.quantity;
             }, 0);
         }, 0);
-        console.log("check files:", files)
-        console.log('Options:', data.options);
         const optionsWithImages = data.options.map((option, index) => {
             // Lọc bỏ các image rỗng hoặc không hợp lệ
             const filteredImages = (option.images || []).filter(image => image && typeof image === 'string');

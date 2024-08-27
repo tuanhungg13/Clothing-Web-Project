@@ -20,7 +20,7 @@ const register = async (req, res) => {
     } catch (error) {
         console.log("Error from 'register func' of userController.js: ", error)
         return res.status(500).json({
-            EM: 'There is an error in the "register function" in usersControllers.js',
+            EM: `Server: There is an error in the "register function" in usersControllers.js: ${error.message}`,
             EC: 1
         })
     }
@@ -49,9 +49,8 @@ const login = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error from 'login func of userController.js: ", error)
         return res.status(500).json({
-            EM: 'There is an error in the "login function" in userControllers.js',
+            EM: `Server: There is an error in the "login function" in userControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -75,7 +74,7 @@ const getUserById = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "getUserById function" in userControllers.js : ${error.message}`,
+            EM: `Server: There is an error in the "getUserById function" in userControllers.js : ${error.message}`,
             EC: 1,
         })
     }
@@ -97,7 +96,7 @@ const refreshAccessToken = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "refreshAccessToken function" in userControllers.js: ${error.message}`,
+            EM: `Server: There is an error in the "refreshAccessToken function" in userControllers.js: ${error.message}`,
             EC: 1
         })
     }
@@ -113,9 +112,8 @@ const logout = async (req, res) => {
             EC: 0
         })
     } catch (error) {
-        console.log("Error from 'logout func' of userController.js: ", error)
         return res.status(500).json({
-            EM: 'There is an error in the "logout function" in userControllers.js',
+            EM: `Server: There is an error in the "logout function" in userControllers.js: ${error.message}`,
             EC: 1
         })
     }
@@ -128,23 +126,22 @@ const updateUser = async (req, res) => {
     try {
         const { role, email, ...information } = req.body;
         const { _id } = req.user;
-        console.log("check update: ", _id, information)
         if (!_id || Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1
             })
         }
-        const response = await userService.handleUpdateUser(_id, information);
+        const response = await userService.handleUpdateUser(_id, information, req.file);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
         })
     } catch (error) {
-        console.log("Error from 'updateUser func' of userController.js: ", error)
+        console.log("Error from 'updateUser func' of userController.js: ",)
         return res.status(500).json({
-            EM: 'There is an error in the "updateUser function" in userControllers.js',
+            EM: `Server: There is an error in the "updateUser function" in userControllers.js: ${error.message}`,
             EC: 1,
         })
     }
@@ -163,9 +160,9 @@ const getAllUsers = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error from 'getAllUsers func' of userController.js: ", error)
+        console.log("Error from 'getAllUsers func' of userController.js: ",)
         return res.status(500).json({
-            EM: 'There is an error in the "getAllUsers function" in userControllers.js',
+            EM: `Server: There is an error in the "getAllUsers function" in userControllers.js: ${error.message}`,
             EC: 1,
         })
     }
@@ -186,7 +183,7 @@ const deleteUser = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "deleteUser function" in userControllers.js: ${error.message} `,
+            EM: `Server: There is an error in the "deleteUser function" in userControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -210,7 +207,7 @@ const updateUserByAdmin = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "updateUserByAdmin function" in userControllers.js: ${error.message} `,
+            EM: `Server: There is an error in the "updateUserByAdmin function" in userControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -235,7 +232,7 @@ const addToCart = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "addToCart function" in userControllers.js: ${error.message} `,
+            EM: `Server: There is an error in the "addToCart function" in userControllers.js: ${error.message} `,
             EC: 1,
         })
     }
@@ -259,7 +256,7 @@ const removeFromCart = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            EM: `There is an error in the "removeFromCart function" in userControllers.js: ${error.message} `,
+            EM: `Server: There is an error in the "removeFromCart function" in userControllers.js: ${error.message} `,
             EC: 1,
         })
     }

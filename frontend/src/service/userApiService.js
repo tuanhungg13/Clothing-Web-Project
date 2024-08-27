@@ -68,3 +68,11 @@ export const apiDeleteByAdmin = (params) => {
         axios.delete("/user/", { params })
     )
 }
+
+export const apiUpdateByUser = (params, data) => {
+    return (axios.put("/user/current", data, { params }, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }))
+}

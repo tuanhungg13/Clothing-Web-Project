@@ -227,12 +227,16 @@ const handleGetAllUsers = async (data) => {
     }
 }
 
-const handleUpdateUser = async (_id, information) => {
+const handleUpdateUser = async (_id, information, file) => {
     try {
         if (information.password) {
             information.password = handleHashPassword(information.password);
         }
-        const userUpdate = await User.findByIdAndUpdate(_id, information, { new: true }).select("-password -role -refreshToken");
+        if (file) {
+            information.avatar = file.path
+        }
+        const userUpdate = await User.findByIdAndUpdate(_id, information,
+            { new: true }).select("-password -role -refreshToken");
         if (!userUpdate) {
             return {
                 EM: "User update failed",
@@ -246,9 +250,8 @@ const handleUpdateUser = async (_id, information) => {
             DT: userUpdate
         }
     } catch (error) {
-        console.log("Error from 'handleUpdateUser function' of userService.js", error)
         return ({
-            EM: 'There is an error in the "handleUpdateUser function" in userService.js',
+            EM: `There is an error in the "handleUpdateUser function" in userService.js : ${error.message}`,
             EC: 1,
             DT: ''
         })
