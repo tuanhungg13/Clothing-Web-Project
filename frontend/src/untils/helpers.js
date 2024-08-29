@@ -4,6 +4,7 @@ import Cookies from "js-cookie"
 import { getCurrent } from "../redux/userSlice";
 import { getCartFromCookies } from "../redux/cartSlice";
 import { apiRemoveFromCart } from "../service/userApiService";
+import { toast } from "react-toastify";
 export const formatCurrency = (amount) => {
     if (!amount) return
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -32,9 +33,17 @@ export const toBase64 = file => new Promise((resolve, reject) => {
 
 export const addToCart = async (dispatch, isLoggedIn, product, color, size, quantity) => {
     if (isLoggedIn) {
-        const addToCart = await apiAddToCart({ pid: product._id, color: color, size: size, quantity: quantity })
+        console.log("price", product.price)
+        const addToCart = await apiAddToCart({
+            pid: product._id,
+            color: color,
+            size: size,
+            quantity: quantity,
+            price: product.price
+        })
         if (addToCart && addToCart.EC === 0) {
             dispatch(getCurrent())
+            toast.success("Cập nhật giỏ hàng thành công!")
         }
     }
     // Người dùng chưa đăng nhập
@@ -55,7 +64,6 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
             cart[productKey] = {
                 product: {
                     title: product.title,
-                    price: product.price,
                     images: product?.options?.find(option => option.color === color)?.images[0] || product.images,
                     slug: product.slug,
                     _id: product._id
@@ -63,7 +71,8 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
                 _id: productKey,
                 quantity: +quantity + cart[productKey].quantity,
                 color: color,
-                size: size
+                size: size,
+                price: product.price
             }
         }
         else {
@@ -71,13 +80,13 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
             cart[productKey] = {
                 product: {
                     title: product.title,
-                    price: product.price,
                     images: product?.options?.find(option => option.color === color)?.images[0] || product.images,
                     slug: product.slug,
                     _id: product._id
                 },
                 _id: `${product._id}-${color}-${size}`,
                 quantity,
+                price: product.price,
                 color,
                 size,
             };
@@ -86,6 +95,7 @@ export const addToCart = async (dispatch, isLoggedIn, product, color, size, quan
         Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
         // Cập nhật Redux state (nếu cần)
         dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
+        toast.success("Cập nhật giỏ hàng thành công!")
     }
 }
 

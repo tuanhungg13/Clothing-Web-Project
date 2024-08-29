@@ -70,7 +70,7 @@ const Header = () => {
                             </li>
                                 :
                                 <>
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/${current._id}`} >Thông tin đơn hàng</NavLink></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/`} >Thông tin đơn hàng</NavLink></li>
                                     <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/lich-su-mua-hang`}>Lịch sử mua hàng</NavLink></li>
                                 </>
                             }

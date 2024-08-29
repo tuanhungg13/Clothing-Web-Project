@@ -1,29 +1,29 @@
-import products from "../models/products";
 import orderService from "../service/orderService";
-import jwt from "jsonwebtoken"
 const createNewOrder = async (req, res) => {
     try {
         const { products, orderBy } = req.body;
-        console.log(products)
-        if (!products) {
+        const { _id } = req.user;
+        if (!products || products.length <= 0) {
             return res.status(400).json({
-                EM: "Missing product!",
-                EC: 0
+                EM: "Không có sản phẩm trong giỏ hàng!",
+                EC: 1
             })
         }
         if (!orderBy || !orderBy.address || !orderBy.phoneNumber || !orderBy.email) {
             return res.status(400).json({
-                EM: "Missing buyer information!",
-                EC: 0
+                EM: "Thông tin mua hàng không đầy đủ!",
+                EC: 1
             });
         }
-        if (req?.headers?.authorization?.startsWith("Bearer")) {
-            const token = req.headers.authorization.split(" ")[1];
-            const decode = jwt.verify(token, process.env.JWT_SECRET)
-            if (decode) req.body.orderBy.user = decode._id
+
+        const response = await orderService.handleCreateNewOrder(req.body, _id);
+        if (response.EC === 1) {
+            return res.status(500).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT,
+            })
         }
-        console.log("check user:", req.body)
-        const response = await orderService.handleCreateNewOrder(req.body);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,

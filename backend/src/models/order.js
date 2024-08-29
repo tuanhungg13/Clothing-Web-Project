@@ -7,15 +7,28 @@ var orderSchema = new mongoose.Schema({
         color: String,
         size: String,
         quantity: Number,
+        price: Number
     }],
+    initialTotalPrice: {
+        type: Number,
+        required: true
+    },
     totalPrice: {
         type: Number,
-        require: true
+        required: true
+    },
+    shippingPrice: {
+        type: Number,
+        default: 0
+    },
+    discount: {
+        type: Number,
+        default: 0
     },
     status: {
         type: String,
         default: "Đang xử lí",
-        enum: ["Hủy", "Đang xử lí", "Xác nhận đơn hàng", "Giao thành công"],
+        enum: ["Hủy", "Đang xử lí", "Đang chuẩn bị hàng", "Đang giao hàng", "Đã nhận hàng"],
     },
     note: {
         type: String,
@@ -31,6 +44,8 @@ var orderSchema = new mongoose.Schema({
         email: { type: String, required: true },
         userName: String
     },
+}, {
+    timestamps: true
 });
 
 //Export the model

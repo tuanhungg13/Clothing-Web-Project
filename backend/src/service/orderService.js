@@ -1,29 +1,36 @@
 import Order from "../models/order";
 import User from "../models/users"
-const handleCreateNewOrder = async (data) => {
+const handleCreateNewOrder = async (data, uid) => {
     try {
-        const newOrder = await Order.create(data);
-        if (data.orderBy.user) {
-            const user = await User.findByIdAndUpdate(data.orderBy.user, {
+        const initialTotalPrice = data.products.reduce((sum, item) => {
+            return sum + (item.price * item.quantity)
+        }, 0);
+        const totalPrice = (initialTotalPrice + data.shippingPrice) * (1 - (data.discount / 100));
+        if (uid) {
+            data.orderBy.user = uid
+        }
+        const newOrder = await Order.create({ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice });
+        if (uid) {
+            const userCart = await User.findByIdAndUpdate(data.orderBy.user, {
                 cart: []
             })
         }
         if (!newOrder) {
             return ({
-                EM: "Creating a new bill failed!",
+                EM: "Creating a new order failed!",
                 EC: 1,
                 DT: {}
             })
         }
         return ({
-            EM: "Bill created successfully!",
+            EM: "Order created successfully!",
             EC: 0,
             DT: newOrder
         }
         )
     } catch (error) {
         return {
-            EM: `There is an error in the "handleCreateNewBill function" in billService.js: ${error.message} `,
+            EM: `There is an error in the "handleCreateNewOrder function" in orderService.js: ${error.message} `,
             EC: 1,
             DT: {}
         }
@@ -47,7 +54,6 @@ const handleGetOrders = async (data) => {
         //Filter
         if (queries?.title) {
             queryString.title = { $regex: queries.title, $options: "i" }
-            console.log("3:", queryString)
         }
         let queryCommand = Order.find(queryString).populate("products.product", "title price options");
 

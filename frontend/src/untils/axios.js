@@ -15,7 +15,10 @@ instance.interceptors.request.use(function (config) {
         localStorageData = JSON.parse(localStorageData)
         if (localStorageData.accessToken) {
             const accessToken = JSON.parse(localStorageData?.accessToken)
-            config.headers = { Authorization: `Bearer ${accessToken}` }
+            config.headers = {
+                ...config.headers,
+                Authorization: `Bearer ${accessToken}`
+            };
             return config
         }
     }
@@ -31,7 +34,6 @@ instance.interceptors.response.use(function (response) {
     // Làm gì đó với dữ liệu response
     return response.data;
 }, async function (error) {
-    console.log("accessToken expiry!", error)
     if (error && error.response && error.response.status === 401) {
         try {
             const response = await instance.post('/user/refreshAccessToken');

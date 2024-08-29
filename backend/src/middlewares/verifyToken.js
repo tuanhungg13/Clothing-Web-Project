@@ -33,7 +33,7 @@ const verifyAccessToken = (req, res, next) => {
 const isAdmin = (req, res, next) => {
     const { role } = req.user;
     if (role !== 'admin') {
-        return res.status(401).json({
+        return res.status(403).json({
             EM: 'Require admin role!',
             EC: 1
         })

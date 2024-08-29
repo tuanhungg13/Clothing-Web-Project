@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import UserInfor from "../../components/UserInfor";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { addToCart, formatCurrency } from "../../untils/helpers";
 import { TiDeleteOutline } from "react-icons/ti";
-import { apiCreateOrder } from "../../service/orderApiService";
+import { apiCreateOrder, apiCreateOrderByGuest } from "../../service/orderApiService";
 import { hanldeDeleteCartItem } from "../../untils/helpers";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie"
@@ -13,9 +13,11 @@ const OrderPage = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart || []);
     const { current, isLoggedIn } = useSelector(state => state?.user);
     const cartFromCookies = useSelector(state => state?.cart?.cartFromCookies || []);
-    const [displayCart, setDisplayCart] = useState([])
     const navigation = useNavigate();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const shippingPrice = 35000;
+    const [discountCode, setDiscountCode] = useState("");
+    const [discount, setDiscount] = useState(0)
     const [payload, setPayload] = useState({
         userName: "",
         email: "",
@@ -50,10 +52,17 @@ const OrderPage = () => {
         note: "",
         payment: ""
     })
-
     const memoizedDisplayCart = useMemo(() => {
         return isLoggedIn ? cartItems : Object.values(cartFromCookies);
     }, [cartItems, cartFromCookies, isLoggedIn]);
+
+    const calculateTotalPrice = () => {
+        const total = memoizedDisplayCart?.reduce((total, item) => total + item?.product?.price * item?.quantity, 0);
+        return total
+    }
+    const totalPrice = useMemo(() => calculateTotalPrice(), [memoizedDisplayCart]);
+
+    if (cartItems.length <= 0 || Object.values(cartFromCookies).length <= 0) return (<Navigate to={"/"} />)
     const getImgOfProduct = (item) => {
         let img;
         if (isLoggedIn) {
@@ -64,31 +73,21 @@ const OrderPage = () => {
         }
         return img
     }
-    const calculateTotalPrice = () => {
-        const total = memoizedDisplayCart?.reduce((total, item) => total + item?.product?.price * item?.quantity, 0);
-        return formatCurrency(total)
-    }
-    const totalPrice = useMemo(() => calculateTotalPrice(), [displayCart]);
 
 
     const handleRemoveCartItems = async (cartItem) => {
-        hanldeDeleteCartItem(dispatch, isLoggedIn, cartItem, displayCart);
+        hanldeDeleteCartItem(dispatch, isLoggedIn, cartItem, memoizedDisplayCart);
     }
     const handleChangeQuantityInCre = (item, index) => {
-        const newError = {}
         const sizeOfColor = item.product?.options?.find(option => option.color === item.color)?.sizeQuantity;
         const quantityOfSize = sizeOfColor?.find(sizeQtt => sizeQtt.size === item.size).quantity;
         if (item.quantity > quantityOfSize) {
             setErrorQuantity(prev => ({ ...prev, [item._id]: "Không đủ số lượng!" }));
             return
         }
+
         else {
             setErrorQuantity(prev => ({ ...prev, [item._id]: "" }));
-            setDisplayCart(prev => {
-                const prevCopy = [...prev];
-                prevCopy[index] = { ...prevCopy[index], quantity: item.quantity + 1 };
-                return prevCopy
-            })
             addToCart(dispatch, isLoggedIn, item.product, item.color, item.size, 1)
         }
     }
@@ -98,11 +97,6 @@ const OrderPage = () => {
             return
         }
         else {
-            setDisplayCart(prev => {
-                const prevCopy = [...prev];
-                prevCopy[index] = { ...prevCopy[index], quantity: item.quantity - 1 };
-                return prevCopy
-            })
             setErrorQuantity(prev => ({ ...prev, [item._id]: "" }));
             addToCart(dispatch, isLoggedIn, item.product, item.color, item.size, -1)
 
@@ -135,7 +129,6 @@ const OrderPage = () => {
             isValid = false;
         }
         setErrors(newError)
-        console.log("check error", errors)
         return isValid
     }
 
@@ -144,24 +137,32 @@ const OrderPage = () => {
         if (checkValid && Object.keys(errorQuantity).length === 0) {
             if (isLoggedIn && current) {
                 const response = await apiCreateOrder({
-                    products: displayCart,
+                    products: memoizedDisplayCart,
                     note: payload.note,
-                    totalPrice: totalPrice,
+                    shippingPrice: shippingPrice,
+                    discount: discount,
                     orderBy: {
                         address: payload.address,
                         email: payload.email,
                         phoneNumber: payload.phoneNumber,
-                        userName: payload.userName
+                        userName: payload.userName,
                     }
                 })
                 if (response.EC === 0) {
                     toast.success("Bạn đã đặt hàng thành công!")
                     dispatch(getCurrent())
+                    navigation("/user/lich-su-mua-hang")
+                }
+                else {
+                    toast.error(response.EM);
                 }
             }
             else {
-                const response = await apiCreateOrder({
-                    displayCart, note: payload.note,
+                const response = await apiCreateOrderByGuest({
+                    memoizedDisplayCart,
+                    note: payload.note,
+                    shippingPrice: shippingPrice,
+                    discount: discount,
                     orderBy: {
                         address: payload.address,
                         email: payload.email,
@@ -172,12 +173,15 @@ const OrderPage = () => {
                 if (response.EC === 0) {
                     toast.success("Bạn đã đặt hàng thành công!")
                     Cookies.set("PRODUCT_CART_NEW", JSON.stringify({}), { expires: 30 });
-
+                    navigation("/")
+                }
+                else {
+                    toast.error(response.EM);
                 }
             }
         }
         else {
-            toast.success("lỗi")
+            toast.error("Vui lòng nhập đầy đủ thông tin!")
         }
     }
     return (
@@ -251,7 +255,7 @@ const OrderPage = () => {
                     <hr />
                     <div className="d-flex justify-content-between">
                         <label>Tổng tiền: </label>
-                        <span>{totalPrice}</span>
+                        <span>{formatCurrency(totalPrice)}</span>
                     </div>
                     <button className="btn btn-primary mt-4 w-100"
                         onClick={() => { handleConfirmOrder() }}>Hoàn tất đơn hàng</button>

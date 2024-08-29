@@ -216,11 +216,11 @@ const updateUserByAdmin = async (req, res) => {
 const addToCart = async (req, res) => {
     try {
         const { _id } = req.user;
-        const { pid, quantity, color, size } = req.body;
-        console.log("check addToCart:", pid, quantity, color, size)
-        if (!pid || !quantity || !color || !size) {
+        const { pid, quantity, color, size, price } = req.body;
+        console.log("check addToCart:", pid, quantity, color, size, price)
+        if (!pid || !quantity || !color || !size || !price) {
             return res.status(400).json({
-                EM: "Missing inputs!",
+                EM: "Không đủ thông tin sản phẩm!",
                 EC: 1
             })
         }

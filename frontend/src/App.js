@@ -27,6 +27,7 @@ import OrderPage from "./pages/public/OrderPage";
 import CartDetailsPage from "./pages/public/CartDetailsPage";
 import UserLayout from "./pages/user/UserLayout";
 import PersonalInfor from "./pages/user/PersonalInfor";
+import OrderHistory from "./pages/user/OrderHistory";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -52,14 +53,14 @@ function App() {
           <Route path="/user" element={<UserLayout />} >
             <Route path="profile/:uid" element={<PersonalInfor />} />
             <Route path="don-hang" element={<CreateProduct />} />
-            <Route path="lich-su-mua-hang" element={<Dashboard />} />
+            <Route path="lich-su-mua-hang" element={<OrderHistory />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/thanh-toan" element={<OrderPage />} />
           <Route path="/san-pham" element={<ProductPage />} />
-          {/* <Route path="/:productId" element={<ProductDetails />} /> */}
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/chi-tiet-gio-hang" element={<CartDetailsPage />} />
 
           <Route path="/sale" element={<ProductPage />} />

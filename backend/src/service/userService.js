@@ -315,14 +315,15 @@ const handleAddToCart = async (_id, data) => {
                 _id,
                 "cart.product": data.pid,
                 "cart.color": data.color,
-                "cart.size": data.size
+                "cart.size": data.size,
+                "cart.price": data.price
             },
                 { $inc: { "cart.$.quantity": data.quantity } }, { new: true })
         }
         else {
             console.log("mới")
             cart = await User.findByIdAndUpdate(_id, {
-                $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color } }
+                $push: { cart: { product: data.pid, quantity: data.quantity, size: data.size, color: data.color, price: data.price } }
             }, { new: true })
         }
         if (!cart) {
