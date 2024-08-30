@@ -17,27 +17,28 @@ const handleCreateNewOrder = async (data, uid) => {
         }
         if (!newOrder) {
             return ({
-                EM: "Creating a new order failed!",
+                EM: "Đặt đơn hàng thất bại!",
                 EC: 1,
                 DT: {}
             })
         }
         return ({
-            EM: "Order created successfully!",
+            EM: "Đặt đơn hàng thành công!",
             EC: 0,
             DT: newOrder
         }
         )
     } catch (error) {
+        console.log(`There is an error in the "handleCreateNewOrder function" in orderService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleCreateNewOrder function" in orderService.js: ${error.message} `,
+            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
             EC: 1,
             DT: {}
         }
     }
 }
 
-const handleGetOrders = async (data) => {
+const handleGetOrdersByAdmin = async (data) => {
     try {
         const queries = { ...data };
         console.log("check req.query:", data)
@@ -78,29 +79,87 @@ const handleGetOrders = async (data) => {
         //Excute query
         const listOrder = await queryCommand.exec();
         const counts = await Order.find(queryString).countDocuments();
+        const totalPages = Math.ceil(counts / limit);
         if (!listOrder) {
             return {
-                EM: "Get orders failed!",
+                EM: "Lấy đơn hàng thất bại!",
                 EC: 1,
                 DT: [],
-                counts
+                totalPages: 0
             }
         }
         return ({
-            EM: "Get orders successfully!",
+            EM: "Lấy đơn hàng thành công!",
             EC: 0,
             DT: listOrder,
-            counts
+            totalPages
         })
     } catch (error) {
+        console.log(`There is an error in the "handleGetOrdersByAdmin function" in orderService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetOrders function" in orderService.js: ${error.message} `,
+            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
             EC: 1,
             DT: {},
-            counts: ""
+            totalPages: 0
         }
     }
 }
+
+const handleGetOrdersByUser = async (uid, data) => {
+    try {
+        const queries = { ...data };
+        const excluderFields = ["sort", "limit", "page"];
+        //Loại bỏ các trường sort, limit, page, fields khỏi queries;
+        excluderFields.forEach(item => delete queries[item]);
+        let queryCommand = Order.find({ 'orderBy.user': `${uid}` }).populate("products.product", "title price options");
+
+        //sort
+        if (data.sort) {
+            const sortBy = data.sort.split(",").join(" ")
+            queryCommand = queryCommand.sort(sortBy);
+        }
+
+        //field limiting
+        if (data.fields) {
+            const fields = data.fields.split(",").join(" ");
+            queryCommand = queryCommand.select(fields);
+        }
+
+        //pagination page
+        const page = +data.page || 1;
+        const limit = +data.limit || process.env.LIMIT_ITEM;
+        const offset = (page - 1) * limit;
+        queryCommand = queryCommand.skip(offset).limit(limit)
+
+        //Excute query
+        const listOrder = await queryCommand.exec();
+        const counts = await Order.find({ 'orderBy.user': `${uid}` }).countDocuments();
+        const totalPages = Math.ceil(counts / limit);
+        if (!listOrder) {
+            return {
+                EM: "Lấy đơn hàng thất bại!",
+                EC: 1,
+                DT: [],
+                totalPages
+            }
+        }
+        return ({
+            EM: "Lấy đơn hàng thành công!",
+            EC: 0,
+            DT: listOrder,
+            totalPages
+        })
+    } catch (error) {
+        console.log(`There is an error in the "handleGetOrdersByUser function" in orderService.js: ${error.message} `)
+        return {
+            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
+            EC: 1,
+            DT: {},
+            totalPages: 0
+        }
+    }
+}
+
 
 const handleUpdateOrderByAdmin = async (data) => {
     try {
@@ -109,21 +168,22 @@ const handleUpdateOrderByAdmin = async (data) => {
         }, { new: true })
         if (!updateOrderByAdmin) {
             return ({
-                EM: "Update order by admin failed!",
+                EM: "Cập nhật đơn hàng thất bại!",
                 EC: 1,
                 DT: {}
             })
         }
         return ({
-            EM: "Update order by admin successfully!",
+            EM: "Cập nhật đơn hàng thành công!",
             EC: 0,
             DT: updateOrderByAdmin
         })
     } catch (error) {
+        console.log(`There is an error in the "handleUpdateOrderByAdmin function" in orderService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleUpdateOrderByAdmin function" in orderService.js: ${error.message} `,
+            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
             EC: 1,
-            DT: {},
+            DT: {}
         }
     }
 }
@@ -135,26 +195,27 @@ const handleUpdateOrderByUser = async (data) => {
         }, { new: true })
         if (!updateOrderByUser) {
             return ({
-                EM: "Update order by user failed!",
+                EM: "Cập nhật đơn hàng thất bại",
                 EC: 1,
                 DT: {}
             })
         }
         return ({
-            EM: "Update order by user successfully!",
+            EM: "Cập nhật đơn hàng thành công!",
             EC: 0,
             DT: updateOrderByUser
         })
     } catch (error) {
+        console.log(`There is an error in the "handleUpdateOrderByUser function" in orderService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleUpdateOrderByAdmin function" in orderService.js: ${error.message} `,
+            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
             EC: 1,
-            DT: {},
+            DT: {}
         }
     }
 }
 
 module.exports = {
-    handleCreateNewOrder, handleGetOrders, handleUpdateOrderByAdmin, handleUpdateOrderByUser
+    handleCreateNewOrder, handleGetOrdersByAdmin, handleUpdateOrderByAdmin, handleUpdateOrderByUser, handleGetOrdersByUser
 }
 

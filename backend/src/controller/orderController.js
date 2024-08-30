@@ -37,11 +37,20 @@ const createNewOrder = async (req, res) => {
     }
 }
 
-const getOrders = async (req, res) => {
+const getOrdersByAdmin = async (req, res) => {
     try {
-        const response = await orderService.handleGetOrders(req.query);
-        return res.status(200).json({
-            counts: response.counts,
+        const response = await orderService.handleGetOrdersByAdmin(req.query);
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                totalPages: response.totalPages,
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+
+            })
+        }
+        return res.status(500).json({
+            totalPages: response.totalPages,
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
@@ -55,6 +64,35 @@ const getOrders = async (req, res) => {
     }
 }
 
+const getOrdersByUser = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const response = await orderService.handleGetOrdersByUser(_id, req.query);
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                totalPages: response.totalPages,
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+
+            })
+        }
+        return res.status(500).json({
+            totalPages: response.totalPages,
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: `There is an error in the "getOrdersByUser function" in orderControllers.js: ${error.message} `,
+            EC: 1,
+        })
+    }
+
+}
+
 
 const updateOrderByAdmin = async (req, res) => {
     try {
@@ -66,10 +104,17 @@ const updateOrderByAdmin = async (req, res) => {
             })
         }
         const response = await orderService.handleUpdateOrderByAdmin(req.body)
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
-            DT: response.DT,
+            DT: response.DT
         })
 
     } catch (error) {
@@ -91,10 +136,17 @@ const updateOrderByUser = async (req, res) => {
             })
         }
         const response = await orderService.handleUpdateOrderByUser(req.body)
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
-            DT: response.DT,
+            DT: response.DT
         })
 
     } catch (error) {
@@ -105,4 +157,4 @@ const updateOrderByUser = async (req, res) => {
     }
 }
 
-module.exports = { createNewOrder, getOrders, updateOrderByAdmin, updateOrderByUser }
+module.exports = { createNewOrder, getOrdersByAdmin, updateOrderByAdmin, updateOrderByUser, getOrdersByUser }

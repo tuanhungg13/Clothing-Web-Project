@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { apiGetOrders } from "../../service/orderApiService";
+import { apiGetOrdersByAdmin } from "../../service/orderApiService";
 import ModalProcessOrder from "../../components/modal/ModalProcessOrder";
 import { formatCurrency } from "../../untils/helpers";
 const ManageOrder = () => {
@@ -18,7 +18,7 @@ const ManageOrder = () => {
         console.log("order")
     }, [currentPage])
     const fetchOrders = useCallback(async () => {
-        const response = await apiGetOrders({ page: currentPage, limit, sort: "-createdAt" });
+        const response = await apiGetOrdersByAdmin({ page: currentPage, limit, sort: "-createdAt" });
         if (response.EC === 0) {
             setOrders(response.DT);
             setTotalPages(response.totalPages);

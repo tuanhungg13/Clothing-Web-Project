@@ -31,7 +31,6 @@ const apiUpdateProduct = (data) => {
     })
 }
 const apiDeleteProduct = (data) => {
-    console.log("check data", data)
     return axios.delete(`/product/delete`, { data: { pid: data.pid } })
 }
 
@@ -43,4 +42,16 @@ const apiRatings = (data) => {
     })
 }
 
-export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct, apiDeleteProduct, apiRatings }
+const apiGetRatingOrder = (oid) => {
+    return axios.get("/product/user/getRatingOrder", {
+        params: { oid }
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+export {
+    apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct, apiDeleteProduct,
+    apiRatings, apiGetRatingOrder
+}

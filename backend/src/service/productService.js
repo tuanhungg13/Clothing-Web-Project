@@ -31,20 +31,21 @@ const handleCreateNewProduct = async (data, files) => {
 
         if (!newProduct) {
             return ({
-                EM: "Creating a new product failed!",
+                EM: "Tạo sản phẩm thất bại!",
                 EC: 1,
                 DT: {}
             })
         }
         return ({
-            EM: "Product created successfully!",
+            EM: "Tạo sản phẩm thành công!",
             EC: 0,
             DT: newProduct
         }
         )
     } catch (error) {
+        console.log(`There is an error in the "handleCreateNewProduct function" in productService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleCreateNewProduct function" in productService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
             DT: {}
         }
@@ -91,24 +92,28 @@ const handleGetProducts = async (data) => {
         //Excute query
         const listProduct = await queryCommand.exec();
         const counts = await Product.find(queryString).countDocuments();
+        const totalPages = Math.ceil(counts / limit);
         if (!listProduct) {
             return {
-                EM: "Get products failed!",
+                EM: "Lấy danh sách sản phẩm thất bại!",
                 EC: 1,
                 DT: [],
+                totalPages: 0
             }
         }
         return ({
-            EM: "Get products successfully!",
+            EM: "Lấy danh sách sản phẩm thành công!",
             EC: 0,
             DT: listProduct,
+            totalPages: totalPages
         })
     } catch (error) {
+        console.log(`There is an error in the "handleGetProducts function" in productService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetProducts function" in productService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra.Vui lòng thử lại!",
             EC: 1,
             DT: {},
-            counts: ""
+            totalPages: 0
         }
     }
 }
@@ -119,13 +124,13 @@ const handleGetAProduct = async (slug) => {
         const allSizes = [...new Set(product.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
         if (!product) {
             return {
-                EM: "Get a product failed!",
+                EM: "Lấy thông tin sản phẩm thất bại!",
                 EC: 1,
                 DT: {},
             }
         }
         return {
-            EM: "Get a product successfully!",
+            EM: "Lấy thông tin sản phẩm thành công!",
             EC: 0,
             DT: {
                 ...product.toObject(),
@@ -133,11 +138,11 @@ const handleGetAProduct = async (slug) => {
             }
         }
     } catch (error) {
+        console.log(`There is an error in the "handleAGetProduct function" in productService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleAGetProduct function" in productService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra.Vui lòng thử lại!",
             EC: 1,
             DT: {},
-            quantity: 0
         }
     }
 }
@@ -147,17 +152,18 @@ const handleDeleteProduct = async (pid) => {
         const deleteProduct = await Product.findByIdAndDelete(pid);
         if (!deleteProduct) {
             return {
-                EM: "Delete product failed!",
+                EM: "Xóa sản phẩm thất bại!",
                 EC: 1
             }
         }
         return {
-            EM: "Delete product successfully!",
+            EM: "Xóa sản phẩm thành công!",
             EC: 0
         }
     } catch (error) {
+        console.log(`There is an error in the "handleDeleteProduct function" in productService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleDeleteProduct function" in productService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         }
     }
@@ -200,20 +206,21 @@ const handleUpdateProduct = async (pid, data, files) => {
 
         if (!updateProduct) {
             return {
-                EM: "Update product failed!",
+                EM: "Cập nhật sản phẩm thát bại!",
                 EC: 1,
                 DT: {}
             };
         }
 
         return {
-            EM: "Update product successfully!",
+            EM: "Cập nhật sản phẩm thành công!",
             EC: 0,
             DT: updateProduct
         };
     } catch (error) {
+        console.log(`There is an error in the "handleUpdateProduct function" in productService.js: ${error.message}`)
         return {
-            EM: `There is an error in the "handleUpdateProduct function" in productService.js: ${error.message}`,
+            EM: "Có lỗi xảy ra.Vui lòng thử lại",
             EC: 1,
             DT: {}
         };
@@ -241,7 +248,7 @@ const handleRatings = async (uid, data) => {
         });
         if (!rating) {
             return {
-                EM: "Rating failed!",
+                EM: "Đánh giá sản phẩm thất bại!",
                 EC: 1,
                 DT: []
             }
@@ -252,18 +259,18 @@ const handleRatings = async (uid, data) => {
         const ratingsCount = updatedProduct.ratings.length;
         //Tổng sao đán giá
         const sumRatings = updatedProduct.ratings.reduce((sum, item) => sum + item.star, 0);
-        console.log("check totalRatings: ", ratingsCount, sumRatings)
         //Tổng sao trung bình
         updatedProduct.totalRatings = Math.round(sumRatings * 10 / ratingsCount) / 10;
         await updatedProduct.save();
         return {
-            EM: "Rating successfully!",
+            EM: "Đánh giá sản phẩm thành công!",
             EC: 0,
             DT: updatedProduct
         }
     } catch (error) {
+        console.log(`There is an error in the "handleRatings function" in productService.js: ${error.message} `)
         return ({
-            EM: `There is an error in the "handleRatings function" in productService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra.Vui lòng thử lại!",
             EC: 1,
             DT: {}
         })
@@ -271,8 +278,61 @@ const handleRatings = async (uid, data) => {
 }
 
 
+const handleGetRatingByUser = async (uid, oid) => {
+    try {
+        console.log(oid)
+        const order = await Order.findById(oid).populate('products.product').exec();
+        console.log(order)
+        if (!order) {
+            return {
+                EM: "Không tìm thấy đơn hàng!",
+                EC: 1,
+                DT: []
+            };
+        }
+        // 2. Tạo danh sách sản phẩm và các thuộc tính liên quan từ đơn hàng
+        const results = order.products.map(item => {
+            const product = item.product; // Lấy thông tin sản phẩm từ đơn hàng
+            // Lọc các đánh giá phù hợp với `uid` và `oid`
+            const matchingRatings = product.ratings.find(rating =>
+                rating.postedBy.toString() === uid &&
+                rating.orderInfor.toString() === oid
+            );
+            return {
+                productInfo: {
+                    title: product.title,
+                    price: product.price,
+                    options: product.options,
+                },
+                orderDetails: {
+                    color: item.color,
+                    size: item.size,
+                    quantity: item.quantity,
+                    price: item.price
+                },
+                ratings: matchingRatings
+            };
+        });
+
+        return {
+            EM: "Lấy thông tin sản phẩm và đánh giá thành công!",
+            EC: 0,
+            DT: results
+        };
+
+    } catch (error) {
+        console.log(`There is an error in the "handleGetRatingByUser function" in productService.js: ${error.message} `)
+        return {
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
+            EC: 1,
+            DT: []
+        };
+    }
+};
+
+
 
 module.exports = {
     handleCreateNewProduct, handleGetAProduct, handleGetProducts, handleDeleteProduct, handleUpdateProduct,
-    handleRatings
+    handleRatings, handleGetRatingByUser
 }

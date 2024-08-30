@@ -16,8 +16,20 @@ const apiCreateOrderByGuest = (data) => {
     })
 }
 
-const apiGetOrders = (data) => {
-    return axios.get("/order/", data)
+const apiGetOrdersByAdmin = (data) => {
+    return axios.get("/order/getOrderByAdmin", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
+const apiGetOrdersByUser = (data) => {
+    return axios.get("/order/getOrderByUser", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
 }
 
 const apiUpdateOrderByAdmin = (data) => {
@@ -38,4 +50,7 @@ const apiUpdateOrderByUser = (data) => {
 
 
 
-export { apiCreateOrder, apiGetOrders, apiUpdateOrderByAdmin, apiCreateOrderByGuest, apiUpdateOrderByUser }
+export {
+    apiCreateOrder, apiGetOrdersByAdmin, apiUpdateOrderByAdmin, apiCreateOrderByGuest, apiUpdateOrderByUser,
+    apiGetOrdersByUser
+}

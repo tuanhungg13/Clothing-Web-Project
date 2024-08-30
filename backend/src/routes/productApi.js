@@ -24,4 +24,6 @@ router.put("/update", [verifyAccessToken, isAdmin], uploader.fields([
     { name: "option[3][images]", maxCount: 10 }
 ]), controllers.updateProduct);
 router.post("/rating", verifyAccessToken, controllers.ratings);
+router.get("/user/getRatingOrder", verifyAccessToken, controllers.getRatingByUser)
+
 module.exports = router

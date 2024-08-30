@@ -5,7 +5,7 @@ const createNewProduct = async (req, res) => {
         const { title, price, options, description, category } = req.body;
         if (!title || !price || !options || !description || !category || !req.file) {
             return res.status(400).json({
-                EM: "Missing require parameters",
+                EM: "Vui lòng nhập đầy đủ dữ liệu!",
                 EC: 1
             })
         }
@@ -16,14 +16,22 @@ const createNewProduct = async (req, res) => {
         //     })
         // }
         const response = await productService.handleCreateNewProduct(req.body, req.files);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "createNewProduct function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "createNewProduct function" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -32,15 +40,24 @@ const createNewProduct = async (req, res) => {
 const getProducts = async (req, res) => {
     try {
         const response = await productService.handleGetProducts(req.query);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                totalPages: response.totalPages,
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT,
-            counts: response.counts
+            totalPages: 0
         })
     } catch (error) {
+        console.log(`There is an error in the "getProducts function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "apiGetProducts function" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -51,19 +68,27 @@ const getAProduct = async (req, res) => {
         const { slug } = req.params;
         if (!slug) {
             return res.status(400).json({
-                EM: "pid not found!",
+                EM: "Vui lòng chọn sản phẩm muốn xem!",
                 EC: 1
             })
         }
         const response = await productService.handleGetAProduct(slug);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
-            DT: response.DT,
+            DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "getAProduct function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "getAProduct function" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -74,18 +99,25 @@ const deleteProduct = async (req, res) => {
         const { pid } = req.body;
         if (!pid) {
             return res.status(400).json({
-                EM: "pid not found!",
+                EM: "Vui lòng chọn sản phẩm muốn xóa!",
                 EC: 1
             })
         }
         const response = await productService.handleDeleteProduct(pid);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
         })
     } catch (error) {
+        console.log(`There is an error in the "deleteProduct function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "deleteProduct" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -96,7 +128,7 @@ const updateProduct = async (req, res) => {
         const { pid, title, price, options, description, category } = req.body;
         if (!pid || !title || !price || !options || !description || !category) {
             return res.status(400).json({
-                EM: "Missing require parameters!",
+                EM: "Vui lòng nhập đầu đủ dữ liệu!",
                 EC: 1
             })
         }
@@ -107,14 +139,22 @@ const updateProduct = async (req, res) => {
         //     })
         // }
         const response = await productService.handleUpdateProduct(pid, req.body, req.files);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "updateProduct function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "updateProduct" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -127,7 +167,7 @@ const ratings = async (req, res) => {
         const { pid, star } = req.body;
         if (!pid || +star === 0) {
             return res.status(400).json({
-                EM: "Missing require parameters",
+                EM: "Vui lòng chọn số sao muốn đánh giá cho sản phẩm!",
                 EC: 1
             })
         }
@@ -145,15 +185,44 @@ const ratings = async (req, res) => {
             DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "ratings function" in productControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "ratings" in productControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
         })
     }
 }
 
+const getRatingByUser = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { oid } = req.query;
+        console.log("check ,", _id, oid)
+        const response = await productService.handleGetRatingByUser(_id, oid);
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
+            EM: response.EM,
+            EC: response.EC,
+            DT: response.DT
+        })
+    } catch (error) {
+        console.log(`There is an error in the "getRatingOrder function" in productControllers.js: ${error.message} `)
+        return res.status(500).json({
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
+            EC: 1,
+        })
+    }
+
+}
+
 
 module.exports = {
     createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,
-    ratings
+    ratings, getRatingByUser
 }

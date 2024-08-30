@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { apiGetOrders, apiUpdateOrderByUser } from "../../service/orderApiService";
+import { apiGetOrdersByUser, apiUpdateOrderByUser } from "../../service/orderApiService";
 import { formatCurrency } from "../../untils/helpers";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import ModalOrderRating from "../../components/modal/ModalOrderRating";
+import { apiGetRatingOrder } from "../../service/productApiService";
+import ModalViewRatingOrder from "../../components/modal/ModalViewRatingOrder";
 const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const limit = 10;
     const [showModalRating, setShowModalRating] = useState(false);
-    const [dataOrder, setDataOrder] = useState({})
+    const [dataOrder, setDataOrder] = useState({});
+    const [showViewModalRating, setShowViewModalRating] = useState(false);
+    const [dataViewRating, setDataViewRating] = useState({})
     useEffect(() => {
         fetchOrders()
     }, [currentPage])
     const fetchOrders = useCallback(async () => {
-        const response = await apiGetOrders({ page: currentPage, limit, sort: "-createdAt" });
+        const response = await apiGetOrdersByUser({ page: currentPage, limit, sort: "-createdAt" });
         if (response && response.EC === 0) {
             setOrders(response.DT);
             setTotalPages(totalPages)
@@ -48,7 +52,17 @@ const OrderHistory = () => {
 
     const handleClose = () => {
         setShowModalRating(false)
+        setShowViewModalRating(false)
         setDataOrder({})
+        setDataViewRating({})
+    }
+
+    const handleGetRatingOrder = async (oid) => {
+        const response = await apiGetRatingOrder(oid);
+        if (response && response.EC == 0) {
+            setShowViewModalRating(true)
+            setDataViewRating(response.DT)
+        }
     }
     return (
         <div>
@@ -70,7 +84,7 @@ const OrderHistory = () => {
                             return (
                                 <tr key={`order-ps-${index}`} >
                                     <th scope="row px-0">{item.createdAt?.slice(0, 10)}</th>
-                                    <td>{item._id}</td>
+                                    <td className="text-break">{item._id}</td>
                                     <td>
                                         <div className=" d-flex flex-column" style={{ width: "15vw" }} >
                                             <label className="fw-bold">Đến:</label>
@@ -78,10 +92,10 @@ const OrderHistory = () => {
                                             <label>{item.orderBy.address}</label>
                                             <label>{item.orderBy.phoneNumber}</label>
                                             <hr className="my-1" />
-                                            <label>Tiền sản phẩm: <span className="fst-italic ms-3">{formatCurrency(item.initialTotalPrice)}</span> </label>
-                                            <label>Phí giao hàng: <span className="fst-italic ms-3">{formatCurrency(item.shippingPrice)}</span></label>
-                                            <label>Giảm giá:<span className="fst-italic" style={{ marginLeft: "60px" }}>{item.discount}%</span> </label>
-                                            <label>Tổng tiền: <span className="fst-italic ms-5">{formatCurrency(item.totalPrice)}</span></label>
+                                            <label>Tiền sản phẩm: <span className="fst-italic ms-sm-3">{formatCurrency(item.initialTotalPrice)}</span> </label>
+                                            <label>Phí giao hàng: <span className="fst-italic ms-sm-3">{formatCurrency(item.shippingPrice)}</span></label>
+                                            <label>Giảm giá:<span className="fst-italic ms-5">{item.discount}%</span> </label>
+                                            <label>Tổng tiền: <span className="fst-italic ms-sm-5">{formatCurrency(item.totalPrice)}</span></label>
                                         </div>
                                     </td>
                                     <td colSpan={3} className="">
@@ -118,7 +132,8 @@ const OrderHistory = () => {
                                             }
                                             {item.status === "Đã nhận hàng" &&
                                                 <button className="btn btn-warning mb-2" onClick={() => { handleOrderRating(item) }}>Đánh giá</button>}
-                                            {item.status === "Đã đánh giá" && <button className="btn btn-secondary">Xem đánh giá</button>}
+                                            {item.status === "Đã đánh giá" && <button className="btn btn-secondary"
+                                                onClick={() => handleGetRatingOrder(item._id)}>Xem đánh giá</button>}
                                         </div>
 
                                     </td>
@@ -158,6 +173,11 @@ const OrderHistory = () => {
                 onClose={handleClose}
                 dataOrder={dataOrder}
                 fetchOrders={fetchOrders}
+            />
+            <ModalViewRatingOrder
+                showModalRating={showViewModalRating}
+                onClose={handleClose}
+                dataViewRating={dataViewRating}
             />
         </div>
     )
