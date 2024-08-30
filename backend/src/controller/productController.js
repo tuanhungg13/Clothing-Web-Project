@@ -125,14 +125,21 @@ const ratings = async (req, res) => {
     try {
         const { _id } = req.user;
         const { pid, star } = req.body;
-        if (!pid || !star) {
+        if (!pid || +star === 0) {
             return res.status(400).json({
                 EM: "Missing require parameters",
                 EC: 1
             })
         }
         const response = await productService.handleRatings(_id, req.body);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
@@ -145,31 +152,6 @@ const ratings = async (req, res) => {
     }
 }
 
-// const updateOptions = async (req, res) => {
-//     try {
-//         const { pid } = req.params;
-//         const { optId, sqttId } = req.query;
-//         const { color, size, quantity } = req.body;
-//         console.log("check req.body updateOption:", req.body)
-//         if ((!pid && !optId) || (!req.files && !color && !size && !quantity)) {
-//             return res.status(400).json({
-//                 EM: "Missing inputs!",
-//                 EC: 1
-//             })
-//         }
-//         const response = await productService.handleUpdateOptions(pid, optId, sqttId, req.files, req.body);
-//         return res.status(200).json({
-//             EM: response.EM,
-//             EC: response.EC,
-//             DT: response.DT
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             EM: `There is an error in the "updateOptions function" in productControllers.js: ${error.message} `,
-//             EC: 1,
-//         })
-//     }
-// }
 
 module.exports = {
     createNewProduct, getAProduct, getProducts, deleteProduct, updateProduct,

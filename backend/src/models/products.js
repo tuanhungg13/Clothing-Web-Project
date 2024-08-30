@@ -63,7 +63,7 @@ var productSchema = new mongoose.Schema({
             star: { type: Number },
             postedBy: { type: mongoose.Types.ObjectId, ref: "User" },
             comment: { type: String },
-            productInfor: { type: mongoose.Types.ObjectId, ref: "Bill" },
+            orderInfor: { type: mongoose.Types.ObjectId, ref: "Order" },
             createdAt: Date
         }
     ],

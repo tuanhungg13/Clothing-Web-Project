@@ -35,4 +35,12 @@ const apiDeleteProduct = (data) => {
     return axios.delete(`/product/delete`, { data: { pid: data.pid } })
 }
 
-export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct, apiDeleteProduct }
+const apiRatings = (data) => {
+    return axios.post("/product/rating", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
+export { apiGetProducts, apiGetProductDetails, apiCreateProduct, apiUpdateProduct, apiDeleteProduct, apiRatings }

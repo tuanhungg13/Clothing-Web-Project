@@ -1,5 +1,6 @@
 import Product from "../models/products";
-import slugify from 'slugify'
+import slugify from 'slugify';
+import Order from "../models/order"
 
 const handleCreateNewProduct = async (data, files) => {
     try {
@@ -222,11 +223,19 @@ const handleUpdateProduct = async (pid, data, files) => {
 
 
 
-const handleRatings = async (_id, data) => {
+const handleRatings = async (uid, data) => {
     try {
         //Tìm sản phẩm và đẩy đánh giá người dùng vào mảng ratings của sản phẩm đó
         const rating = await Product.findByIdAndUpdate(data.pid, {
-            $push: { ratings: { star: data.star, comment: data.comment, postedBy: _id, createdAt: Date.now() } }
+            $push: {
+                ratings: {
+                    star: data.star,
+                    comment: data.comment,
+                    postedBy: uid,
+                    createdAt: Date.now(),
+                    orderInfor: data.orderInfor
+                }
+            }
         }, {
             new: true
         });
@@ -237,6 +246,7 @@ const handleRatings = async (_id, data) => {
                 DT: []
             }
         }
+        const updateStatusOrder = await Order.findByIdAndUpdate(data.orderInfor, { status: "Đã đánh giá" })
         const updatedProduct = await Product.findById(data.pid).populate("ratings.postedBy", "userName");
         //Số lượt đánh giá
         const ratingsCount = updatedProduct.ratings.length;

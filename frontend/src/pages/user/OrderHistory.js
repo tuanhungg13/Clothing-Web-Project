@@ -3,22 +3,24 @@ import { apiGetOrders, apiUpdateOrderByUser } from "../../service/orderApiServic
 import { formatCurrency } from "../../untils/helpers";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
-
+import ModalOrderRating from "../../components/modal/ModalOrderRating";
 const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const limit = 10;
+    const [showModalRating, setShowModalRating] = useState(false);
+    const [dataOrder, setDataOrder] = useState({})
     useEffect(() => {
         fetchOrders()
-    }, [])
+    }, [currentPage])
     const fetchOrders = useCallback(async () => {
         const response = await apiGetOrders({ page: currentPage, limit, sort: "-createdAt" });
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             setOrders(response.DT);
             setTotalPages(totalPages)
         }
-    }, [])
+    }, [currentPage])
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
@@ -31,7 +33,7 @@ const OrderHistory = () => {
 
     const handleUpdateOrder = async (oid, status) => {
         const response = await apiUpdateOrderByUser({ oid: oid, status: status })
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             toast.success("Cập nhật đơn hàng thành công!")
             fetchOrders();
         }
@@ -39,7 +41,15 @@ const OrderHistory = () => {
             toast.error(response.EM)
         }
     }
+    const handleOrderRating = (data) => {
+        setShowModalRating(true)
+        setDataOrder(data)
+    }
 
+    const handleClose = () => {
+        setShowModalRating(false)
+        setDataOrder({})
+    }
     return (
         <div>
             <h3>Lịch sử mua hàng</h3>
@@ -96,7 +106,6 @@ const OrderHistory = () => {
                                     <td className={`${item.status === "Hủy" ? "text-danger" : `${item.status === "Đang xử lí" ? "text-warning" : "text-success"}`}`}>{item.status}</td>
                                     <td >
                                         <div className="d-flex flex-column">
-                                            <button className="btn btn-success mb-2">Xem đơn hàng</button>
                                             {item.status === "Đang xử lí" &&
                                                 <button className="btn btn-danger mb-2" onClick={() => { handleUpdateOrder(item._id, "Hủy") }}>
                                                     Hủy
@@ -108,8 +117,8 @@ const OrderHistory = () => {
                                                 </button>
                                             }
                                             {item.status === "Đã nhận hàng" &&
-                                                <button className="btn btn-warning mb-2">Đánh giá</button>}
-                                            {item.status === "Đã đánh giá" && <button className="btn-secondary">Xem đánh giá</button>}
+                                                <button className="btn btn-warning mb-2" onClick={() => { handleOrderRating(item) }}>Đánh giá</button>}
+                                            {item.status === "Đã đánh giá" && <button className="btn btn-secondary">Xem đánh giá</button>}
                                         </div>
 
                                     </td>
@@ -144,6 +153,12 @@ const OrderHistory = () => {
                     />
                 }
             </div>
+            <ModalOrderRating
+                showModalRating={showModalRating}
+                onClose={handleClose}
+                dataOrder={dataOrder}
+                fetchOrders={fetchOrders}
+            />
         </div>
     )
 }
