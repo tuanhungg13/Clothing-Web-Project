@@ -66,7 +66,7 @@ const handleGetProducts = async (data) => {
 
         //Filter
         if (queries?.title) {
-            queryString.title = { $regex: queries.title, $options: "i" }
+            queryString.title = { $regex: `.*${queries.title}.*`, $options: "i" };
             console.log("3:", queryString)
         }
         let queryCommand = Product.find(queryString).populate("category", "categoryName");
@@ -120,7 +120,7 @@ const handleGetProducts = async (data) => {
 
 const handleGetAProduct = async (slug) => {
     try {
-        const product = await Product.findOne({ slug: slug }).populate("category ratings.postedBy", "categoryName userName");
+        const product = await Product.findOne({ slug: slug }).populate("category ratings.postedBy", "categoryName userName avatar");
         const allSizes = [...new Set(product.options.flatMap(option => option.sizeQuantity.map(sizeQtt => sizeQtt.size)))];
         if (!product) {
             return {

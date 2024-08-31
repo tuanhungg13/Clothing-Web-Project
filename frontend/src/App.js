@@ -28,6 +28,8 @@ import CartDetailsPage from "./pages/public/CartDetailsPage";
 import UserLayout from "./pages/user/UserLayout";
 import PersonalInfor from "./pages/user/PersonalInfor";
 import OrderHistory from "./pages/user/OrderHistory";
+import Pants from "./pages/public/Pants";
+import Shirt from "./pages/public/Shirt";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -37,8 +39,11 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="App">
-        <Header />
-        <Nav />
+        <div className="header-page">
+          <Header />
+          <Nav />
+        </div>
+
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -61,6 +66,8 @@ function App() {
           <Route path="/thanh-toan" element={<OrderPage />} />
           <Route path="/san-pham" element={<ProductPage />} />
           <Route path="/product/:productId" element={<ProductDetails />} />
+          <Route path="/pants" element={<Pants />} />
+          <Route path="/shirt" element={<Shirt />} />
           <Route path="/chi-tiet-gio-hang" element={<CartDetailsPage />} />
 
           <Route path="/sale" element={<ProductPage />} />

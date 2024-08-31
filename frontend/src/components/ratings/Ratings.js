@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, Space } from 'antd';
-
 import { FaStar } from "react-icons/fa";
 import { renderStarFromNumber } from "../../untils/helpers";
 const Ratings = (props) => {
@@ -29,16 +27,15 @@ const Ratings = (props) => {
 
 
             <div>
-                {ratings?.map(item => {
+                {ratings && ratings.length > 0 && ratings?.map(item => {
                     return (
                         <div className=" mt-3" key={`rating-${item._id}`}>
                             <div className="d-flex justify-content-between">
-                                <div className="d-flex row">
-                                    <img src="https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg"
-                                        style={{ width: "80px", height: "60px" }} />
-                                    <div className="col-10">
+                                <div className="d-flex">
+                                    <img src={item?.postedBy?.avatar} className="rounded-circle" style={{ width: "80px", height: "60px" }} />
+                                    <div className="col-10 ms-3">
                                         <div>
-                                            <label>{item.postedBy?.userName}</label>
+                                            <label>{item?.postedBy?.userName}</label>
                                             <div>{renderStarFromNumber(item.star)}</div>
                                             <label>{item.createdAt} | </label>
                                             <span> Phân loại hàng: đen, L</span>

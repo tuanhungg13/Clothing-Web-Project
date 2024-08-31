@@ -3,7 +3,8 @@ import productService from "../service/productService";
 const createNewProduct = async (req, res) => {
     try {
         const { title, price, options, description, category } = req.body;
-        if (!title || !price || !options || !description || !category || !req.file) {
+        console.log("check product:", title, price, options, description, category, req.files)
+        if (!title || !price || !options || !description || !category || !req.files) {
             return res.status(400).json({
                 EM: "Vui lòng nhập đầy đủ dữ liệu!",
                 EC: 1

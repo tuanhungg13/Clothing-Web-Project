@@ -239,15 +239,15 @@ const OrderPage = () => {
                     <div>
                         <div className="d-flex justify-content-between">
                             <label>Tạm tính</label>
-                            <span className="bg-light">{totalPrice}đ</span>
+                            <span>{totalPrice}đ</span>
                         </div>
                         <div className="d-flex justify-content-between">
                             <label>Phí vận chuyển</label>
-                            <span className="bg-light">đ</span>
+                            <span >{shippingPrice}đ</span>
                         </div>
                         <div className="d-flex justify-content-between">
                             <label>Giảm giá</label>
-                            <span>111đ</span>
+                            <span>{discount * totalPrice}đ</span>
                         </div>
 
 
@@ -255,7 +255,7 @@ const OrderPage = () => {
                     <hr />
                     <div className="d-flex justify-content-between">
                         <label>Tổng tiền: </label>
-                        <span>{formatCurrency(totalPrice)}</span>
+                        <span>{formatCurrency(shippingPrice + (((1 - (discount / 100)) * totalPrice)))}</span>
                     </div>
                     <button className="btn btn-primary mt-4 w-100"
                         onClick={() => { handleConfirmOrder() }}>Hoàn tất đơn hàng</button>

@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react';
 import './ProductDetail.scss';
 import Slider from "react-slick";
 import { useRef } from 'react';
-import { IoIosArrowDown, IoIosArrowUp, IoMdStar, IoMdArrowDropright } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { FaFacebook, FaHome } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetProductDetails } from '../../../service/productApiService';
-import InputField from '../../../components/input/InputField';
 import { formatCurrency, renderStarFromNumber } from '../../../untils/helpers';
 import Ratings from "../../../components/ratings/Ratings"
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { addToCart } from '../../../untils/helpers';
+import DOMPurify from 'dompurify';
+import { toast } from 'react-toastify';
 import { apiAddToCart } from '../../../service/userApiService';
 import { getCurrent } from '../../../redux/userSlice';
 import Cookies from "js-cookie";
 import { getCartFromCookies } from '../../../redux/cartSlice';
-import { addToCart } from '../../../untils/helpers';
 const ProductDetails = (props) => {
     const dispatch = useDispatch()
     const [displayItems, setDisplayItems] = useState(5)
@@ -42,7 +43,8 @@ const ProductDetails = (props) => {
         vertical: vertical,
         verticalSwiping: true,
     };
-    let { productId } = useParams();
+    const navigation = useNavigate()
+    const { productId } = useParams();
     const fetchAProduct = async () => {
         try {
             const responseProduct = await apiGetProductDetails(productId);
@@ -158,6 +160,7 @@ const ProductDetails = (props) => {
             }
         }
         else if (!color || !size || !quantity) {
+            toast.error("Vui lòng chọn đầy đủ thông tin sản phẩm!")
             isValid = false
         }
         return isValid
@@ -165,6 +168,85 @@ const ProductDetails = (props) => {
     const handleAddToCart = async () => {
         const check = validDate()
         if (check) addToCart(dispatch, isLoggedIn, productDetails, color, size, quantity)
+    }
+    const ContentDisplay = ({ content }) => {
+        const cleanContent = DOMPurify.sanitize(content); // Làm sạch nội dung HTML
+
+        return (
+            <div dangerouslySetInnerHTML={{ __html: cleanContent }} />
+        );
+    }
+
+    const handleBuyNow = async () => {
+        const checkValid = validDate();
+        if (checkValid) {
+            if (isLoggedIn) {
+                const addToCart = await apiAddToCart({
+                    pid: productDetails._id,
+                    color: color,
+                    size: size,
+                    quantity: quantity,
+                    price: productDetails.price
+                })
+                if (addToCart && addToCart.EC === 0) {
+                    dispatch(getCurrent())
+                    setTimeout(() => {
+                        navigation("/thanh-toan")
+                    }, 100)
+                }
+            }
+            // Người dùng chưa đăng nhập
+            else {
+                // Lấy dữ liệu giỏ hàng hiện tại từ cookies
+                let cart = Cookies.get("PRODUCT_CART_NEW");
+                if (cart) {
+                    // Nếu cookie đã có dữ liệu, giải mã nó
+                    cart = JSON.parse(cart);
+                } else {
+                    // Nếu không có dữ liệu, khởi tạo giỏ hàng rỗng
+                    cart = {};
+                }
+                const productKey = `${productDetails._id}-${color}-${size}`;
+
+                // Thêm sản phẩm vào giỏ hàng
+                if (cart[productKey]) {
+                    cart[productKey] = {
+                        product: {
+                            title: productDetails.title,
+                            images: productDetails?.options?.find(option => option.color === color)?.images[0] || productDetails.images,
+                            slug: productDetails.slug,
+                            _id: productDetails._id
+                        },
+                        _id: productKey,
+                        quantity: +quantity + cart[productKey].quantity,
+                        color: color,
+                        size: size,
+                        price: productDetails.price
+                    }
+                }
+                else {
+                    // Thêm sản phẩm mới vào giỏ hàng
+                    cart[productKey] = {
+                        product: {
+                            title: productDetails.title,
+                            images: productDetails?.options?.find(option => option.color === color)?.images[0] || productDetails.images,
+                            slug: productDetails.slug,
+                            _id: productDetails._id
+                        },
+                        _id: `${productDetails._id}-${color}-${size}`,
+                        quantity,
+                        price: productDetails.price,
+                        color,
+                        size,
+                    };
+                }
+                // Cập nhật lại cookies sau khi thêm vào giỏ hàng
+                Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
+                // Cập nhật Redux state (nếu cần)
+                dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
+                navigation("/thanh-toan")
+            }
+        }
     }
     return (
         <div className='product-details-page'>
@@ -257,7 +339,7 @@ const ProductDetails = (props) => {
                         <div className='add-cart mt-3'>
                             <button className='add-to-cart' type='button' onClick={() => { handleAddToCart() }}>
                                 THÊM VÀO GIỎ HÀNG</button>
-                            <button className='add-to-cart add-quick-cart'>MUA NGAY</button>
+                            <button className='add-to-cart add-quick-cart' onClick={handleBuyNow}>MUA NGAY</button>
                         </div>
                         <div className='favourite mt-4 d-flex justify-content-center '>
                             <button className='border-0 bg-transparent'><CiHeart className='mb-1' /> YÊU THÍCH</button>
@@ -270,7 +352,7 @@ const ProductDetails = (props) => {
                 </div>
                 <hr />
                 <div className='description-product mb-5'>
-                    {productDetails.description}
+                    <ContentDisplay content={productDetails.description} />
                 </div>
                 <hr />
 

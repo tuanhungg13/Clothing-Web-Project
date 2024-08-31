@@ -59,7 +59,7 @@ const OrderHistory = () => {
 
     const handleGetRatingOrder = async (oid) => {
         const response = await apiGetRatingOrder(oid);
-        if (response && response.EC == 0) {
+        if (response && response.EC === 0) {
             setShowViewModalRating(true)
             setDataViewRating(response.DT)
         }

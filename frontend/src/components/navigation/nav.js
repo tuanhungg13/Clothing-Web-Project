@@ -9,8 +9,8 @@ const Nav = () => {
                 <div className="topnav">
                     <NavLink to="/">Trang chủ</NavLink>
                     <NavLink to="/san-pham">Sản phẩm</NavLink>
-                    <NavLink to="/sale">Sale</NavLink>
-                    <NavLink to="/huong-dan-mua-hang">Hướng dẫn</NavLink>
+                    <NavLink to="/shirt">Áo</NavLink>
+                    <NavLink to="/pants">Quần</NavLink>
                     <NavLink to="/thong-bao">Thông báo</NavLink>
                 </div>
             </div>
@@ -32,10 +32,10 @@ const Nav = () => {
                                 <NavLink to="/san-pham">Sản phẩm</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/sale">Sale</NavLink>
+                                <NavLink to="/shirt">Áo</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/huong-dan-mua-hang">Hướng dẫn</NavLink>
+                                <NavLink to="/pants">Quần</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink to="/thong-bao">Thông báo</NavLink>

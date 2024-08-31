@@ -1,5 +1,4 @@
 import React from "react";
-import Nav from "./Nav";
 import { NavLink } from "react-router-dom";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { MdOutlineProductionQuantityLimits, MdMenu } from "react-icons/md";

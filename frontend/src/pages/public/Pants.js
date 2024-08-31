@@ -3,7 +3,7 @@ import DisplayProduct from "../../components/displayProduct/DisplayProduct";
 import SidebarProduct from "../../components/sidebar/SidebarProduct";
 import ReactPaginate from "react-paginate";
 import { apiGetProducts } from "../../service/productApiService";
-const ProductPage = () => {
+const Pants = () => {
     const [sortBy, setSortBy] = useState("-createdAt");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -18,7 +18,7 @@ const ProductPage = () => {
             fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory, price: { gt: priceRange[0], lt: priceRange[1] } })
         }
         else {
-            fetchProducts({ limit, page: currentPage, sort: sortBy, price: { gt: priceRange[0], lt: priceRange[1] } })
+            fetchProducts({ limit, page: currentPage, sort: sortBy, title: "Quần", price: { gt: priceRange[0], lt: priceRange[1] } })
         }
     }, [sortBy, priceRange, selectedCategory, currentPage])
 
@@ -38,7 +38,7 @@ const ProductPage = () => {
     return (
         <div className="product-page container">
             <div className="row">
-                <div className="col-sm-3 col-12">
+                <div className="col-3">
                     <SidebarProduct setProducts={setProducts}
                         selectedCategory={selectedCategory}
                         setSelectedCategory={setSelectedCategory}
@@ -48,7 +48,7 @@ const ProductPage = () => {
                         setPriceRange={setPriceRange}
                     />
                 </div>
-                <div className="col-sm-9 col-12">
+                <div className="col-9">
                     <div className='d-flex justify-content-between p-3 my-4' style={{ backgroundColor: "#f7f7f7" }}>
                         <div className='d-flex'>
                             <span className='d-flex'>Bạn đang xem: </span>
@@ -94,4 +94,4 @@ const ProductPage = () => {
     )
 }
 
-export default ProductPage;
+export default Pants;
