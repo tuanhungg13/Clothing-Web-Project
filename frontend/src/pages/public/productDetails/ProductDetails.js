@@ -18,6 +18,7 @@ import { apiAddToCart } from '../../../service/userApiService';
 import { getCurrent } from '../../../redux/userSlice';
 import Cookies from "js-cookie";
 import { getCartFromCookies } from '../../../redux/cartSlice';
+import { Spin } from 'antd';
 const ProductDetails = (props) => {
     const dispatch = useDispatch()
     const [displayItems, setDisplayItems] = useState(5)
@@ -32,6 +33,7 @@ const ProductDetails = (props) => {
     const [ratings, setRatings] = useState([])
     const isLoggedIn = useSelector(state => state.user.isLoggedIn)
     const sliderRef = useRef();
+    const [loading, setLoading] = useState(false)
     const settings = {
         dots: false,
         infinite: true,
@@ -46,16 +48,21 @@ const ProductDetails = (props) => {
     const navigation = useNavigate()
     const { productId } = useParams();
     const fetchAProduct = async () => {
+        setLoading(true)
         try {
             const responseProduct = await apiGetProductDetails(productId);
-            setProductDetails(responseProduct?.DT);
-            setRatings(responseProduct.DT.ratings)
-            setDisplayImage(responseProduct?.DT?.options[0]?.images[0])
-            const allImages = responseProduct?.DT?.options.flatMap(option => option.images)
-            setImagesSlider(allImages)
+            if (responseProduct && responseProduct.EC === 0) {
+                setProductDetails(responseProduct?.DT);
+                setRatings(responseProduct.DT.ratings)
+                setDisplayImage(responseProduct?.DT?.options[0]?.images[0])
+                const allImages = responseProduct?.DT?.options.flatMap(option => option.images)
+                setImagesSlider(allImages)
+            }
         } catch (error) {
             console.error("Error fetching product details:", error);
         }
+        setLoading(false);
+
     }
     const handleResize = () => {
         if (window.innerWidth > 576) {
@@ -250,115 +257,120 @@ const ProductDetails = (props) => {
     }
     return (
         <div className='product-details-page'>
-            <div className='container '>
-                <div className='row mt-5'>
-                    <div className='imgs-product col-lg-8'>
-                        <div className='row'>
-                            <div className={`${displayItems === 5 ? " list-imgs-product col-2" : "col-12 list-imgs-product-sm"} `}>
-                                <Slider {...settings} ref={sliderRef}>
-                                    {imagesSlider.map((item, index) => {
+            {loading ? (
+                <div className='d-flex justify-content-center' style={{ marginTop: "100px" }}>
+                    <Spin size="large" />
+                </div>
+            ) : (
+                <div className='container '>
+                    <div className='row mt-5'>
+                        <div className='imgs-product col-lg-8'>
+                            <div className='row'>
+                                <div className={`${displayItems === 5 ? " list-imgs-product col-2" : "col-12 list-imgs-product-sm"} `}>
+                                    <Slider {...settings} ref={sliderRef}>
+                                        {imagesSlider && imagesSlider.length > 0 && imagesSlider.map((item, index) => {
+                                            return (
+                                                <div key={`img-${index}`}>
+                                                    <img src={item} onClick={() => { handleChangeImage(item) }} />
+                                                </div>
+                                            )
+                                        })}
+                                    </Slider>
+
+                                    {/* Thêm ảnh từ các biến khác nếu cần */}
+
+                                    <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
+                                    <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
+                                </div>
+                                <div className='display-img-product col-sm-10 d-sm-block d-none' >
+                                    <img src={displayImage} alt='' style={{ width: "100%" }} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className=' ps-4 info-product col-lg-4'>
+                            <h3>{productDetails?.title}</h3>
+                            <div>
+                                <div className='voteView me-1 pe-1 d-inline-block' style={{ color: '#ee4d2d' }}>{productDetails?.totalRatings}</div>
+                                <div className='vote d-inline-block'>
+                                    {renderStarFromNumber(productDetails?.totalRatings)}
+                                </div>
+                            </div>
+                            <hr />
+                            <div className='product-price mt-0'>
+                                <div className={`price-sale d-inline me-4`}>{productDetails?.discount !== 0 ? `${formatCurrency(productDetails?.price * (1 - productDetails?.discount / 100))}đ` : ""}</div>
+                                <div className={`${productDetails?.discount !== 0 ? 'price-real d-inline' : 'price'}`}>{`${formatCurrency(productDetails?.price)}đ`}</div>
+                                <div className={`${productDetails?.discount !== 0 ? 'sale d-inline' : ''}`}>
+                                    {productDetails?.discount !== 0 ? `Giảm ${productDetails?.discount} %` : ''}
+                                </div>
+                            </div>
+
+                            <div className='info-color-product mt-3'>
+                                <div className='d-inline '>Màu sắc</div>
+                                <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>{color}</div>
+                                <div className='d-flex mt-2'>
+                                    {productDetails?.options?.map((item, index) => {
                                         return (
-                                            <div key={`img-${index}`}>
-                                                <img src={item} onClick={() => { handleChangeImage(item) }} />
-                                            </div>
+                                            <label onClick={() => { handleChooseColor(item.color) }} key={`color-${index}`}
+                                                className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
+                                                <img src={item.images[0]} alt={item.color} />
+                                            </label>
                                         )
                                     })}
-                                </Slider>
-
-                                {/* Thêm ảnh từ các biến khác nếu cần */}
-
-                                <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
-                                <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
+                                </div>
                             </div>
-                            <div className='display-img-product col-sm-10 d-sm-block d-none' >
-                                <img src={displayImage} alt='' style={{ width: "100%" }} />
+                            <div className='size-product d-flex flex-column mt-3'>
+                                <div>
+                                    <div className='d-inline'>Kích thước:</div>
+                                    <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
+                                </div>
+                                <div className='list-size-items d-flex mt-2'>
+                                    {productDetails?.allSizes?.map((item, index) => {
+                                        return (
+                                            <label key={`${item}-${index}`}
+                                                className={`${size === item && handleCheckSize(item) ? "active" : " "} ${handleCheckSize(item) ? " " : "inactive pe-none"} size-items`}
+                                                onClick={() => { handleChooseSize(item) }}>
+                                                <span>{item}</span>
+                                            </label>
+
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className='input-quantity mt-3'>
+                                <input type='button' className='minus-quantity border' value={'-'} onClick={() => {
+                                    handleDecremantQuantity()
+                                }} />
+                                <input type='number' className='text-center border-top border-bottom w-25' value={quantity}
+                                    onChange={(event) => { handleChangeQuantity(event) }} />
+                                <input type='button' value={'+'} className='plus-quantity border' onClick={() => {
+                                    handleIncrementQuantity()
+
+                                }} />
+                                {error && <div>{error}</div>}
+                            </div>
+                            <div className='add-cart mt-3'>
+                                <button className='add-to-cart' type='button' onClick={() => { handleAddToCart() }}>
+                                    THÊM VÀO GIỎ HÀNG</button>
+                                <button className='add-to-cart add-quick-cart' onClick={handleBuyNow}>MUA NGAY</button>
+                            </div>
+                            <div className='favourite mt-4 d-flex justify-content-center '>
+                                <button className='border-0 bg-transparent'><CiHeart className='mb-1' /> YÊU THÍCH</button>
+                            </div>
+                            <div className='share-product mt-3 d-flex justify-content-center'>
+                                <label>Chia sẻ <FaFacebook className='mb-1 ms-2' style={{ fontSize: '30px' }} /></label>
                             </div>
                         </div>
+
                     </div>
-                    <div className=' ps-4 info-product col-lg-4'>
-                        <h3>{productDetails?.title}</h3>
-                        <div>
-                            <div className='voteView me-1 pe-1 d-inline-block' style={{ color: '#ee4d2d' }}>{productDetails?.totalRatings}</div>
-                            <div className='vote d-inline-block'>
-                                {renderStarFromNumber(productDetails?.totalRatings)}
-                            </div>
-                        </div>
-                        <hr />
-                        <div className='product-price mt-0'>
-                            <div className={`price-sale d-inline me-4`}>{productDetails?.discount !== 0 ? `${formatCurrency(productDetails?.price * (1 - productDetails?.discount / 100))}đ` : ""}</div>
-                            <div className={`${productDetails?.discount !== 0 ? 'price-real d-inline' : 'price'}`}>{`${formatCurrency(productDetails?.price)}đ`}</div>
-                            <div className={`${productDetails?.discount !== 0 ? 'sale d-inline' : ''}`}>
-                                {productDetails?.discount !== 0 ? `Giảm ${productDetails?.discount} %` : ''}
-                            </div>
-                        </div>
-
-                        <div className='info-color-product mt-3'>
-                            <div className='d-inline '>Màu sắc</div>
-                            <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>{color}</div>
-                            <div className='d-flex mt-2'>
-                                {productDetails?.options?.map((item, index) => {
-                                    return (
-                                        <label onClick={() => { handleChooseColor(item.color) }} key={`color-${index}`}
-                                            className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
-                                            <img src={item.images[0]} alt={item.color} />
-                                        </label>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                        <div className='size-product d-flex flex-column mt-3'>
-                            <div>
-                                <div className='d-inline'>Kích thước:</div>
-                                <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
-                            </div>
-                            <div className='list-size-items d-flex mt-2'>
-                                {productDetails?.allSizes?.map((item, index) => {
-                                    return (
-                                        <label key={`${item}-${index}`}
-                                            className={`${size === item && handleCheckSize(item) ? "active" : " "} ${handleCheckSize(item) ? " " : "inactive pe-none"} size-items`}
-                                            onClick={() => { handleChooseSize(item) }}>
-                                            <span>{item}</span>
-                                        </label>
-
-                                    )
-                                })}
-                            </div>
-                        </div>
-                        <div className='input-quantity mt-3'>
-                            <input type='button' className='minus-quantity border' value={'-'} onClick={() => {
-                                handleDecremantQuantity()
-                            }} />
-                            <input type='number' className='text-center border-top border-bottom w-25' value={quantity}
-                                onChange={(event) => { handleChangeQuantity(event) }} />
-                            <input type='button' value={'+'} className='plus-quantity border' onClick={() => {
-                                handleIncrementQuantity()
-
-                            }} />
-                            {error && <div>{error}</div>}
-                        </div>
-                        <div className='add-cart mt-3'>
-                            <button className='add-to-cart' type='button' onClick={() => { handleAddToCart() }}>
-                                THÊM VÀO GIỎ HÀNG</button>
-                            <button className='add-to-cart add-quick-cart' onClick={handleBuyNow}>MUA NGAY</button>
-                        </div>
-                        <div className='favourite mt-4 d-flex justify-content-center '>
-                            <button className='border-0 bg-transparent'><CiHeart className='mb-1' /> YÊU THÍCH</button>
-                        </div>
-                        <div className='share-product mt-3 d-flex justify-content-center'>
-                            <label>Chia sẻ <FaFacebook className='mb-1 ms-2' style={{ fontSize: '30px' }} /></label>
-                        </div>
+                    <hr />
+                    <div className='description-product mb-5'>
+                        <ContentDisplay content={productDetails.description} />
                     </div>
+                    <hr />
 
+                    <Ratings ratings={ratings} totalRatings={productDetails?.totalRatings} />
                 </div>
-                <hr />
-                <div className='description-product mb-5'>
-                    <ContentDisplay content={productDetails.description} />
-                </div>
-                <hr />
-
-                <Ratings ratings={ratings} totalRatings={productDetails?.totalRatings} />
-            </div>
-
+            )}
         </div >
 
     )

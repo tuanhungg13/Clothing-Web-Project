@@ -3,7 +3,9 @@ import DisplayProduct from "../../components/displayProduct/DisplayProduct";
 import SidebarProduct from "../../components/sidebar/SidebarProduct";
 import ReactPaginate from "react-paginate";
 import { apiGetProducts } from "../../service/productApiService";
-const ProductPage = () => {
+import { Spin } from "antd";
+import { toast } from "react-toastify";
+const Shirt = () => {
     const [sortBy, setSortBy] = useState("-createdAt");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -12,22 +14,37 @@ const ProductPage = () => {
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedSize, setSlectedSize] = useState("");
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
-        console.log("check category:", selectedCategory)
-        if (selectedCategory) {
-            fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory, price: { gt: priceRange[0], lt: priceRange[1] } })
+        console.log("size:", selectedSize)
+        if (selectedCategory && selectedCategory._id) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+        }
+        else if (selectedSize) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+
+        }
+        else if (selectedCategory && selectedCategory._id) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+
         }
         else {
             fetchProducts({ limit, page: currentPage, sort: sortBy, price: { gt: priceRange[0], lt: priceRange[1] } })
         }
-    }, [sortBy, priceRange, selectedCategory, currentPage])
+    }, [sortBy, priceRange, selectedCategory, currentPage, selectedSize])
 
     const fetchProducts = async (data) => {
-        const response = await apiGetProducts(data);
-        if (response.EC === 0) {
-            setProducts(response.DT);
-            setTotalPages(response.totalPages)
+        setLoading(true)
+        try {
+            const response = await apiGetProducts(data);
+            if (response && response.EC === 0) {
+                setProducts(response.DT);
+                setTotalPages(response.totalPages)
+            }
+        } catch (error) {
+            toast.error("Có vui xảy ra.Vui lòng thử lại!")
         }
+        setLoading(false)
     }
 
     const handlePageClick = (event) => {
@@ -52,7 +69,7 @@ const ProductPage = () => {
                     <div className='d-flex justify-content-between p-3 my-4' style={{ backgroundColor: "#f7f7f7" }}>
                         <div className='d-flex'>
                             <span className='d-flex'>Bạn đang xem: </span>
-                            <span className='category ms-3 text-uppercase fw-bold text-info'>Sản phẩm</span>
+                            <span className='category ms-3 text-uppercase fw-bold text-info'>{selectedCategory && selectedCategory.categoryName ? selectedCategory.categoryName : "Áo"}</span>
                         </div>
 
                         <select className="" aria-label="Default select example" onChange={(event) => { setSortBy(event.target.value) }}>
@@ -94,4 +111,4 @@ const ProductPage = () => {
     )
 }
 
-export default ProductPage;
+export default Shirt;

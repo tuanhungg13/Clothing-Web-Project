@@ -16,7 +16,7 @@ const DisplayProduct = (props) => {
         <div className=' container'>
             <div className='display-product'>
                 <div className='container-product d-flex justify-content-center flex-wrap row '>
-                    {products.map((item, index) => {
+                    {products && products.length > 0 && products.map((item, index) => {
                         return (
                             <div className='product-content col-6 col-sm-4 d-flex flex-column text-center' key={`product-${index}`}>
                                 <div className='product-information'>

@@ -2,8 +2,7 @@ import React from 'react';
 import './SidebarProduct.scss';
 import { Slider } from 'antd';
 import { useSelector } from "react-redux";
-import { MdMenu } from 'react-icons/md';
-import logo from "../../assets/img/logoStore.jpg"
+
 const SidebarProduct = (props) => {
     const categories = useSelector(state => state.productCategories.categories);
     const sizes = [{ name: "S" }, { name: "M" }, { name: "L" }, { name: "XL" }, { name: "XXL" }]
@@ -37,8 +36,8 @@ const SidebarProduct = (props) => {
                                 {categories.map((item, index) => {
                                     return (
                                         <li key={item._id}>
-                                            <input type='checkbox' value={item._id} checked={props.selectedCategory === item._id}
-                                                onChange={() => handleSelectCategory(item._id)} /> {item.categoryName}
+                                            <input type='checkbox' value={item._id} checked={props?.selectedCategory === item}
+                                                onChange={() => handleSelectCategory(item)} /> {item.categoryName}
                                         </li>
                                     )
                                 })}
@@ -65,8 +64,8 @@ const SidebarProduct = (props) => {
                                     onChange={onChangeSliderRange} // Hàm được gọi khi slider thay đổi
                                 />
                                 <div className='price-slider d-flex justify-content-between'>
-                                    <div >{formatCurrency(props.priceRange[0])}đ</div>
-                                    <div>{formatCurrency(props.priceRange[1])}đ</div>
+                                    <div >{formatCurrency(props?.priceRange[0])}đ</div>
+                                    <div>{formatCurrency(props?.priceRange[1])}đ</div>
                                 </div>
                                 <div className='d-flex justify-content-between mt-3'>
                                     <div>Sắp xếp</div>
@@ -91,10 +90,12 @@ const SidebarProduct = (props) => {
                         <div className="collapse" id="orders-collapse">
                             <ul className="size-product btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 {sizes && sizes.length > 0 && sizes.map((size, index) => {
-                                    <li key={`sizeSelect-${index}`}>
-                                        <input type='checkbox' value={size.name} checked={props.selectedSize === size.name} onChange={() => handleSelectSize(size.name)} />
-                                        <span>{size.name}</span>
-                                    </li>
+                                    return (
+                                        <li key={`sizeSelect-${index}`}>
+                                            <input type='checkbox' value={size.name} checked={props?.selectedSize === size.name} onChange={() => handleSelectSize(size.name)} />
+                                            <span className='ms-1' style={{ fontSize: "18px" }}>{size.name}</span>
+                                        </li>
+                                    )
                                 })}
 
 
@@ -120,11 +121,11 @@ const SidebarProduct = (props) => {
                                     </button>
                                     <div className="collapse" id="home-collapse">
                                         <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                            {categories.map((item, index) => {
+                                            {categories && categories.length > 0 && categories.map(item => {
                                                 return (
                                                     <li key={item._id}>
-                                                        <input type='checkbox' value={item._id} checked={props.selectedCategory === item._id}
-                                                            onChange={() => handleSelectCategory(item._id)} /> {item.categoryName}
+                                                        <input type='checkbox' value={item._id} checked={props?.selectedCategory === item._id}
+                                                            onChange={() => handleSelectCategory(item)} /> {item.categoryName}
                                                     </li>
                                                 )
                                             })}
@@ -147,12 +148,12 @@ const SidebarProduct = (props) => {
                                                 min={0}
                                                 max={3000000}
                                                 draggableTrack // Cho phép kéo thanh slider để chọn khoảng giá
-                                                defaultValue={props.priceRange} // Giá trị mặc định của slider
+                                                defaultValue={props?.priceRange} // Giá trị mặc định của slider
                                                 onChange={onChangeSliderRange} // Hàm được gọi khi slider thay đổi
                                             />
                                             <div className='price-slider d-flex justify-content-between'>
-                                                <div >{formatCurrency(props.priceRange[0])}đ</div>
-                                                <div>{formatCurrency(props.priceRange[1])}đ</div>
+                                                <div >{formatCurrency(props?.priceRange[0])}đ</div>
+                                                <div>{formatCurrency(props?.priceRange[1])}đ</div>
                                             </div>
                                             <div className='d-flex justify-content-between mt-3'>
                                                 <div>Sắp xếp</div>
@@ -177,10 +178,13 @@ const SidebarProduct = (props) => {
                                     <div className="collapse" id="orders-collapse">
                                         <ul className="size-product btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                             {sizes && sizes.length > 0 && sizes.map((size, index) => {
-                                                <li key={`sizeSelect-${index}`}>
-                                                    <input type='checkbox' value={size.name} checked={props.selectedSize === size.name} onChange={() => handleSelectSize(size.name)} />
-                                                    <span>{size.name}</span>
-                                                </li>
+                                                return (
+                                                    <li key={`sizeSelect-${index}`}>
+                                                        <input type='checkbox' value={size.name} checked={props.selectedSize === size.name} onChange={() => handleSelectSize(size.name)} />
+                                                        <span>{size.name}</span>
+                                                    </li>
+                                                )
+
                                             })}
 
 

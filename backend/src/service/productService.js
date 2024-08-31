@@ -65,6 +65,20 @@ const handleGetProducts = async (data) => {
         queryString = JSON.parse(queryString);
 
         //Filter
+        if (queries.size) {
+            queryString["options"] = {
+                $elemMatch: {
+                    sizeQuantity: {
+                        $elemMatch: {
+                            size: queries.size,
+                            quantity: { $gt: 0 }
+                        }
+                    }
+                }
+            };
+        }
+
+
         if (queries?.title) {
             queryString.title = { $regex: `.*${queries.title}.*`, $options: "i" };
             console.log("3:", queryString)

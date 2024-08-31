@@ -16,12 +16,12 @@ const Ratings = (props) => {
             <div className="d-flex row border border-secondery justify-content-center">
                 <h3 className="mx-5 col-3">{totalRatings ? totalRatings : ""}/5</h3>
                 <div className="d-flex justify-content-between align-items-center col-6">
-                    <div className="border border-dark text-center" style={{ width: "80px" }}>Tất cả</div>
-                    <div className="border border-dark text-center" style={{ width: "80px" }}>5<FaStar className="mb-1" /></div>
-                    <div className="border border-dark text-center" style={{ width: "80px" }}>4<FaStar className="mb-1" /></div>
-                    <div className="border border-dark text-center" style={{ width: "80px" }}>3<FaStar className="mb-1" /></div>
-                    <div className="border border-dark text-center" style={{ width: "80px" }}> 2<FaStar className="mb-1" /></div>
-                    <div className="border border-dark text-center" style={{ width: "80px" }}>1<FaStar className="mb-1" /></div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110px" }}>Tất cả</div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110px" }}>5<FaStar className="mb-1" /></div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110px" }}>4<FaStar className="mb-1" /></div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110px" }}>3<FaStar className="mb-1" /></div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110x" }}> 2<FaStar className="mb-1" /></div>
+                    <div className="border border-dark text-center me-2" style={{ width: "110px" }}>1<FaStar className="mb-1" /></div>
                 </div>
             </div>
 

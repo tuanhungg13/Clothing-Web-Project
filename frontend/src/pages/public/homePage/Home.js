@@ -7,35 +7,35 @@ import poster4 from '../../../assets/img/poster_8.jpeg';
 import poster5 from '../../../assets/img/poster_3.jpg';
 import poster6 from '../../../assets/img/poster_2.jpg';
 import introduce from '../../../assets/video/introduce.mp4';
-import style01 from "../../../assets/img/product01.webp";
-import style02 from "../../../assets/img/product02.webp";
-import style03 from "../../../assets/img/product03.webp";
-import style04 from "../../../assets/img/product04.webp";
-import style05 from "../../../assets/img/product05.webp";
-import style06 from "../../../assets/img/product06.webp";
-import style07 from "../../../assets/img/product07.webp";
-import style08 from "../../../assets/img/product08.webp";
-import style09 from "../../../assets/img/product09.webp";
-import style10 from "../../../assets/img/product10.webp";
 import { NavLink } from 'react-router-dom';
 import Banner from "../../../components/banner/Banner";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
 import SliderComponent from '../../../components/slider/Slider';
 import { apiGetProducts } from '../../../service/productApiService';
-
+import { toast } from 'react-toastify';
+import { Spin } from 'antd';
 const Home = () => {
     const background = [poster1, poster2, poster3, poster4, poster5, poster6];
     const [productBestSeller, setProductBestSeller] = useState([])
-    const [newProduct, setNewProduct] = useState([])
-    const limit = 15
+    const [newProduct, setNewProduct] = useState([]);
+    const limit = 15;
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         fetchProducts()
     }, [])
     const fetchProducts = async () => {
-        const responseProdBestSeller = await apiGetProducts({ limit: limit, page: 1, sort: "-sold" })
-        const responseNewProduct = await apiGetProducts({ limit: limit, page: 1, sort: "-createdAt" })
-        if (responseProdBestSeller.EC === 0) setProductBestSeller(responseProdBestSeller.DT);
-        if (responseNewProduct.EC === 0) setNewProduct(responseNewProduct.DT);
+        setLoading(true)
+        try {
+            const [bestSellers, newProducts] = await Promise.all([
+                apiGetProducts({ limit: limit, page: 1, sort: "-sold" }),
+                apiGetProducts({ limit: limit, page: 1, sort: "-createdAt" })
+            ])
+            if (bestSellers && bestSellers.EC === 0) setProductBestSeller(bestSellers.DT)
+            if (newProducts && newProducts.EC === 0) setNewProduct(newProducts.DT);
+        } catch (error) {
+            toast.error("Có lỗi xảy ra. Vui lòng thử lại")
+        }
+        setLoading(false)
     }
     return (
         <>
@@ -51,10 +51,18 @@ const Home = () => {
                         </div>
                     </div>
                     <div className='container-product d-flex justify-content-center flex-wrap row mt-5'>
-                        <DisplayProduct productList={productBestSeller} />
-                        <div className='product-other'>
-                            Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
-                        </div>
+                        {loading ? (
+                            <div className='d-flex justify-content-center' style={{ marginTop: "100px" }}>
+                                <Spin size="large" />
+                            </div>
+                        ) : (
+                            <div>
+                                <DisplayProduct productList={productBestSeller} />
+                                <div className='product-other'>
+                                    Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
+                                </div>
+                            </div>
+                        )}
 
                     </div>
 
@@ -66,11 +74,17 @@ const Home = () => {
                         </div>
                     </div>
                     <div className='container-product d-flex justify-content-center flex-wrap row '>
-                        <div className='product-other'>
-                            <DisplayProduct productList={newProduct} />
+                        {loading ? (
+                            <div className='d-flex justify-content-center' style={{ marginTop: "100px" }}>
+                                <Spin size="large" />
+                            </div>
+                        ) : (
+                            <div className='product-other'>
+                                <DisplayProduct productList={newProduct} />
 
-                            Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
-                        </div>
+                                Mời bạn <NavLink to='/san-pham'>xem thêm các sản phẩm hot</NavLink> khác
+                            </div>
+                        )}
                     </div>
                     {/* danh sách kiểu phối đồ */}
                     <div className='outfit'>
