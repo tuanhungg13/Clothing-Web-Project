@@ -12,7 +12,7 @@ import ProductDetails from "./pages/public/productDetails/ProductDetails";
 import Login from "./pages/public/login/Login";
 import Register from "./pages/public/register/Register";
 import Header from './components/header/Header';
-import Nav from './components/navigation/Nav';
+import Nav from "./components/navigation/Nav";
 import ProductPage from "./pages/public/productPage";
 import ScrollToTop from "./components/scroll";
 import AdminLayOut from "./pages/admin/AdminLayOut";
@@ -50,30 +50,26 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminLayOut />}>
             <Route path="thong-ke" element={<Dashboard />} />
-            <Route path="tao-san-pham" element={<CreateProduct />} />
-            <Route path="quan-li-san-pham" element={<ManageProducts />} />
-            <Route path="quan-li-don-hang" element={<ManageOrder />} />
-            <Route path="quan-li-nguoi-dung" element={<ManageUsers />} />
+            <Route path="create-product" element={<CreateProduct />} />
+            <Route path="product-list" element={<ManageProducts />} />
+            <Route path="order-list" element={<ManageOrder />} />
+            <Route path="user-list" element={<ManageUsers />} />
           </Route>
 
           <Route path="/user" element={<UserLayout />} >
             <Route path="profile/:uid" element={<PersonalInfor />} />
-            <Route path="don-hang" element={<CreateProduct />} />
-            <Route path="lich-su-mua-hang" element={<OrderHistory />} />
+            <Route path="purchase-history" element={<OrderHistory />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/thanh-toan" element={<OrderPage />} />
-          <Route path="/san-pham" element={<ProductPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/products" element={<ProductPage />} />
           <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/pants" element={<Pants />} />
           <Route path="/shirt" element={<Shirt />} />
-          <Route path="/chi-tiet-gio-hang" element={<CartDetailsPage />} />
-
-          <Route path="/sale" element={<ProductPage />} />
-          <Route path="/huong-dan-mua-hang" element={<Instruction />} />
-          <Route path="/thong-bao" element={<Announcement />} />
+          <Route path="/cart-details" element={<CartDetailsPage />} />
+          <Route path="/notification" element={<Announcement />} />
           {/* Xử lý các trang ngoại lệ */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

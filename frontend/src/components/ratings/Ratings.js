@@ -14,7 +14,7 @@ const Ratings = (props) => {
         <div>
             <h2>Đánh giá sản phẩm</h2>
             <div className="d-flex row border border-secondery justify-content-center">
-                <h3 className="mx-5 col-3">{totalRatings ? totalRatings : ""}/5</h3>
+                <h3 className="mx-5 col-3">{totalRatings ? totalRatings : 0}/5</h3>
                 <div className="d-flex justify-content-between align-items-center col-6">
                     <div className="border border-dark text-center me-2" style={{ width: "110px" }}>Tất cả</div>
                     <div className="border border-dark text-center me-2" style={{ width: "110px" }}>5<FaStar className="mb-1" /></div>

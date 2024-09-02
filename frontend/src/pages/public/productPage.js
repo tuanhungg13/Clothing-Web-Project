@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 import { apiGetProducts } from "../../service/productApiService";
 import { Spin } from "antd";
 import { toast } from "react-toastify";
+import Breadcrumbs from "../../components/Breadcrumbs";
 const Shirt = () => {
     const [sortBy, setSortBy] = useState("-createdAt");
     const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +55,7 @@ const Shirt = () => {
 
     return (
         <div className="product-page container">
+            <Breadcrumbs />
             <div className="row">
                 <div className="col-sm-3 col-12">
                     <SidebarProduct setProducts={setProducts}

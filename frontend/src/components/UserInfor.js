@@ -74,7 +74,7 @@ const UserInfor = ({ payload, setPayload, errors }) => {
                 </div>
             </form>
             <button className="btn text-start ps-0 mt-3">
-                <NavLink className={"text-decoration-none"} to={"/chi-tiet-gio-hang"}>
+                <NavLink className={"text-decoration-none"} to={"/cart-details"}>
                     <IoIosArrowBack /> Giỏ hàng
                 </NavLink>
 

@@ -12,6 +12,7 @@ import { MdPublishedWithChanges } from "react-icons/md";
 import { RiContactsBookLine } from "react-icons/ri";
 import { addToCart } from "../../untils/helpers";
 import { hanldeDeleteCartItem } from "../../untils/helpers";
+import Breadcrumbs from "../../components/Breadcrumbs";
 const CartDetailsPage = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart);
     const cartFromCookies = useSelector(state => state?.cart?.cartFromCookies);
@@ -97,10 +98,10 @@ const CartDetailsPage = () => {
         }
     }
     return (
-        <div>
-            <label>Giỏ hàng</label>
-            <div style={{ margin: "30px 150px" }}>
-                <div className="mx-3">
+        <div className="container">
+            <Breadcrumbs />
+            <div>
+                <div className="mx-3 mt-4">
                     <h3 className="d-inline me-3">CHI TIẾT GIỎ HÀNG</h3>
                     <label className="mb-1"> (Bạn đang có
                         <span className="fw-bold mx-1">
@@ -111,7 +112,7 @@ const CartDetailsPage = () => {
                     <hr />
                 </div>
                 <div className="row mx-0">
-                    <div className="col-7">
+                    <div className="col-sm-7 col-12">
                         {displayCart && displayCart.length > 0 && displayCart.map((item, index) => {
                             return (
                                 <div key={`cartItem -${index}`}>
@@ -149,7 +150,7 @@ const CartDetailsPage = () => {
                             )
                         })}
                     </div>
-                    <div className="col-5">
+                    <div className="col-sm-5 col-12">
                         <div className="border bg-light p-3">
                             <label className="fw-bold">TÓM TẮT ĐƠN HÀNG</label>
                             <span className="d-block mt-2">Chưa bao gồm phí ship và mã giảm giá(nếu có)</span>

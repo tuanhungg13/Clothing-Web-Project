@@ -103,8 +103,8 @@ const CartMenu = () => {
                         <div>{calculateTotalPrice()}</div>
                     </div>
                     <button type="button" className="w-100 my-3 " style={{ backgroundColor: "black", height: "40px", color: "white" }}>
-                        <NavLink className={"text-white text-decoration-none"} to={"/thanh-toan"}>TIẾN HÀNH ĐẶT HÀNG</NavLink></button>
-                    <NavLink className="d-flex justify-content-center" style={{ color: "black" }} to={"/chi-tiet-gio-hang"}>Chi tiết giỏ hàng</NavLink>
+                        <NavLink className={"text-white text-decoration-none"} to={"/order"}>TIẾN HÀNH ĐẶT HÀNG</NavLink></button>
+                    <NavLink className="d-flex justify-content-center" style={{ color: "black" }} to={"/cart-details"}>Chi tiết giỏ hàng</NavLink>
                 </div>
 
             </ul>

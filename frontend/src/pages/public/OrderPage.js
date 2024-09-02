@@ -9,6 +9,7 @@ import { hanldeDeleteCartItem } from "../../untils/helpers";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie"
 import { getCurrent } from "../../redux/userSlice";
+import Breadcrumbs from "../../components/Breadcrumbs";
 const OrderPage = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart || []);
     const { current, isLoggedIn } = useSelector(state => state?.user);
@@ -186,6 +187,7 @@ const OrderPage = () => {
     }
     return (
         <div style={{ margin: "0 100px" }}>
+            <Breadcrumbs />
             <div className="row mx-0">
                 <div className="col-7 p-5">
                     <UserInfor

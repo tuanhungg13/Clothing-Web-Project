@@ -8,10 +8,10 @@ const Nav = () => {
             <div className="container-nav d-lg-flex d-none justify-content-center">
                 <div className="topnav">
                     <NavLink to="/">Trang chủ</NavLink>
-                    <NavLink to="/san-pham">Sản phẩm</NavLink>
+                    <NavLink to="/products">Sản phẩm</NavLink>
                     <NavLink to="/shirt">Áo</NavLink>
                     <NavLink to="/pants">Quần</NavLink>
-                    <NavLink to="/thong-bao">Thông báo</NavLink>
+                    <NavLink to="/notification">Thông báo</NavLink>
                 </div>
             </div>
             <div className="btn-toggler d-lg-none d-block ">
