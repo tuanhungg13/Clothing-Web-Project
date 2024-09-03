@@ -3,7 +3,6 @@
 
         /* danh sách ảnh */
         .list-imgs-product {
-            height: 660px;
             position: relative;
             overflow: hidden;
             padding-top: 20px;
@@ -198,19 +197,6 @@
                     width: 50px;
                 }
 
-            }
-        }
-
-        .add-cart {
-
-            /* button thêm vào giỏ hàng */
-            .add-to-cart {
-                width: 45%;
-                min-height: 50px;
-                background-color: black;
-                font-size: 15px;
-                color: white;
-                margin-right: 10px;
             }
         }
 

@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 const UserInfor = ({ payload, setPayload, errors }) => {
     return (
-        <div className="d-flex flex-column container">
+        <div className="d-flex flex-column container mt-3">
             <img src={logo} className="w-25" alt="logo" />
             <label className="mt-3">Thông tin giao hàng</label>
             <form>
@@ -21,7 +21,7 @@ const UserInfor = ({ payload, setPayload, errors }) => {
                     />
                 </div>
                 <div className="row">
-                    <div className="form-group mt-3 col-7">
+                    <div className="form-group mt-3 col-sm-7 col-12">
                         <label>Email</label>
                         <InputField
                             nameKey={"email"}
@@ -30,7 +30,7 @@ const UserInfor = ({ payload, setPayload, errors }) => {
                             errors={errors}
                         />
                     </div>
-                    <div className="form-group mt-3 col-5">
+                    <div className="form-group mt-3 col-sm-5 col-12">
                         <label>Số điện thoại</label>
                         <InputField
                             nameKey={"phoneNumber"}

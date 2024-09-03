@@ -22,7 +22,7 @@ const DisplayProduct = (props) => {
                                 <div className='product-information'>
                                     <div className='product-detail' onClick={() => { handleGetDetailsProduct(item) }}>
                                         <img src={`${item?.options[0]?.images[0]}`} alt='' />
-                                        <div className='product-name'>{item.title}</div>
+                                        <div className='product-name mt-sm-2' style={{ height: "40px" }}>{item.title}</div>
                                     </div>
                                     <div className='product-price'>
                                         <div className={`${item.discount !== 0 ? "price-sale d-inline-block" : ""}`}>{item.discount !== 0 ? `${formatCurrency(item.price * (1 - item.discount / 100))}đ` : ""}</div>

@@ -5,7 +5,7 @@ const Breadcrumbs = () => {
     const location = useLocation();
     console.log("location:", location)
     return (
-        <div className="mt-3">
+        <div className="mt-sm-3">
             <NavLink to={"/"} className={"text-decoration-none text-dark"} ><IoHomeOutline className="mb-1" /> Home / </NavLink>
             {location.pathname === "/products" && <NavLink to={"/products"} className={"text-decoration-none text-dark"} >Sản phẩm</NavLink>}
             {location.pathname === "/shirt" && <NavLink to={"/shirt"} className={"text-decoration-none text-dark"}>Áo</NavLink>}

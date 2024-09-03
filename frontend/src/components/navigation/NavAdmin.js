@@ -17,31 +17,31 @@ const NavAdmin = () => {
         },
         {
             id: "2",
-            path: "/admin/tao-san-pham",
+            path: "/admin/create-product",
             name: "Tạo sản phẩm",
             icon: <IoBagAddOutline />
         },
         {
             id: "3",
-            path: "/admin/quan-li-san-pham",
+            path: "/admin/product-list",
             name: "Quản lí sản phẩm",
             icon: <MdOutlineProductionQuantityLimits />
         },
         {
             id: "4",
-            path: "/admin/quan-li-don-hang",
+            path: "/admin/order-list",
             name: "Quản lí đơn hàng",
             icon: <CiViewList />
         },
         {
             id: "5",
-            path: "/admin/quan-li-nguoi-dung",
+            path: "/admin/user-list",
             name: "Quản lí người dùng",
             icon: <FaUsers />
         },
         {
             id: "6",
-            path: "/admin/thong-bao",
+            path: "/admin/notification",
             name: "Thông báo",
             icon: <FaRegBell />
         },

@@ -26,10 +26,10 @@ const ManageOrder = () => {
     }, [currentPage])
 
 
-    const handleUpdateOrder = (item) => {
+    const handleUpdateOrder = (item, stt) => {
         setShowModalOrder(true)
         const orderData = JSON.parse(JSON.stringify(item));
-        setDataOrder(orderData)
+        setDataOrder(prev => ({ ...orderData, status: stt }))
     }
 
     const handleCloseModal = () => {
@@ -61,7 +61,7 @@ const ManageOrder = () => {
                             return (
                                 <tr key={item._id} className="text-center" >
                                     <th scope="row px-0">{((currentPage - 1) * limit) + index + 1}</th>
-                                    <td>{item._id}</td>
+                                    <td className="text-break">{item._id}</td>
                                     <td >{item.orderBy.userName || item.orderBy.user}</td>
                                     <td>{item.orderBy.address}</td>
                                     <td>{item.orderBy.phoneNumber}</td>
@@ -70,13 +70,27 @@ const ManageOrder = () => {
                                     </td>
                                     <td>{formatCurrency(item.totalPrice)}</td>
                                     <td>
-                                        <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2"
-                                            onClick={() => { handleUpdateOrder(item) }} >
-                                            Sửa
-                                        </button>
-                                        <button className="btn btn-danger" >
-                                            Xóa
-                                        </button>
+                                        {item.status === "Đang xử lí" &&
+                                            <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2"
+                                                onClick={() => { handleUpdateOrder(item, "Đang chuẩn bị hàng") }} >
+                                                Đang chuẩn bị
+                                            </button>
+                                        }
+                                        {item.status === "Đang xử lí" &&
+                                            <button className="btn btn-danger me-sm-2 mb-sm-0 mb-2"
+                                                onClick={() => { handleUpdateOrder(item, "Hủy") }} >
+                                                Hủy
+                                            </button>
+                                        }
+                                        {item.status === "Đang chuẩn bị hàng" &&
+                                            <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2"
+                                                onClick={() => { handleUpdateOrder(item, "Đang giao hàng") }} >
+                                                Đang giao hàng
+                                            </button>
+                                        }
+
+
+
                                     </td>
                                 </tr>
                             )

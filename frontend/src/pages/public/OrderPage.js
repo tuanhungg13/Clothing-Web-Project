@@ -186,17 +186,17 @@ const OrderPage = () => {
         }
     }
     return (
-        <div style={{ margin: "0 100px" }}>
+        <div className="container">
             <Breadcrumbs />
             <div className="row mx-0">
-                <div className="col-7 p-5">
+                <div className="col-sm-7 col-12 p-sm-5">
                     <UserInfor
                         payload={payload}
                         setPayload={setPayload}
                         errors={errors}
                     />
                 </div>
-                <div className="col-5 pt-5" style={{ borderLeft: "1px solid gray", height: "100vh", paddingLeft: "50px", paddingRight: "50px" }}>
+                <div className="col-sm-5 col-12 pt-sm-5" style={{ height: "100vh", paddingLeft: "50px", paddingRight: "50px" }}>
                     {memoizedDisplayCart && memoizedDisplayCart.length > 0 && memoizedDisplayCart.map((item, index) => {
                         return (
                             <div key={`cartItem -${index}`}>
@@ -241,15 +241,15 @@ const OrderPage = () => {
                     <div>
                         <div className="d-flex justify-content-between">
                             <label>Tạm tính</label>
-                            <span>{totalPrice}đ</span>
+                            <span>{formatCurrency(totalPrice)}đ</span>
                         </div>
                         <div className="d-flex justify-content-between">
                             <label>Phí vận chuyển</label>
-                            <span >{shippingPrice}đ</span>
+                            <span >{formatCurrency(shippingPrice)}đ</span>
                         </div>
                         <div className="d-flex justify-content-between">
                             <label>Giảm giá</label>
-                            <span>{discount * totalPrice}đ</span>
+                            <span>{formatCurrency(discount * totalPrice) || 0}đ</span>
                         </div>
 
 

@@ -6,6 +6,7 @@ const ModalProcessOrder = ({ showModalOrder, dataOrder, onClose, fetchOrders }) 
     const modalRef = useRef(null);
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("")
+    console.log(dataOrder)
     useEffect(() => {
         console.log("check show order")
         if (showModalOrder) {
@@ -49,7 +50,7 @@ const ModalProcessOrder = ({ showModalOrder, dataOrder, onClose, fetchOrders }) 
     return (
         <div className={`modal fade ${showModalOrder ? 'show' : ''}`} tabIndex="-1" style={{ display: showModalOrder ? 'block' : 'none' }}
             ref={modalRef} onClick={handleCloseModal} onKeyDown={handleOnKeyDown}>
-            <div className="modal-dialog" style={{ margin: "0 auto", maxWidth: "60vw" }} >
+            <div className="modal-dialog" style={{ margin: "0 auto", minWidth: "80vw" }} >
                 <div className="modal-content " onClick={(event) => { event.stopPropagation() }}>
                     <div className="modal-header">
                         <h1 className="modal-title fs-5">
@@ -88,19 +89,32 @@ const ModalProcessOrder = ({ showModalOrder, dataOrder, onClose, fetchOrders }) 
                             <label>Số điện thoại: </label>
                             <label >{order?.orderBy?.phoneNumber}</label>
                         </div>
+                        <hr />
 
                         <div className="d-flex justify-content-between mt-1">
+                            <label>Giá sản phẩm: </label>
+                            <label >{formatCurrency(order.initialTotalPrice)}</label>
+                        </div>
+                        <div className="d-flex justify-content-between mt-1">
+                            <label>Phí giao hàng: </label>
+                            <label >{formatCurrency(order.shippingPrice)}</label>
+                        </div>
+                        <div className="d-flex justify-content-between mt-1">
+                            <label>Giảm giá: </label>
+                            <label >{order.discount}%</label>
+                        </div>
+                        <div className="d-flex justify-content-between mt-1">
                             <h5>Tổng tiền: </h5>
-                            <h5 className="fw-bold" >{order.totalPrice}</h5>
+                            <h5 className="fw-bold" >{formatCurrency(order.totalPrice)}</h5>
                         </div>
 
                         <hr />
                         <label className="fw-bold me-3">Trạng thái đơn hàng: </label>
-                        <select className="form-select w-25 d-inline" value={status} onChange={(e) => { setStatus(e.target.value) }} >
+                        <select className="form-select w-75 mt-2 d-inline" value={status} onChange={(e) => { setStatus(e.target.value) }} >
                             <option value={"Hủy"}>Hủy</option>
                             <option value={"Đang xử lí"}>Đang xử lí</option>
-                            <option value={"Xác nhận đơn hàng"}>Xác nhận đơn hàng</option>
-
+                            <option value={"Đang chuẩn bị hàng"}>Đang chuẩn bị</option>
+                            <option value={"Đang giao hàng"}>Đang giao hàng</option>
                         </select>
 
                     </div>

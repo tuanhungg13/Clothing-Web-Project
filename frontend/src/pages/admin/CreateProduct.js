@@ -308,7 +308,7 @@ const CreateProduct = () => {
                         />
                     </div>
                     <div className="col-sm-3 col-6  mt-sm-0 mt-3">
-                        <label className="mb-1">Ngày hết hạn giảm giá</label>
+                        <label className="mb-1">Ngày hết hạn</label>
                         <DatePicker
                             showTime
                             value={payload.expiry || ""}

@@ -91,7 +91,7 @@ const Header = () => {
                 <nav className="navbar">
                     <div className="container-fluid p-1">
                         <Nav />
-                        <NavLink className="navbar-brand me-0" to='/'><img src={logo} alt='' /></NavLink>
+                        <NavLink className="navbar-brand me-0 mb-2" to='/'><img src={logo} alt='atino' /></NavLink>
 
                         <CartMenu />
                         {!isLoggedIn &&
@@ -103,11 +103,22 @@ const Header = () => {
                                     <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end text-small">
-                                    <li><a className="dropdown-item" href="#">Thông tin tài khoản</a></li>
-                                    <li><a className="dropdown-item" href="#">Thông tin đơn hàng</a></li>
-                                    <li><a className="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
+                                    {current?.role === "admin" ? <li>
+                                        <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/thong-ke"}> Quản lý cửa hàng</NavLink>
+
+                                    </li>
+                                        :
+                                        <>
+                                            <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/`} >Thông tin đơn hàng</NavLink></li>
+                                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/lich-su-mua-hang`}>Lịch sử mua hàng</NavLink></li>
+                                        </>
+                                    }
+
+
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><a className="dropdown-item" href="#">Đăng xuất</a></li>
+                                    <li><button className='dropdown-item border-0' type='button'
+                                        onClick={() => { handleLogout() }}>Đăng xuất</button></li>
                                 </ul>
                             </div>
                         }

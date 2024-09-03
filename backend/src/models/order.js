@@ -28,7 +28,7 @@ var orderSchema = new mongoose.Schema({
     status: {
         type: String,
         default: "Đang xử lí",
-        enum: ["Hủy", "Đang xử lí", "Đang chuẩn bị hàng", "Đang giao hàng", "Đã nhận hàng"],
+        enum: ["Hủy", "Đang xử lí", "Đang chuẩn bị hàng", "Đang giao hàng", "Đã nhận hàng", "Đã đánh giá"],
     },
     note: {
         type: String,

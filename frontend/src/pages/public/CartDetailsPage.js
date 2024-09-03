@@ -163,10 +163,10 @@ const CartDetailsPage = () => {
                             <small className="ms-1">Có thể nhập mẫ giảm giá ở phần thanh toán</small>
                             <div className="mt-3">
                                 <button className="btn bg-dark w-100 text-white">
-                                    <NavLink to={"/thanh-toan"} className={"text-decoration-none text-white"}> TIẾN HÀNH ĐẶT HÀNG</NavLink>
+                                    <NavLink to={"/order"} className={"text-decoration-none text-white"}> TIẾN HÀNH ĐẶT HÀNG</NavLink>
                                 </button>
                                 <button className="btn border bg-light w-100 text-dark mt-2">
-                                    <NavLink to={"/san-pham"} className={"text-decoration-none text-dark"}>MUA THÊM SẢN PHẨM</NavLink>
+                                    <NavLink to={"/products"} className={"text-decoration-none text-dark"}>MUA THÊM SẢN PHẨM</NavLink>
                                 </button>
                             </div>
                         </div>

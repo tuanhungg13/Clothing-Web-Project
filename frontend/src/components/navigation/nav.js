@@ -23,24 +23,15 @@ const Nav = () => {
                         <h5 className="offcanvas-title" id="offcanvasNavbarLabel"><img src={logo} alt='' /></h5>
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div className="offcanvas-body pt-0">
-                        <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li className="nav-item">
-                                <NavLink to="/">Trang chủ</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/san-pham">Sản phẩm</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/shirt">Áo</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/pants">Quần</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/thong-bao">Thông báo</NavLink>
-                            </li>
-                        </ul>
+                    <div className="offcanvas-body pt-0 container-nav">
+                        <div className="topnav">
+                            <NavLink to="/" className={"border-end-0"}>Trang chủ</NavLink>
+                            <NavLink to="/products" className={"border-end-0"}>Sản phẩm</NavLink>
+                            <NavLink to="/shirt" className={"border-end-0"}>Áo</NavLink>
+                            <NavLink to="/pants" className={"border-end-0"}>Quần</NavLink>
+                            <NavLink to="/notification" className={"border-end-0"}>Thông báo</NavLink>
+                        </div>
+
                     </div>
                 </div>
             </div>

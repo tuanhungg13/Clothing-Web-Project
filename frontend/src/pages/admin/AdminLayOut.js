@@ -9,7 +9,7 @@ const AdminLayOut = () => {
     return (
         <div className="">
             <div className="d-flex row mx-0">
-                <div className="col-sm-2 mt-3 p-0" style={{ borderRight: "1px solid black", height: "100vh" }}>
+                <div className="col-sm-2 mt-3 p-0" style={{ borderRight: "1px solid black" }}>
                     <SidebarAdmin />
                 </div>
 

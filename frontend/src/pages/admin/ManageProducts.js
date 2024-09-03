@@ -4,7 +4,9 @@ import ReactPaginate from "react-paginate";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import UpdateProduct from "./UpdateProduct";
+import { formatCountdown } from "antd/es/statistic/utils";
 import ModalDeleteProduct from "../../components/modal/ModalDeleteProduct";
+import { formatCurrency } from "../../untils/helpers";
 const ManageProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -90,7 +92,7 @@ const ManageProducts = () => {
                                                 <img src={item.options[0].images[0]} alt="anh-san-pham" style={{ width: "55px" }} />
                                             </td>
                                             <td >{item.title}</td>
-                                            <td>{item.price}</td>
+                                            <td>{formatCurrency(item.price)}</td>
                                             <td>1</td>
                                             <td>{item?.category?.categoryName}</td>
                                             <td className={`${+item.stock === 0 ? "text-danger" : `${item.stock < 100 ? "text-warning" : "text-success"}`}`}>

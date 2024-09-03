@@ -91,7 +91,7 @@ const ModalEditUser = (props) => {
                             />
                         </div>
                         <div className="mt-3 row px-0">
-                            <div className="col-8 me-3">
+                            <div className="col-sm-8 col-12 me-3">
                                 <label>Chức vụ</label>
                                 <SelectField
                                     nameKey={"role"}
@@ -103,7 +103,7 @@ const ModalEditUser = (props) => {
                             </div>
 
 
-                            <div className="col-3">
+                            <div className="col-sm-3 col-12">
                                 <label>Chặn</label>
                                 <select className="form-select" aria-label="Default select example" value={payload.isBlocked}
                                     onChange={(event) => { setPayload(prev => ({ ...prev, isBlocked: event.target.value })) }}>

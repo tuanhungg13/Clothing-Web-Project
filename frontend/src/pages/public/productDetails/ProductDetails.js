@@ -83,12 +83,13 @@ const ProductDetails = (props) => {
     };
 
     useEffect(() => {
+        console.log("oke")
         fetchAProduct()
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [])
+    }, [vertical, displayItems])
 
 
 
@@ -281,7 +282,7 @@ const ProductDetails = (props) => {
                             <NavLink className={"text-decoration-none text-dark"} to={`/product/${productDetails.slug}`}>{productDetails.title}</NavLink>
                         </div >
                         <div className='row mt-5'>
-                            <div className='imgs-product col-lg-8'>
+                            <div className='imgs-product col-lg-8 col-12'>
                                 <div className='row'>
                                     <div className={`${displayItems === 5 ? " list-imgs-product col-2" : "col-12 list-imgs-product-sm"} `}>
                                         <Slider {...settings} ref={sliderRef}>
@@ -304,7 +305,7 @@ const ProductDetails = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className=' ps-4 info-product col-lg-4'>
+                            <div className=' ps-4 info-product mt-lg-0 mt-3 col-lg-4 col-12'>
                                 <h3>{productDetails?.title}</h3>
                                 <div>
                                     {productDetails && productDetails.totalRatings !== 0 ?
@@ -371,10 +372,10 @@ const ProductDetails = (props) => {
                                     }} />
                                     {error && <div>{error}</div>}
                                 </div>
-                                <div className='add-cart mt-3'>
-                                    <button className='add-to-cart' type='button' onClick={() => { handleAddToCart() }}>
+                                <div className='mt-3 d-flex'>
+                                    <button className='w-50 me-3 bg-dark text-white' type='button' style={{ minHeight: "55px" }} onClick={() => { handleAddToCart() }}>
                                         THÊM VÀO GIỎ HÀNG</button>
-                                    <button className='add-to-cart add-quick-cart' onClick={handleBuyNow}>MUA NGAY</button>
+                                    <button className='w-50 bg-dark text-white' style={{ minHeight: "55px" }} onClick={handleBuyNow}>MUA NGAY</button>
                                 </div>
                                 <div className='favourite mt-4 d-flex justify-content-center '>
                                     <button className='border-0 bg-transparent'><CiHeart className='mb-1' /> YÊU THÍCH</button>

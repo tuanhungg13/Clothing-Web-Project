@@ -69,12 +69,13 @@ const Shirt = () => {
                 </div>
                 <div className="col-sm-9 col-12">
                     <div className='d-flex justify-content-between p-3 my-4' style={{ backgroundColor: "#f7f7f7" }}>
-                        <div className='d-flex'>
-                            <span className='d-flex'>Bạn đang xem: </span>
-                            <span className='category ms-3 text-uppercase fw-bold text-info'>{selectedCategory && selectedCategory.categoryName ? selectedCategory.categoryName : "Áo"}</span>
-                        </div>
+                        <label>Bạn đang xem:
+                            <span className="category ms-3 text-uppercase fw-bold text-info">
+                                {selectedCategory && selectedCategory.categoryName ? selectedCategory.categoryName : "Sản phẩm"}
+                            </span>
+                        </label>
 
-                        <select className="" aria-label="Default select example" onChange={(event) => { setSortBy(event.target.value) }}>
+                        <select className="ms-3" aria-label="Default select example" onChange={(event) => { setSortBy(event.target.value) }}>
                             <option value="-createdAt">Mặc định</option>
                             <option value="-price">Giá giảm dần</option>
                             <option value="price">Giá tăng dần</option>
