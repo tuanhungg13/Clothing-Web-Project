@@ -20,7 +20,7 @@ const ManageProducts = () => {
 
     const fetchProducts = useCallback(async () => {
         const response = await apiGetProducts({ sort: "-createdAt", page: currentPage, limit });
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             setProducts(response.DT);
             setTotalPages(response.totalPages);
         }

@@ -11,7 +11,14 @@ const createNewBlog = async (req, res) => {
             })
         }
         const response = await blogService.handleCreateNewBlog(req.body, req.file);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
@@ -26,11 +33,20 @@ const createNewBlog = async (req, res) => {
 
 const getBlogs = async (req, res) => {
     try {
-        const response = await blogService.handleGetBlogs();
-        return res.status(200).json({
+        const response = await blogService.handleGetBlogs(req.query);
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT,
+                totalPages: response.totalPages
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
-            DT: response.DT
+            DT: response.DT,
+            totalPages: response.totalPages
         })
     } catch (error) {
         return res.status(500).json({

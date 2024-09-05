@@ -239,7 +239,7 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                 });
             });
             const updateProduct = await apiUpdateProduct(updatedPayload._id, formData);
-            if (updateProduct.EC === 0) {
+            if (updateProduct && updateProduct.EC === 0) {
                 toast.success("Cập nhật sản phẩm thành công!")
                 fetchProducts()
             }

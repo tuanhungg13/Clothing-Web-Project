@@ -19,7 +19,7 @@ const ManageOrder = () => {
     }, [currentPage])
     const fetchOrders = useCallback(async () => {
         const response = await apiGetOrdersByAdmin({ page: currentPage, limit, sort: "-createdAt" });
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             setOrders(response.DT);
             setTotalPages(response.totalPages);
         }

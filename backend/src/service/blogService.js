@@ -25,26 +25,43 @@ const handleCreateNewBlog = async (data, file) => {
     }
 }
 
-const handleGetBlogs = async () => {
+const handleGetBlogs = async (data) => {
     try {
-        const blogs = await Blog.find();
-        if (!blogs) {
-            return {
-                EM: "Get blogs failed!",
-                EC: 1,
-                DT: []
-            }
+        const queries = { ...data };
+        const excluderFields = ["sort", "limit", "page"];
+        //Loại bỏ các trường sort, limit, page, fields khỏi queries;
+        excluderFields.forEach(item => delete queries[item]);
+        let queryCommand = Blog.find();
+        if (data.sort) {
+            const sortBy = data.sort.split(",").join(" ")
+            queryCommand = queryCommand.sort(sortBy);
         }
-        return {
-            EM: "Get blogs successfully!",
+        //pagination page
+        const page = +data.page || 1;
+        const limit = +data.limit || process.env.LIMIT_ITEM;
+        const offset = (page - 1) * limit;
+        queryCommand = queryCommand.skip(offset).limit(limit)
+
+        //Excute query
+        const listBlog = await queryCommand.exec();
+        const counts = await Blog.find().countDocuments();
+        const totalPages = Math.ceil(counts / limit);
+        if (!listBlog) {
+            throw new Error("Lấy danh sách blog thất bại!")
+        }
+        return ({
+            EM: "Lấy danh sách sản phẩm thành công!",
             EC: 0,
-            DT: blogs
-        }
+            DT: listBlog,
+            totalPages: totalPages
+        })
     } catch (error) {
+        console.log(`There is an error in the "handleGetBlogs function" in blogService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetBlogs function" in blogService.js: ${error.message} `,
+            EM: `Có lỗi xảy ra. Vui lòng thử lại!`,
             EC: 1,
-            DT: []
+            DT: [],
+            totalPages: 0
         }
     }
 }

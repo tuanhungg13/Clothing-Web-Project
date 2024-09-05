@@ -8,4 +8,16 @@ const apiCreateBlog = (data) => {
     })
 }
 
-export { apiCreateBlog }
+const apiGetBlogs = (data) => {
+    return axios.get("/blog/", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
+const apiGetBlogDetails = (param) => {
+    return axios.get(`/blog/${param}`)
+}
+
+export { apiCreateBlog, apiGetBlogs, apiGetBlogDetails }

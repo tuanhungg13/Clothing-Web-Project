@@ -279,7 +279,8 @@ const ProductDetails = (props) => {
                     <div className='container'>
                         <div className='mt-3'>
                             <NavLink className={"text-decoration-none text-dark"} to={"/"}><IoHomeOutline className='mb-1' /> Trang chủ / </NavLink>
-                            <NavLink className={"text-decoration-none text-dark"} to={`/product/${productDetails.slug}`}>{productDetails.title}</NavLink>
+                            <NavLink className={"text-decoration-none text-dark"} to={`/products/`}>Sản phẩm / </NavLink>
+                            <NavLink className={"text-decoration-none text-dark"} to={`/products/${productDetails.slug}`}>{productDetails.title}</NavLink>
                         </div >
                         <div className='row mt-5'>
                             <div className='imgs-product col-lg-8 col-12'>

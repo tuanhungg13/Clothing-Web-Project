@@ -9,7 +9,7 @@ const DisplayProduct = (props) => {
         setProducts(props.productList)
     }, [props.productList])
     const handleGetDetailsProduct = (item) => {
-        navigation(`/product/${item.slug}`)
+        navigation(`/products/${item.slug}`)
     }
     return (
 

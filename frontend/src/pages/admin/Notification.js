@@ -4,8 +4,10 @@ import InputField from "../../components/input/InputField";
 import { apiCreateBlog } from "../../service/blogApiService";
 import { toBase64 } from "../../untils/helpers";
 import { toast } from "react-toastify";
+import { Spin } from "antd";
 const Notification = () => {
-    const [previewImg, setPreviewImg] = useState(null)
+    const [previewImg, setPreviewImg] = useState(null);
+    const [loading, setLoading] = useState(false)
     const [payload, setPayload] = useState({
         title: "",
         description: "",
@@ -45,58 +47,73 @@ const Notification = () => {
     }
 
     const handleCreateBlog = async () => {
-        const checkValid = validate();
-        if (checkValid) {
-            const formData = new FormData()
-            for (let [key, value] of Object.entries(payload)) {
-                formData.append(key, value);
+        try {
+            const checkValid = validate();
+            if (checkValid) {
+                setLoading(true)
+                const formData = new FormData()
+                for (let [key, value] of Object.entries(payload)) {
+                    formData.append(key, value);
+                }
+                const response = await apiCreateBlog(formData)
+                if (response && response.EC === 0) {
+                    toast.success("Tạo blog thành công!")
+                    setPayload({
+                        title: "",
+                        description: "",
+                        image: null
+                    })
+                    setPreviewImg(null)
+                    setLoading(false)
+                }
+                else {
+                    toast.error(response.EM)
+                    setLoading(false)
+                }
             }
-            const response = await apiCreateBlog(formData)
-            if (response && response.EC === 0) {
-                toast.success("Tạo blog thành công!")
-                setPayload({
-                    title: "",
-                    description: "",
-                    image: null
-                })
-                setPreviewImg(null)
-            }
-            else toast.error(response.EM)
+        } catch (error) {
+            toast.error("Có lỗi xảy ra.Vui lòng thử lại!")
         }
+
     }
 
     return (
         <div className="container">
-            <h3>Bài viết</h3>
-            <div>
-                <label htmlFor="blogImg"> Ảnh bìa</label>
-                <input type="file" className="d-block mb-3 mt-2" id="blogImg"
-                    onChange={(e) => { handleImg(e) }} />
+            {loading ? (
+                <div className='d-flex justify-content-center' style={{ marginTop: "100px" }}>
+                    <Spin size="large" />
+                </div>) : (
                 <div>
-                    <img src={previewImg || ""} alt="Anh-bia" className="w-25" />
-                </div>
-            </div>
+                    <h3>Bài viết</h3>
+                    <div>
+                        <label htmlFor="blogImg"> Ảnh bìa</label>
+                        <input type="file" className="d-block mb-3 mt-2" id="blogImg"
+                            onChange={(e) => { handleImg(e) }} />
+                        <div>
+                            {previewImg && <img src={previewImg || ""} alt="Anh-bia" className="w-25" />}
+                        </div>
+                    </div>
 
-            <div className="mb-3">
-                <label>Tiêu đề</label>
-                <InputField
-                    nameKey={"title"}
-                    value={payload.title}
-                    setValue={setPayload}
-                    errors={errors}
-                />
-            </div>
-            <MarkdownEditor
-                label={"Nội dung"}
-                nameKey={"description"}
-                value={payload.description}
-                setValue={setPayload}
-                errors={errors}
-            />
+                    <div className="mb-3">
+                        <label>Tiêu đề</label>
+                        <InputField
+                            nameKey={"title"}
+                            value={payload.title}
+                            setValue={setPayload}
+                            errors={errors}
+                        />
+                    </div>
+                    <MarkdownEditor
+                        label={"Nội dung"}
+                        nameKey={"description"}
+                        value={payload.description}
+                        setValue={setPayload}
+                        errors={errors}
+                    />
 
-            <button className="btn btn-success w-100 mt-3"
-                onClick={handleCreateBlog}>Tạo </button>
-
+                    <button className="btn btn-success w-100 mt-3"
+                        onClick={handleCreateBlog}>Tạo </button>
+                </div>)}
         </div>
     )
 }

@@ -6,7 +6,8 @@ import { CiViewList } from "react-icons/ci";
 import { FaUsers } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
 import { IoBagAddOutline } from "react-icons/io5";
-import logo from "../../assets/img/logoStore.jpg"
+import logo from "../../assets/img/logoStore.jpg";
+import { TfiWrite } from "react-icons/tfi";
 const NavAdmin = () => {
     const dataNav = [
         {
@@ -43,8 +44,15 @@ const NavAdmin = () => {
             id: "6",
             path: "/admin/notification",
             name: "Thông báo",
-            icon: <FaRegBell />
+            icon: <TfiWrite />
         },
+        {
+            id: "7",
+            path: "/admin/blog-list",
+            name: "Quản lí bài viết",
+            icon: <FaRegBell />
+
+        }
     ]
     return (
         <>

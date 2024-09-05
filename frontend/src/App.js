@@ -6,8 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Home from "./pages/public/homePage/Home";
-import Instruction from "./components/instructionPage/Instruction";
-import Announcement from "./components/announcement/Announcement";
+import Announcement from "./pages/public/Announcement";
 import ProductDetails from "./pages/public/productDetails/ProductDetails";
 import Login from "./pages/public/login/Login";
 import Register from "./pages/public/register/Register";
@@ -32,6 +31,8 @@ import OrderHistory from "./pages/user/OrderHistory";
 import Pants from "./pages/public/Pants";
 import Shirt from "./pages/public/Shirt";
 import Notification from "./pages/admin/Notification";
+import ManageBlog from "./pages/admin/ManageBlog";
+import AnnouncementDetails from "./pages/public/AnnoucementDetails";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -56,6 +57,7 @@ function App() {
             <Route path="order-list" element={<ManageOrder />} />
             <Route path="user-list" element={<ManageUsers />} />
             <Route path="notification" element={<Notification />} />
+            <Route path="blog-list" element={<ManageBlog />} />
           </Route>
 
           <Route path="/user" element={<UserLayout />} >
@@ -67,11 +69,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/products" element={<ProductPage />} />
-          <Route path="/product/:productId" element={<ProductDetails />} />
+          <Route path="/products/:productId" element={<ProductDetails />} />
           <Route path="/pants" element={<Pants />} />
           <Route path="/shirt" element={<Shirt />} />
           <Route path="/cart-details" element={<CartDetailsPage />} />
           <Route path="/notification" element={<Announcement />} />
+          <Route path="/notification/:bid" element={<AnnouncementDetails />} />
           {/* Xử lý các trang ngoại lệ */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

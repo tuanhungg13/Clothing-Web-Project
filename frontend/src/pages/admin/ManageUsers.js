@@ -18,7 +18,7 @@ const ManageUsers = () => {
 
     const fetchUsers = useCallback(async () => {
         const response = await apiGetAllUsers({ sort: "-createdAt", page: currentPage, limit: limit });
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             setUsers(response.DT);
             setTotalPages(response.totalPages);
         }

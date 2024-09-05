@@ -4,11 +4,9 @@ import SelectField from "../../components/input/SelectField";
 import MarkdownEditor from "../../components/input/MarkdownEditor";
 import { TiDelete } from "react-icons/ti";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Select } from 'antd';
 import { toBase64 } from "../../untils/helpers";
 import { useSelector } from "react-redux";
 import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
 import { apiCreateProduct } from "../../service/productApiService";
 import { toast } from "react-toastify";
 const CreateProduct = () => {
