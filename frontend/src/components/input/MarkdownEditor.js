@@ -5,7 +5,7 @@ const MarkdownEditor = (props) => {
     const editorRef = useRef(null);
     return (
         <div className=''>
-            <label>{props.label}</label>
+            <label>{props?.label}</label>
             <Editor
                 apiKey={process.env.REACT_APP_MARKDOWN_KEY}
                 onInit={(_evt, editor) => editorRef.current = editor}
@@ -24,9 +24,9 @@ const MarkdownEditor = (props) => {
                         'removeformat | help',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
-                onChange={(e) => { props.setValue(prev => ({ ...prev, [props.nameKey]: e.target.getContent() })) }}
+                onChange={(e) => { props.setValue(prev => ({ ...prev, [props?.nameKey]: e.target.getContent() })) }}
             />
-            {props.errors[props.nameKey] && <small className='text-danger'>{props.errors[props.nameKey]}</small>}
+            {props && props.errors && props.errors[props.nameKey] && <small className='text-danger'>{props.errors[props.nameKey]}</small>}
         </div>
     );
 }

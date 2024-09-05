@@ -31,6 +31,7 @@ import PersonalInfor from "./pages/user/PersonalInfor";
 import OrderHistory from "./pages/user/OrderHistory";
 import Pants from "./pages/public/Pants";
 import Shirt from "./pages/public/Shirt";
+import Notification from "./pages/admin/Notification";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -54,6 +55,7 @@ function App() {
             <Route path="product-list" element={<ManageProducts />} />
             <Route path="order-list" element={<ManageOrder />} />
             <Route path="user-list" element={<ManageUsers />} />
+            <Route path="notification" element={<Notification />} />
           </Route>
 
           <Route path="/user" element={<UserLayout />} >

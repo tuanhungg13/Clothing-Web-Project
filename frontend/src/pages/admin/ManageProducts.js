@@ -4,7 +4,6 @@ import ReactPaginate from "react-paginate";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import UpdateProduct from "./UpdateProduct";
-import { formatCountdown } from "antd/es/statistic/utils";
 import ModalDeleteProduct from "../../components/modal/ModalDeleteProduct";
 import { formatCurrency } from "../../untils/helpers";
 const ManageProducts = () => {

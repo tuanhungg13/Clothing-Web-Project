@@ -7,7 +7,7 @@ var orderSchema = new mongoose.Schema({
         color: String,
         size: String,
         quantity: Number,
-        price: Number
+        price: Number,
     }],
     initialTotalPrice: {
         type: Number,

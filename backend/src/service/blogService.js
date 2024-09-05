@@ -1,7 +1,8 @@
 import Blog from "../models/blog";
 
-const handleCreateNewBlog = async (data) => {
+const handleCreateNewBlog = async (data, file) => {
     try {
+        data = { ...data, image: file.path }
         const newBlog = await Blog.create(data);
         if (!newBlog) {
             return {

@@ -1,6 +1,8 @@
 import Order from "../models/order";
 import User from "../models/users"
 const handleCreateNewOrder = async (data, uid) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const initialTotalPrice = data.products.reduce((sum, item) => {
             return sum + (item.price * item.quantity)
@@ -9,18 +11,14 @@ const handleCreateNewOrder = async (data, uid) => {
         if (uid) {
             data.orderBy.user = uid
         }
-        const newOrder = await Order.create({ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice });
+        const newOrder = await Order.create([{ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice }], { session });
         if (uid) {
-            const userCart = await User.findByIdAndUpdate(data.orderBy.user, {
-                cart: []
-            })
+            await User.findByIdAndUpdate(data.orderBy.user, { cart: [] }, { session });
         }
+        await session.commitTransaction();
+        session.endSession();
         if (!newOrder) {
-            return ({
-                EM: "Đặt đơn hàng thất bại!",
-                EC: 1,
-                DT: {}
-            })
+            throw new Error("Đặt đơn hàng thất bại! Không thể tạo đơn hàng.");
         }
         return ({
             EM: "Đặt đơn hàng thành công!",
@@ -29,6 +27,8 @@ const handleCreateNewOrder = async (data, uid) => {
         }
         )
     } catch (error) {
+        await session.commitTransaction();
+        session.endSession();
         console.log(`There is an error in the "handleCreateNewOrder function" in orderService.js: ${error.message} `)
         return {
             EM: `Có lỗi xảy ra. Vui lòng thử lại`,

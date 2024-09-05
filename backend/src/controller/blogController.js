@@ -2,14 +2,15 @@ import blogService from "../service/blogService";
 
 const createNewBlog = async (req, res) => {
     try {
-        const { title, description, category } = req.body;
-        if (!title || !description || !category) {
+        const { title, description } = req.body;
+        console.log(title, description, req.file)
+        if (!title || !description) {
             return res.status(400).json({
                 EM: "Missing require parameter!",
                 EC: 1
             })
         }
-        const response = await blogService.handleCreateNewBlog(req.body);
+        const response = await blogService.handleCreateNewBlog(req.body, req.file);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
