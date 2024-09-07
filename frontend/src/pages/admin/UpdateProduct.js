@@ -139,22 +139,35 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
     const handleAddSize = (optionIndex, size) => {
         setOptions(prevOptions => {
             // Sao chép options cũ để tránh đột biến trực tiếp vào state
-            const newOptions = JSON.parse(JSON.stringify(prevOptions));
-            const currentSizeQuantity = newOptions[optionIndex].sizeQuantity;
-            // Tìm chỉ số của kích thước trong sizeQuantity
-            const sizeIndex = currentSizeQuantity.findIndex(sq => sq.size === size);
+            const newOptions = prevOptions.map((option, index) => {
+                if (index === optionIndex) {
+                    // Sao chép sizeQuantity của option hiện tại
+                    const currentSizeQuantity = [...option.sizeQuantity];
 
-            if (sizeIndex !== -1) {
-                // Nếu kích thước đã tồn tại, xóa nó
-                currentSizeQuantity.splice(sizeIndex, 1);
-            } else {
-                // Nếu kích thước chưa tồn tại, thêm mới vào
-                currentSizeQuantity.push({
-                    size: size,
-                    quantity: ""
-                });
-            }
-            return newOptions; // Trả về options mới đã ghi đè
+                    // Tìm kích thước trong sizeQuantity
+                    const sizeIndex = currentSizeQuantity.findIndex(sq => sq.size === size);
+
+                    if (sizeIndex === -1) {
+                        console.log("push")
+                        // Nếu kích thước chưa tồn tại, thêm mới vào
+                        return {
+                            ...option,
+                            sizeQuantity: [...currentSizeQuantity, { size: size, quantity: "" }]
+                        };
+                    } else {
+                        console.log("delete")
+                        // Nếu kích thước đã tồn tại, xóa nó
+                        return {
+                            ...option,
+                            sizeQuantity: currentSizeQuantity.filter((_, idx) => idx !== sizeIndex)
+                        };
+                    }
+                }
+                return option;
+            });
+
+            // Trả về các options đã được cập nhật
+            return newOptions;
         });
     };
     const handleCheckSizeSelect = (optionIndex, size) => {

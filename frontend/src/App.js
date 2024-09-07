@@ -33,6 +33,7 @@ import Shirt from "./pages/public/Shirt";
 import Notification from "./pages/admin/Notification";
 import ManageBlog from "./pages/admin/ManageBlog";
 import AnnouncementDetails from "./pages/public/AnnoucementDetails";
+import UpdateBlog from "./pages/admin/UpdateBlog";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -58,6 +59,7 @@ function App() {
             <Route path="user-list" element={<ManageUsers />} />
             <Route path="notification" element={<Notification />} />
             <Route path="blog-list" element={<ManageBlog />} />
+            <Route path="blog-list/:bid" element={<UpdateBlog />} />
           </Route>
 
           <Route path="/user" element={<UserLayout />} >

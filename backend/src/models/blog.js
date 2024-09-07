@@ -16,9 +16,6 @@ var blogSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    likes: [
-        { type: mongoose.Types.ObjectId, ref: "User" }
-    ],
     image: {
         type: String,
         default: "https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-business-keyboard-coffee-creative-background-image_2340199.jpg"

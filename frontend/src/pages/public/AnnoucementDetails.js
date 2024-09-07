@@ -5,14 +5,15 @@ import { apiGetBlogDetails } from "../../service/blogApiService";
 import { toast } from "react-toastify";
 import { IoHomeOutline } from "react-icons/io5";
 import { Spin } from "antd";
-const AnnouncementDetails = ({ blog }) => {
+import { useNavigate } from "react-router-dom";
+const AnnouncementDetails = () => {
     const [blogDetails, setBlogDetails] = useState({});
     const params = useParams();
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         fetchBlogDetails()
     }, [])
-    console.log("bid", params)
+    const navigation = useNavigate()
     const fetchBlogDetails = async () => {
         setLoading(true)
         try {
@@ -25,6 +26,7 @@ const AnnouncementDetails = ({ blog }) => {
             else {
                 toast.error(response.EM)
                 setLoading(false)
+                navigation("/notification")
             }
         } catch (error) {
             setLoading(false)

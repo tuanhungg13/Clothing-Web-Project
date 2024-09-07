@@ -16,8 +16,16 @@ const apiGetBlogs = (data) => {
     })
 }
 
-const apiGetBlogDetails = (param) => {
-    return axios.get(`/blog/${param}`)
+const apiGetBlogDetails = (params) => {
+    return axios.get(`/blog/${params}`)
 }
 
-export { apiCreateBlog, apiGetBlogs, apiGetBlogDetails }
+const apiUpdateBlog = (params, data) => {
+    return axios.put(`/blog/update/${params}`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+}
+
+export { apiCreateBlog, apiGetBlogs, apiGetBlogDetails, apiUpdateBlog }

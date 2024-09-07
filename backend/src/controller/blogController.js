@@ -82,13 +82,14 @@ const getBlog = async (req, res) => {
 const updateBlog = async (req, res) => {
     try {
         const { bid } = req.params;
+        console.log("check", req.file, req.body, bid)
         if (!bid || Object.keys(req.body).length === 0) {
             return res.status(400).json({
-                EM: "Missing inputs!",
+                EM: "Vui lòng nhập đầy đủ dữ liệu!",
                 EC: 1
             })
         }
-        const response = await blogService.handleUpdateBlog(bid, req.body);
+        const response = await blogService.handleUpdateBlog(bid, req.body, req.file);
         return res.status(200).json({
             EM: response.EM,
             EC: response.EC,
@@ -125,30 +126,8 @@ const deleteBlog = async (req, res) => {
     }
 }
 
-const likeBlog = async (req, res) => {
-    try {
-        const { _id } = req.user;
-        const { bid } = req.params
-        if (!_id || !bid) {
-            return res.status(400).json({
-                EM: "_id or bid not found!",
-                EC: 1
-            })
-        }
-        const response = await blogService.handleLikeBlog(_id, bid);
-        return res.status(200).json({
-            EM: response.EM,
-            EC: response.EC,
-        })
-    } catch (error) {
-        return res.status(500).json({
-            EM: `There is an error in the "likeBlog func" in blogController.js: ${error.message} `,
-            EC: 1,
-        })
-    }
-}
 
 
 module.exports = {
-    createNewBlog, getBlogs, updateBlog, deleteBlog, likeBlog, getBlog
+    createNewBlog, getBlogs, updateBlog, deleteBlog, getBlog
 }

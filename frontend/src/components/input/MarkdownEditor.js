@@ -11,7 +11,7 @@ const MarkdownEditor = (props) => {
                 onInit={(_evt, editor) => editorRef.current = editor}
                 initialValue={props.value}
                 init={{
-                    height: 400,
+                    height: 700,
                     menubar: true,
                     plugins: [
                         'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',

@@ -43,7 +43,7 @@ const NavAdmin = () => {
         {
             id: "6",
             path: "/admin/notification",
-            name: "Thông báo",
+            name: "Tạo bài viết",
             icon: <TfiWrite />
         },
         {
