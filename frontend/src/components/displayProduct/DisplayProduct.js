@@ -8,8 +8,8 @@ const DisplayProduct = (props) => {
     useEffect(() => {
         setProducts(props.productList)
     }, [props.productList])
-    const handleGetDetailsProduct = (item) => {
-        navigation(`/products/${item.slug}`)
+    const handleGetDetailsProduct = (slug) => {
+        navigation(`/products/${slug}`)
     }
     return (
 
@@ -20,17 +20,15 @@ const DisplayProduct = (props) => {
                         return (
                             <div className='product-content col-6 col-sm-4 d-flex flex-column text-center' key={`product-${index}`}>
                                 <div className='product-information'>
-                                    <div className='product-detail' onClick={() => { handleGetDetailsProduct(item) }}>
+                                    <div className='product-detail' onClick={() => { handleGetDetailsProduct(item.slug) }}>
                                         <img src={`${item?.options[0]?.images[0]}`} alt='' />
                                         <div className='product-name mt-sm-2' style={{ height: "40px" }}>{item.title}</div>
                                     </div>
                                     <div className='product-price'>
-                                        <div className={`${item.discount !== 0 ? "price-sale d-inline-block" : ""}`}>{item.discount !== 0 ? `${formatCurrency(item.price * (1 - item.discount / 100))}đ` : ""}</div>
-                                        <div className={`${item.discount !== 0 ? "price-real d-inline" : "price"}`}>{formatCurrency(item.price)}</div>
-                                        <button type='button' className='mt-2'>Thêm vào giỏ hàng</button>
+                                        <div className={"price"}>{formatCurrency(item.price)}</div>
+                                        <button type='button' className='mt-2' onClick={() => { handleGetDetailsProduct(item.slug) }}>Thêm vào giỏ hàng</button>
                                     </div>
                                     {item.stock === 0 && <label className='label-sold'>Hết hàng</label>}
-                                    {item.discount !== 0 && item.quantity !== 0 && <label className='label-sale'>-{item.discount}%</label>}
 
                                 </div>
                             </div>

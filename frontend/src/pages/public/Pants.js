@@ -16,13 +16,21 @@ const Pants = () => {
     const [selectedSize, setSlectedSize] = useState("");
 
     useEffect(() => {
-        if (selectedCategory) {
-            fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+        if (selectedCategory && selectedCategory._id && !selectedSize) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, title: "Quần", category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+        }
+        else if (selectedSize) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, title: "Quần", "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+
+        }
+        else if (selectedCategory && selectedCategory._id && selectedSize) {
+            fetchProducts({ limit, page: currentPage, sort: sortBy, title: "Quần", "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
+
         }
         else {
             fetchProducts({ limit, page: currentPage, sort: sortBy, title: "Quần", price: { gt: priceRange[0], lt: priceRange[1] } })
         }
-    }, [sortBy, priceRange, selectedCategory, currentPage])
+    }, [sortBy, priceRange, selectedCategory, selectedSize, currentPage])
 
     const fetchProducts = async (data) => {
         try {

@@ -18,14 +18,14 @@ const Shirt = () => {
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         console.log("size:", selectedSize)
-        if (selectedCategory && selectedCategory._id) {
+        if (selectedCategory && selectedCategory._id && !selectedSize) {
             fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
         }
         else if (selectedSize) {
             fetchProducts({ limit, page: currentPage, sort: sortBy, "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
 
         }
-        else if (selectedCategory && selectedCategory._id) {
+        else if (selectedCategory && selectedCategory._id && selectedSize) {
             fetchProducts({ limit, page: currentPage, sort: sortBy, "options.sizeQuantity.size": selectedSize, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
 
         }

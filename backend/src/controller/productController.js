@@ -10,12 +10,7 @@ const createNewProduct = async (req, res) => {
                 EC: 1
             })
         }
-        // if ((!req.body.discount && req.body.expiryDiscount) || (req.body.discount && !req.body.expiryDiscount)) {
-        //     return res.status(400).json({
-        //         EM: "Missing discount and expiration date!",
-        //         EC: 1
-        //     })
-        // }
+
         const response = await productService.handleCreateNewProduct(req.body, req.files);
         if (response && response.EC === 0) {
             return res.status(200).json({

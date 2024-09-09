@@ -34,16 +34,6 @@
                         color: rgb(20, 20, 20);
                     }
 
-                    .price-sale {
-                        color: rgb(20, 20, 20);
-                        margin-right: 5px;
-                    }
-
-                    .price-real {
-                        color: rgb(146, 144, 144);
-                        text-decoration-line: line-through;
-                    }
-
                     button {
                         border: 1px solid #ccc;
                         border-radius: 5px;
@@ -63,19 +53,6 @@
                     background: #b1afaf;
                 }
 
-                .label-sale {
-                    position: absolute;
-                    top: 8px;
-                    left: 1px;
-                    font-size: 13px;
-                    border-radius: 5px;
-                    padding: 4px 8px;
-                    background: #f7e15f;
-                    font-size: 15px;
-                    color: #191919;
-                    font-weight: 800;
-                    font-family: Roboto-Regular;
-                }
             }
         }
     }

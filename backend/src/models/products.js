@@ -43,13 +43,6 @@ var productSchema = new mongoose.Schema({
     stock: {
         type: Number
     },
-    discount: {
-        type: Number,
-        default: 0
-    },
-    expiryDiscount: {
-        type: Date
-    },
     category: {
         type: mongoose.Types.ObjectId,
         ref: "ProductCategory"

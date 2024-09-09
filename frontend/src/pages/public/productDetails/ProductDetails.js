@@ -321,13 +321,8 @@ const ProductDetails = (props) => {
                                     }
                                 </div>
                                 <hr />
-                                <div className='product-price mt-0'>
-                                    <div className={`price-sale d-inline me-4`}>{productDetails?.discount !== 0 ? `${formatCurrency(productDetails?.price * (1 - productDetails?.discount / 100))}đ` : ""}</div>
-                                    <div className={`${productDetails?.discount !== 0 ? 'price-real d-inline' : 'price'}`}>{`${formatCurrency(productDetails?.price)}đ`}</div>
-                                    <div className={`${productDetails?.discount !== 0 ? 'sale d-inline' : ''}`}>
-                                        {productDetails?.discount !== 0 ? `Giảm ${productDetails?.discount} %` : ''}
-                                    </div>
-                                </div>
+
+                                <div className={'product-price'}>{`${formatCurrency(productDetails?.price)}đ`}</div>
 
                                 <div className='info-color-product mt-3'>
                                     <div className='d-inline '>Màu sắc</div>

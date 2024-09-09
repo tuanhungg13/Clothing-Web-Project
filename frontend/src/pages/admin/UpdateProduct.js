@@ -54,6 +54,7 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
     }, [dataProduct])
 
     const handleAddOption = () => {
+        if (options.length >= 4) return toast.warning("Chỉ hỗ trợ tạo tối đa 4 options")
         setOptions([...options,
         {
             color: "",
@@ -288,26 +289,17 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                             errors={errors}
                         />
                     </div>
-                    <div className="col-sm-3 col-12 mt-sm-0 mt-3">
+                    <div className="col-sm-6 col-12 mt-sm-0 mt-3 pe-sm-5">
                         <label>Giá bán</label>
                         <InputField
                             nameKey={"price"}
+                            type={"number"}
                             value={payload.price}
                             setValue={setPayload}
                             errors={errors}
                         />
                     </div>
-                    <div className="col-sm-3 col-12 pe-sm-5 mt-sm-0 mt-3">
-                        <label>Thương hiệu</label>
-                        <SelectField
-                            nameKey={"brand"}
-                            value={payload.brand}
-                            setValue={setPayload}
-                            options={[{ brand: "Atino" }]}
-                            errors={errors}
-                        />
 
-                    </div>
                 </div>
                 <div className="row mx-0 px-0 mb-2">
                     <div className="col-sm-6 col-12">
@@ -323,31 +315,16 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                         </select>
                         {errors.category && <small className="text-danger ms-1">{errors.category}</small>}
                     </div>
-                    <div className="col-sm-3 col-6 mt-sm-0 mt-3">
-                        <label>Giảm giá</label>
-                        <InputField
-                            type={"number"}
-                            nameKey={"discount"}
-                            value={payload.discount}
+                    <div className="col-sm-6 col-12 pe-sm-5 mt-sm-0 mt-3">
+                        <label>Thương hiệu</label>
+                        <SelectField
+                            nameKey={"brand"}
+                            value={payload.brand}
                             setValue={setPayload}
+                            options={[{ brand: "Atino" }]}
                             errors={errors}
                         />
-                    </div>
-                    <div className="col-sm-3 col-6 mt-sm-0 mt-3">
-                        <label className="mb-1">Ngày hết hạn</label>
-                        <DatePicker
-                            showTime
-                            value={payload.expiry || ""}
-                            onChange={(value, dateString) => {
-                                console.log('Selected Time: ', value);
-                                console.log('Formatted Selected Time: ', dateString);
-                                setPayload({ ...payload, expiry: value });
-                            }}
-                            getPopupContainer={trigger => trigger.parentElement}
-                            popupStyle={{ zIndex: 1050 }}
 
-                        />
-                        {errors.expiry && <div className="text-danger">{errors.expiry}</div>}
                     </div>
                 </div>
                 <MarkdownEditor

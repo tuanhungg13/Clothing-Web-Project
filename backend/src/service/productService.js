@@ -24,8 +24,6 @@ const handleCreateNewProduct = async (data, files) => {
             brand: data.brand,
             options: optionsWithImages,
             stock: stock,
-            discount: data.discount,
-            expiry: data.expiry,
             category: data.category
         });
 

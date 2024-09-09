@@ -20,8 +20,6 @@ const CreateProduct = () => {
         category: "",
         brand: "",
         options: [],
-        discount: 0,
-        expiry: ""
     });
     const [errors, setErrors] = useState({
         title: "",
@@ -48,7 +46,7 @@ const CreateProduct = () => {
     const sizes = ["S", "M", "L", "XL", "XXL"];
 
     const handleAddOption = () => {
-        console.log("add options:", options)
+        if (options.length >= 4) return toast.warning("Chỉ hỗ trợ tạo tối đa 4 options")
         setOptions([...options,
         {
             color: "",
@@ -297,7 +295,7 @@ const CreateProduct = () => {
                                     errors={errors}
                                 />
                             </div>
-                            <div className="col-sm-3 col-12 mt-sm-0 mt-3">
+                            <div className="col-sm-6 col-12 mt-sm-0 mt-3 pe-sm-5">
                                 <label>Giá bán</label>
                                 <InputField
                                     nameKey={"price"}
@@ -306,17 +304,7 @@ const CreateProduct = () => {
                                     errors={errors}
                                 />
                             </div>
-                            <div className="col-sm-3 col-12 pe-sm-5 mt-sm-0 mt-3">
-                                <label>Thương hiệu</label>
-                                <SelectField
-                                    nameKey={"brand"}
-                                    value={payload.brand}
-                                    setValue={setPayload}
-                                    options={[{ brand: "Atino" }]}
-                                    errors={errors}
-                                />
 
-                            </div>
                         </div>
                         <div className="row me-0 mb-3">
                             <div className="col-sm-6 col-12">
@@ -332,30 +320,16 @@ const CreateProduct = () => {
                                 </select>
                                 {errors.category && <small className="text-danger ms-1">{errors.category}</small>}
                             </div>
-                            <div className="col-sm-3 col-6  mt-sm-0 mt-3">
-                                <label>Giảm giá</label>
-                                <InputField
-                                    nameKey={"discount"}
-                                    value={payload.discount}
+                            <div className="col-sm-6 col-12 pe-sm-5 mt-sm-0 mt-3">
+                                <label>Thương hiệu</label>
+                                <SelectField
+                                    nameKey={"brand"}
+                                    value={payload.brand}
                                     setValue={setPayload}
+                                    options={[{ brand: "Atino" }]}
                                     errors={errors}
                                 />
-                            </div>
-                            <div className="col-sm-3 col-6  mt-sm-0 mt-3">
-                                <label className="mb-1">Ngày hết hạn</label>
-                                <DatePicker
-                                    showTime
-                                    value={payload.expiry || ""}
-                                    onChange={(value, dateString) => {
-                                        console.log('Selected Time: ', value);
-                                        console.log('Formatted Selected Time: ', dateString);
-                                        setPayload({ ...payload, expiry: value });
-                                    }}
-                                    getPopupContainer={trigger => trigger.parentElement}
-                                    popupStyle={{ zIndex: 1050 }}
 
-                                />
-                                {errors.expiry && <div className="text-danger">{errors.expiry}</div>}
                             </div>
                         </div>
                         <MarkdownEditor
