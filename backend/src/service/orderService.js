@@ -1,8 +1,7 @@
 import Order from "../models/order";
-import User from "../models/users"
+import User from "../models/users";
+import mongoose from "mongoose";
 const handleCreateNewOrder = async (data, uid) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
     try {
         const initialTotalPrice = data.products.reduce((sum, item) => {
             return sum + (item.price * item.quantity)
@@ -11,27 +10,25 @@ const handleCreateNewOrder = async (data, uid) => {
         if (uid) {
             data.orderBy.user = uid
         }
-        const newOrder = await Order.create([{ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice }], { session });
-        if (uid) {
-            await User.findByIdAndUpdate(data.orderBy.user, { cart: [] }, { session });
+        const newOrder = await Order.create({ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice });
+        if (newOrder && uid) {
+            await User.findByIdAndUpdate(data.orderBy.user, {
+                cart: []
+            })
         }
-        await session.commitTransaction();
-        session.endSession();
         if (!newOrder) {
-            throw new Error("Đặt đơn hàng thất bại! Không thể tạo đơn hàng.");
+            throw new Error("Tạo đơn hàng thất bại! Vui lòng thử lại!")
         }
         return ({
-            EM: "Đặt đơn hàng thành công!",
+            EM: "Tạo đơn hàng thành công!",
             EC: 0,
             DT: newOrder
         }
         )
     } catch (error) {
-        await session.commitTransaction();
-        session.endSession();
         console.log(`There is an error in the "handleCreateNewOrder function" in orderService.js: ${error.message} `)
         return {
-            EM: `Có lỗi xảy ra. Vui lòng thử lại`,
+            EM: "Có lỗi xảy ra. Vui lòng thử lại!",
             EC: 1,
             DT: {}
         }
@@ -41,15 +38,13 @@ const handleCreateNewOrder = async (data, uid) => {
 const handleGetOrdersByAdmin = async (data) => {
     try {
         const queries = { ...data };
-        console.log("check req.query:", data)
-        const excluderFields = ["sort", "limit", "page", "fields"];
+        const excluderFields = ["sort", "limit", "page"];
         //Loại bỏ các trường sort, limit, page, fields khỏi queries;
         excluderFields.forEach(item => delete queries[item]);
         //Format lại các operators cho đúng cú pháp của mongodb;
         let queryString = JSON.stringify(queries);
         console.log(queryString)
         queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, condition => `$${condition}`);
-        console.log("2:", queryString)
         queryString = JSON.parse(queryString);
 
         //Filter
@@ -62,12 +57,6 @@ const handleGetOrdersByAdmin = async (data) => {
         if (data.sort) {
             const sortBy = data.sort.split(",").join(" ")
             queryCommand = queryCommand.sort(sortBy);
-        }
-
-        //field limiting
-        if (data.fields) {
-            const fields = data.fields.split(",").join(" ");
-            queryCommand = queryCommand.select(fields);
         }
 
         //pagination page

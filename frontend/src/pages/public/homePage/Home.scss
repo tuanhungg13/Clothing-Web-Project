@@ -82,30 +82,6 @@
 }
 
 
-/* advertisement */
-.advertisement {
-    width: 100%;
-    height: 350px;
-    margin: 100px 0 0 60px;
-
-    .video-introduce {
-        video {
-            width: 40vw;
-            height: auto;
-            margin-right: 50px;
-        }
-    }
-
-    .text-introduce {
-        width: 33vw;
-
-        h3 {
-            margin-top: 10px;
-        }
-
-    }
-}
-
 
 @media (max-width: 768px) {
     .container-product {
@@ -134,25 +110,5 @@
         }
     }
 
-    .advertisement {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 60px 0 0 0;
 
-        .video-introduce {
-            width: 90%;
-
-            video {
-                width: 100%;
-                margin-right: 0;
-            }
-        }
-
-        .text-introduce {
-            width: 90%;
-            text-align: center;
-            margin-top: 30px;
-        }
-    }
 }

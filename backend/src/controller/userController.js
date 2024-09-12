@@ -6,15 +6,21 @@ const register = async (req, res) => {
         const { email, phoneNumber, userName, password } = req.body;
         if (!email || !phoneNumber || !userName || !password) {
             return res.status(400).json({
-                EM: "Missing require parameters register", //error message
+                EM: "Vui lòng nhập đầy đủ thông tin!", //error message
                 EC: "1",                            //error code
             })
         }
         const response = await userService.handleRegister(req.body);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
-            errors: response.errors ? response.errors : ""
+            errors: response.errors
         })
 
     } catch (error) {
@@ -37,16 +43,23 @@ const login = async (req, res) => {
         }
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000 })
+            return res.status(200).json({
+                EM: response.EM,
+                accessToken: response.accessToken,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        else {
+            return res.status(500).json({
+                EM: response.EM,
+                EC: response.EC,
+            })
         }
 
-        return res.status(200).json({
-            EM: response.EM,
-            accessToken: response.accessToken,
-            EC: response.EC,
-            DT: response.DT
-        })
+
 
     } catch (error) {
         return res.status(500).json({

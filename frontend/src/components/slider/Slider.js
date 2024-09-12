@@ -56,7 +56,7 @@ const SliderComponent = (props) => {
                     return (
                         <div key={`img-${index}`} className="outfit-content">
                             <div className="d-flex flex-column justify-content-center" style={{ fontFamily: "Roboto-Regular" }}>
-                                <img src={item.options[0].images[0]} style={{ width: "95%" }} onClick={() => { handleAddToCart(item.slug) }} />
+                                <img src={item.options[0].images[0]} onClick={() => { handleAddToCart(item.slug) }} />
                                 <label className="text-center mt-3">{item.title}</label>
                                 <label className="text-center fw-bold" >{formatCurrency(item.price)}</label>
                                 <button onClick={() => { handleAddToCart(item.slug) }}>Thêm vào giỏ hàng</button>

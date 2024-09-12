@@ -34,6 +34,7 @@ import Notification from "./pages/admin/Notification";
 import ManageBlog from "./pages/admin/ManageBlog";
 import AnnouncementDetails from "./pages/public/AnnoucementDetails";
 import UpdateBlog from "./pages/admin/UpdateBlog";
+import Footer from "./components/Footer";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -52,7 +53,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminLayOut />}>
-            <Route path="thong-ke" element={<Dashboard />} />
+            <Route path="home" element={<Dashboard />} />
             <Route path="create-product" element={<CreateProduct />} />
             <Route path="product-list" element={<ManageProducts />} />
             <Route path="order-list" element={<ManageOrder />} />
@@ -80,10 +81,11 @@ function App() {
           {/* Xử lý các trang ngoại lệ */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <Footer />
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={1000}
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

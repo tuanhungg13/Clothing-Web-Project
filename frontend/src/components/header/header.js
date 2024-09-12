@@ -13,7 +13,6 @@ import { apiLogout } from '../../service/userApiService';
 import { logout } from "../../redux/userSlice";
 import Cookies from 'js-cookie'
 import { getCartFromCookies } from '../../redux/cartSlice';
-
 const Header = () => {
     const { isLoggedIn, current } = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -60,18 +59,17 @@ const Header = () => {
                 {isLoggedIn &&
                     <div className="account dropdown text-end">
                         <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src={avatar} alt="mdo" className="rounded-circle border" />
+                            <img src={current.avatar || avatar} alt="mdo" className="rounded-circle border" />
                         </a>
                         <ul className="dropdown-menu text-small">
                             <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
                             {current?.role === "admin" ? <li>
-                                <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/thong-ke"}> Quản lý cửa hàng</NavLink>
+                                <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/home"}> Quản lý cửa hàng</NavLink>
 
                             </li>
                                 :
                                 <>
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/`} >Thông tin đơn hàng</NavLink></li>
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/lich-su-mua-hang`}>Lịch sử mua hàng</NavLink></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/purchase-history`}>Lịch sử mua hàng</NavLink></li>
                                 </>
                             }
 
@@ -100,18 +98,17 @@ const Header = () => {
                         {isLoggedIn &&
                             <div className="account dropdown text-end me-3">
                                 <a href="#" className="d-block link-body-emphasis text-decoration-none " data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" className="rounded-circle" />
+                                    <img src={current.avatar || avatar} alt="mdo" className="rounded-circle" />
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end text-small">
                                     <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
                                     {current?.role === "admin" ? <li>
-                                        <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/thong-ke"}> Quản lý cửa hàng</NavLink>
+                                        <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/home"}> Quản lý cửa hàng</NavLink>
 
                                     </li>
                                         :
                                         <>
-                                            <li><NavLink className="dropdown-item bg-transparent text-dark " to={`/user/`} >Thông tin đơn hàng</NavLink></li>
-                                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/lich-su-mua-hang`}>Lịch sử mua hàng</NavLink></li>
+                                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/purchase-history`}>Lịch sử mua hàng</NavLink></li>
                                         </>
                                     }
 

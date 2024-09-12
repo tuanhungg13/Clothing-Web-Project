@@ -2,7 +2,6 @@ import User from "../models/users"
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../middlewares/jwt';
 import jwt from 'jsonwebtoken';
-import products from "../models/products";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -49,7 +48,7 @@ const handleRegister = async (rawUserData) => {
         }
         if (Object.keys(errors).length > 0) {
             return {
-                EM: "Lỗi xác thực!",
+                EM: "Lỗi! Thông tin đã tồn tại!",
                 EC: EC,
                 errors: errors
             }
@@ -57,14 +56,18 @@ const handleRegister = async (rawUserData) => {
         const hashPassword = handleHashPassword(rawUserData.password);
         rawUserData.password = hashPassword
         const newUser = await User.create(rawUserData)
+        if (!newUser) {
+            throw new Error("Tạo người dùng thất bại!")
+        }
         return ({
-            EM: newUser ? "A user is created successfully" : "Registration failed",
-            EC: newUser ? 0 : 1
+            EM: "Tạo người dùng thành công!",
+            EC: 0,
+
         })
     } catch (error) {
         console.log("Error from 'handleRegister function' of userService.js", error)
         return ({
-            EM: 'There is an error in the "handleRegister function" in userService.js',
+            EM: 'Có lỗi xảy ra! Vui lòng thử lại',
             EC: 1
         })
     }

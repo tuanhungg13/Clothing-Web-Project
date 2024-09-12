@@ -4,7 +4,7 @@ import { apiLogin } from '../../../service/userApiService';
 import { login } from '../../../redux/userSlice';
 import { useDispatch } from "react-redux";
 import InputField from '../../../components/input/InputField';
-
+import { Spin } from 'antd';
 const Login = () => {
     const [password, setPassword] = useState("");
     const [payload, setPayload] = useState({
@@ -17,6 +17,7 @@ const Login = () => {
         errorServer: ""
 
     })
+    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
     const navigation = useNavigate();
     const validDate = () => {
@@ -34,57 +35,85 @@ const Login = () => {
         return isValid;
     }
     const handleLogin = async () => {
-        const checkValidate = validDate();
-        if (checkValidate) {
-            const response = await apiLogin(payload)
-            if (response.EC === 0) {
-                dispatch(login({ userData: response.DT, accessToken: response.accessToken }))
-                navigation('/')
+        setLoading(true)
+        try {
+            const checkValidate = validDate();
+            if (checkValidate) {
+                const response = await apiLogin(payload)
+                console.log("check login:", response)
+                if (response && response.EC === 0) {
+                    dispatch(login({ userData: response.DT, accessToken: response.accessToken }))
+                    navigation('/')
+                    setLoading(false)
+                }
+                else {
+                    setLoading(false)
+                    setErrors(prev => ({ ...prev, errorServer: response.EM }))
+                    console.log(errors)
+
+                }
             }
             else {
-                setErrors({ errorServer: response.EM })
+                setLoading(false)
             }
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+
         }
+
     }
 
     return (
-        <div className='login-page container'>
-            <div className='form-login'>
-                <h2 className='text-center my-4'>Đăng nhập</h2>
-                <div className='content-right col-lg-5 col-12 d-flex flex-column gap-2 p-3 m-auto'
-                    style={{
-                        boxShadow: "0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1)",
-                        border: "1px solid gray"
-                    }}>
-                    <InputField
-                        nameKey={"loginValue"}
-                        placeholder={"Email/Số điện thoại"}
-                        value={payload.loginValue}
-                        setValue={setPayload}
-                        errors={errors}
-                    />
-                    <InputField
-                        nameKey={"password"}
-                        placeholder={"Mật khẩu"}
-                        value={payload.password}
-                        setValue={setPayload}
-                        errors={errors}
-                    />
-                    <div className='text-center'>
-                        <button className='mt-3 btn btn-primary w-75' type='button'
-                            onClick={() => { handleLogin() }}>
-                            Đăng nhập
-                        </button>
-                        <hr className='mx-5' />
-                        <label>Quên mật khẩu</label>
-                        <span className='d-block mt-3'>Bạn chưa có tài khoản?
-                            <NavLink to='/register' className='text-decoration-none'>
-                                Đăng ký</NavLink>
-                        </span>
-                    </div>
-
+        <div className='login-page container' >
+            {loading ? (
+                <div className='d-flex justify-content-center' style={{ marginTop: "100px" }}>
+                    <Spin size="large" />
                 </div>
-            </div>
+            ) : (
+                <div className='form-login'>
+                    <h2 className='text-center my-4'>Đăng nhập</h2>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleLogin();
+                    }
+                    }>
+                        <div className='content-right col-lg-5 col-12 d-flex flex-column gap-2 p-3 m-auto'
+                            style={{
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1)",
+                                border: "1px solid gray"
+                            }}>
+                            <InputField
+                                nameKey={"loginValue"}
+                                placeholder={"Email/Số điện thoại"}
+                                value={payload.loginValue}
+                                setValue={setPayload}
+                                errors={errors}
+                            />
+                            <InputField
+                                nameKey={"password"}
+                                placeholder={"Mật khẩu"}
+                                value={payload.password}
+                                setValue={setPayload}
+                                errors={errors}
+                            />
+                            {errors && errors.errorServer && <small className='text-danger'>{errors.errorServer}</small>}
+                            <div className='text-center'>
+                                <button className='mt-3 btn btn-primary w-75' type='submit'
+                                >
+                                    Đăng nhập
+                                </button>
+                                <hr className='mx-5' />
+                                <label>Quên mật khẩu</label>
+                                <span className='d-block mt-3'>Bạn chưa có tài khoản?
+                                    <NavLink to='/register' className='text-decoration-none'>
+                                        Đăng ký</NavLink>
+                                </span>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>)}
         </div>
     )
 }

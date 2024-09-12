@@ -35,7 +35,7 @@ const ManageBlog = () => {
             <div className="d-flex flex-wrap">
                 {blogs && blogs.length > 0 && blogs.map((item, index) => {
                     return (
-                        <div className="d-flex flex-column w-25 me-3 mb-5" key={`adm-blog-${index}`}
+                        <div className="d-flex flex-column col-sm-3 col-12 mx-sm-4 mb-5" key={`adm-blog-${index}`}
                             onClick={() => { handleUpdateBlog(item._id) }} style={{ cursor: "pointer" }}>
                             <img src={item.image} className="w-100" alt="bai-viet" />
                             <label className="mt-2">{(item.title).toUpperCase()}</label>

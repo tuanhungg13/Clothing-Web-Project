@@ -55,9 +55,10 @@ instance.interceptors.response.use(function (response) {
             console.log("Failed to refresh access token", error);
         }
     }
+
     // Bất kì mã trạng thái nào lọt ra ngoài tầm 2xx đều khiến hàm này được trigger\
     // Làm gì đó với lỗi response
-    return error.data;
+    return error.response.data;
 });
 
 export default instance

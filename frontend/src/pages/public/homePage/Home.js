@@ -6,7 +6,6 @@ import poster3 from '../../../assets/img/poster_6.jpg';
 import poster4 from '../../../assets/img/poster_8.jpeg';
 import poster5 from '../../../assets/img/poster_3.jpg';
 import poster6 from '../../../assets/img/poster_2.jpg';
-import introduce from '../../../assets/video/introduce.mp4';
 import { NavLink } from 'react-router-dom';
 import Banner from "../../../components/banner/Banner";
 import DisplayProduct from '../../../components/displayProduct/DisplayProduct';
@@ -107,29 +106,6 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div className='advertisement d-flex'>
-                        <div className='video-introduce'>
-                            <video controls>
-                                <source src={introduce} type="video/mp4" />
-                            </video>
-                        </div>
-
-                        <div className='text-introduce text-break'>
-                            <h3>LEVENTS® S/S24 COLLECTION</h3>
-                            <p>
-                                Mùa Xuân 2024, Levents® mang đến bộ sưu tập mới với những
-                                items mang đậm tinh thần sáng tạo để khích lệ chất riêng trong phong
-                                cách thời trang cũng như tính cách của từng bạn trẻ.
-                            </p>
-                            <p>
-                                Các items đều được chăm chút tỉ mỉ đến từng chi tiết, thiết kế và
-                                chất liệu để mang đến những sản phẩm chất lượng vượt trội, độ bền cao, nổi bật
-                                nhưng vẫn thanh lịch và phù hợp với mọi giới tính cũng như dáng người.
-                                Đảm bảo bất kì ai cũng có thể tự tin thể hiện bản thân, lan tỏa năng
-                                lượng tích cực khi diện lên mình các sản phẩm đến từ Levents®.
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>

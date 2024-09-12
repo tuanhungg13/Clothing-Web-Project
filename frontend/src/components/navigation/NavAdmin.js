@@ -12,8 +12,8 @@ const NavAdmin = () => {
     const dataNav = [
         {
             id: "1",
-            path: "/admin/thong-ke",
-            name: "Thống kê",
+            path: "/admin/home",
+            name: "Trang chủ",
             icon: <AiOutlineDashboard />
         },
         {
@@ -79,7 +79,7 @@ const NavAdmin = () => {
                         <MdMenu />
                     </button>
                     <img src={logo} alt="lg" className="mb-1 ms-2" style={{ width: "50px" }} />
-                    <div class="container-nav navbar-collapse collapse show" id="navbarsExample01">
+                    <div class="container-nav navbar-collapse collapse" id="navbarsExample01">
                         <div className="topnav d-flex flex-column text-none " >
                             {dataNav.map(item => {
                                 return (
