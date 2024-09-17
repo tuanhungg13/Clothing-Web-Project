@@ -23,8 +23,6 @@ import { Spin } from 'antd';
 import { ImSad2 } from "react-icons/im";
 const ProductDetails = (props) => {
     const dispatch = useDispatch()
-    const [displayItems, setDisplayItems] = useState(5)
-    const [vertical, setVertical] = useState(true)
     const [productDetails, setProductDetails] = useState({});
     const [displayImage, setDisplayImage] = useState("");
     const [size, setSize] = useState("");
@@ -42,10 +40,21 @@ const ProductDetails = (props) => {
         infinite: true,
         arrows: false,
         speed: 500,
-        slidesToShow: displayItems,
+        slidesToShow: 5,
         slidesToScroll: 1,
         autoplaySpeed: 2000,
-        vertical: vertical,
+        vertical: true,
+        verticalSwiping: true,
+    };
+    const settingsMobile = {
+        dots: false,
+        infinite: true,
+        arrows: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplaySpeed: 2000,
+        vertical: false,
         verticalSwiping: true,
     };
     const navigation = useNavigate()
@@ -72,24 +81,12 @@ const ProductDetails = (props) => {
         setLoading(false);
 
     }
-    const handleResize = () => {
-        if (window.innerWidth > 576) {
-            setDisplayItems(5);
-            setVertical(true);
-        } else {
-            setDisplayItems(1);
-            setVertical(false)
-        }
-    };
 
     useEffect(() => {
         console.log("oke")
         fetchAProduct()
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [vertical, displayItems])
+
+    }, [productId])
 
 
 
@@ -285,8 +282,24 @@ const ProductDetails = (props) => {
                         <div className='row mt-5'>
                             <div className='imgs-product col-lg-8 col-12'>
                                 <div className='row'>
-                                    <div className={`${displayItems === 5 ? " list-imgs-product col-2" : "col-12 list-imgs-product-sm"} `}>
+                                    <div className={"d-sm-block d-none list-imgs-product col-2"}>
                                         <Slider {...settings} ref={sliderRef}>
+                                            {imagesSlider && imagesSlider.length > 0 && imagesSlider.map((item, index) => {
+                                                return (
+                                                    <div key={`img-${index}`}>
+                                                        <img src={item} onClick={() => { handleChangeImage(item) }} />
+                                                    </div>
+                                                )
+                                            })}
+                                        </Slider>
+
+                                        {/* Thêm ảnh từ các biến khác nếu cần */}
+
+                                        <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
+                                        <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
+                                    </div>
+                                    <div className={"d-sm-none d-block list-imgs-product-sm col-12"}>
+                                        <Slider {...settingsMobile} ref={sliderRef}>
                                             {imagesSlider && imagesSlider.length > 0 && imagesSlider.map((item, index) => {
                                                 return (
                                                     <div key={`img-${index}`}>

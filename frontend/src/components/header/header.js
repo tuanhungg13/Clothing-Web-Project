@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import logo from '../../assets/img/logoStore.jpg'
 import './Header.scss'
 import { FaPhone } from "react-icons/fa6";
-import { IoSearch } from "react-icons/io5";
 import Nav from '../navigation/Nav';
 import avatar from "../../assets/img/avatar.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +12,7 @@ import { apiLogout } from '../../service/userApiService';
 import { logout } from "../../redux/userSlice";
 import Cookies from 'js-cookie'
 import { getCartFromCookies } from '../../redux/cartSlice';
+import Search from '../Search';
 const Header = () => {
     const { isLoggedIn, current } = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -43,10 +43,8 @@ const Header = () => {
         <>
             <div className='header-desktop container d-lg-flex d-none justify-content-evenly align-items-center' >
                 <img src={logo} alt='' />
-                <div className='searchTop d-flex justify-content-between'>
-                    <input type='text' placeholder='Bạn cần tìm gì?' />
-                    <button><IoSearch className='icons' /></button>
-                </div>
+
+                <Search />
 
                 <div className='hotline'><FaPhone style={{ marginRight: '5px' }} />  Hotline: 0123456789</div>
                 {!isLoggedIn &&
@@ -122,7 +120,8 @@ const Header = () => {
 
                     </div>
                 </nav>
-                <input className='col-11 d-flex justify-content-center rounded-2 border-1 ' placeholder='Tìm kiếm...' />
+                <Search />
+                {/* <input className='col-11 d-flex justify-content-center rounded-2 border-1 ' placeholder='Tìm kiếm...' /> */}
             </div>
         </>
     )
