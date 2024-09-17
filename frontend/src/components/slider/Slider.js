@@ -12,26 +12,24 @@ const SliderComponent = (props) => {
         infinite: true,
         arrows: true,
         speed: 500,
-        slidesToShow: displayItems,
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        verticalSwiping: true,
+    };
+    const settingsMobile = {
+        dots: false,
+        infinite: true,
+        arrows: true,
+        speed: 500,
+        slidesToShow: 1,
         slidesToScroll: 1,
         verticalSwiping: true,
     };
     const navigation = useNavigate()
     const [products, setProducts] = useState([])
-    const handleResize = () => {
-        if (window.innerWidth > 576) {
-            setDisplayItems(5);
-        } else {
-            setDisplayItems(1);
-        }
-    };
 
     useEffect(() => {
         fetchProducts()
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
     }, []);
 
     const fetchProducts = async () => {
@@ -50,22 +48,44 @@ const SliderComponent = (props) => {
         navigation(`/products/${slug}`)
     }
     return (
-        <div className="list-img" style={{ height: props.height }}>
-            <Slider {...settings}>
-                {products && products.length > 0 && products.map((item, index) => {
-                    return (
-                        <div key={`img-${index}`} className="outfit-content">
-                            <div className="d-flex flex-column justify-content-center" style={{ fontFamily: "Roboto-Regular" }}>
-                                <img src={item.options[0].images[0]} onClick={() => { handleAddToCart(item.slug) }} />
-                                <label className="text-center mt-3">{item.title}</label>
-                                <label className="text-center fw-bold" >{formatCurrency(item.price)}</label>
-                                <button onClick={() => { handleAddToCart(item.slug) }}>Thêm vào giỏ hàng</button>
-                            </div>
+        <div className="list-img">
+            <div className="d-md-block d-none">
+                <Slider {...settings}>
+                    {products && products.length > 0 && products.map((item, index) => {
+                        return (
+                            <div key={`img-${index}`} className="outfit-content">
+                                <div className="d-flex flex-column justify-content-center" style={{ fontFamily: "Roboto-Regular" }}>
+                                    <img src={item.options[0].images[0]} onClick={() => { handleAddToCart(item.slug) }} />
+                                    <label className="text-center mt-3" style={{ height: "50px" }}>{item.title}</label>
+                                    <label className="text-center fw-bold" >{formatCurrency(item.price)}</label>
+                                    <button className="mt-2" onClick={() => { handleAddToCart(item.slug) }}>Thêm vào giỏ hàng</button>
+                                </div>
 
-                        </div>
-                    )
-                })}
-            </Slider>
+                            </div>
+                        )
+                    })}
+                </Slider>
+
+            </div>
+
+            <div className="d-md-none d-block">
+                <Slider {...settingsMobile}>
+                    {products && products.length > 0 && products.map((item, index) => {
+                        return (
+                            <div key={`img-${index}`}>
+                                <div className="d-flex flex-column justify-content-center" style={{ fontFamily: "Roboto-Regular" }}>
+                                    <img src={item.options[0].images[0]} onClick={() => { handleAddToCart(item.slug) }} />
+                                    <label className="text-center mt-3">{item.title}</label>
+                                    <label className="text-center fw-bold" >{formatCurrency(item.price)}</label>
+                                    <button className="m-auto mt-2 w-75" style={{ border: "1px solid #ccc", color: "#d61c1f", borderRadius: "5px" }} onClick={() => { handleAddToCart(item.slug) }}>Thêm vào giỏ hàng</button>
+                                </div>
+
+                            </div>
+                        )
+                    })}
+                </Slider>
+            </div>
+
 
         </div>
     )

@@ -8,7 +8,7 @@ import cartSlice from './cartSlice';
 const userConfig = {
     key: "profile",
     storage,
-    whitelist: ["isLoggedIn", "accessToken", "current"]
+    whitelist: ["isLoggedIn", "accessToken"]
 }
 
 export const store = configureStore({

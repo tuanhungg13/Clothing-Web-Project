@@ -27,13 +27,16 @@ const userSlice = createSlice({
 
         // Khi thực hiện action lấy dữ liệu người dùng thành công (Promise fulfilled)
         builder.addCase(getCurrent.fulfilled, (state, action) => {
+            state.isLoggedIn = true;
             state.current = action.payload.DT;
         });
 
         // Khi thực hiện action lấy dữ liệu người dùng thất bại (Promise rejected)
         builder.addCase(getCurrent.rejected, (state, action) => {
             // Tắt trạng thái loading
-            state.isLoading = false;
+            state.isLoggedIn = false;
+            state.current = null;
+            state.accessToken = null
 
         })
     }

@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import InputField from '../../../components/input/InputField';
 import { Spin } from 'antd';
 const Login = () => {
-    const [password, setPassword] = useState("");
     const [payload, setPayload] = useState({
         loginValue: "",
         password: ""
@@ -40,7 +39,6 @@ const Login = () => {
             const checkValidate = validDate();
             if (checkValidate) {
                 const response = await apiLogin(payload)
-                console.log("check login:", response)
                 if (response && response.EC === 0) {
                     dispatch(login({ userData: response.DT, accessToken: response.accessToken }))
                     navigation('/')
@@ -92,6 +90,7 @@ const Login = () => {
                             />
                             <InputField
                                 nameKey={"password"}
+                                type={"password"}
                                 placeholder={"Mật khẩu"}
                                 value={payload.password}
                                 setValue={setPayload}

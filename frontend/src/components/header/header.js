@@ -26,16 +26,9 @@ const Header = () => {
         }
     }, [dispatch, isLoggedIn])
 
-    // const handleGetProfile = () =>{
-    //     if (isLoggedIn) {
-    //         dispatch(getCurrent())
-    //     }
-    // }
-
-
     const handleLogout = async () => {
         const response = await apiLogout()
-        if (response.EC === 0) {
+        if (response && response.EC === 0) {
             dispatch(logout())
         }
     }
@@ -57,10 +50,10 @@ const Header = () => {
                 {isLoggedIn &&
                     <div className="account dropdown text-end">
                         <a href="#" className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src={current.avatar || avatar} alt="mdo" className="rounded-circle border" />
+                            <img src={current?.avatar || avatar} alt="mdo" className="rounded-circle border" />
                         </a>
                         <ul className="dropdown-menu text-small">
-                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
+                            <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current?._id}`}>Thông tin tài khoản</NavLink></li>
                             {current?.role === "admin" ? <li>
                                 <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/home"}> Quản lý cửa hàng</NavLink>
 
@@ -96,10 +89,10 @@ const Header = () => {
                         {isLoggedIn &&
                             <div className="account dropdown text-end me-3">
                                 <a href="#" className="d-block link-body-emphasis text-decoration-none " data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src={current.avatar || avatar} alt="mdo" className="rounded-circle" />
+                                    <img src={current?.avatar || avatar} alt="mdo" className="rounded-circle" />
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end text-small">
-                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current._id}`}>Thông tin tài khoản</NavLink></li>
+                                    <li><NavLink className="dropdown-item bg-transparent text-dark" to={`/user/profile/${current?._id}`}>Thông tin tài khoản</NavLink></li>
                                     {current?.role === "admin" ? <li>
                                         <NavLink className="dropdown-item bg-transparent text-dark" to={"/admin/home"}> Quản lý cửa hàng</NavLink>
 
@@ -121,7 +114,6 @@ const Header = () => {
                     </div>
                 </nav>
                 <Search />
-                {/* <input className='col-11 d-flex justify-content-center rounded-2 border-1 ' placeholder='Tìm kiếm...' /> */}
             </div>
         </>
     )

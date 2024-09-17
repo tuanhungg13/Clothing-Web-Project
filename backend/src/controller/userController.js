@@ -117,7 +117,6 @@ const refreshAccessToken = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        const cookie = req.cookies;
         res.clearCookie('refreshToken', { httpOnly: true, secure: true })
         res.clearCookie('accessToken', { httpOnly: true })
         return res.status(200).json({

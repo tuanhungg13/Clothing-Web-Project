@@ -8,7 +8,7 @@ router.post('/login', controllers.login);
 //users
 router.get('/current', verifyAccessToken, controllers.getUserById);
 router.put('/current', verifyAccessToken, uploadCloudUser.single("avatar"), controllers.updateUser);
-router.post('/refreshAccessToken', controllers.refreshAccessToken);
+router.get('/refreshAccessToken', controllers.refreshAccessToken);
 router.post('/logout', controllers.logout)
 router.put('/addToCart', verifyAccessToken, controllers.addToCart)
 router.put("/removeFromCart", verifyAccessToken, controllers.removeFromCart)

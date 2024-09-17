@@ -36,7 +36,7 @@ instance.interceptors.response.use(function (response) {
 }, async function (error) {
     if (error && error.response && error.response.status === 401) {
         try {
-            const response = await instance.post('/user/refreshAccessToken');
+            const response = await instance.get('/user/refreshAccessToken');
             if (response && response.EC === 0) {
                 const newAccessToken = response.accessToken;
                 // Cập nhật accessToken trong localStorage
@@ -50,6 +50,18 @@ instance.interceptors.response.use(function (response) {
                 const originalRequest = error.config;
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return instance(originalRequest);
+            }
+            else {
+                const response = await instance.post('/user/logout')
+                if (response && response.EC === 0) {
+                    let localStorageData = window.localStorage.getItem("persist:profile");
+                    if (localStorageData && typeof localStorageData === "string") {
+                        localStorageData = JSON.parse(localStorageData);
+                        localStorageData.accessToken = "";
+                        localStorageData.isLoggedIn = false;
+                        window.localStorage.setItem("persist:profile", JSON.stringify(localStorageData));
+                    }
+                }
             }
         } catch (error) {
             console.log("Failed to refresh access token", error);

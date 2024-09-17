@@ -73,36 +73,39 @@ const Search = () => {
 
             </div>
 
-
             <div className="d-md-none d-block" >
-                <div className="col-12 d-flex justify-content-between flex-column px-3">
-                    <div className="d-flex justify-content-between">
-                        <input
+                <div className="account dropdown text-end col-12 d-flex justify-content-between flex-column px-3">
+                    <a href="#" className="d-block link-body-emphasis text-decoration-none " data-bs-toggle="dropdown" aria-expanded="false"
+                        onClick={() => { searchRef.current.focus() }}>
+                        <input ref={searchRef}
                             type="text"
+                            className="w-100 col-12 m-auto"
                             placeholder="Bạn cần tìm gì?"
-                            className="w-100 ps-3 rounded-2 border-1"
                             value={query}
                             onChange={(e) => { setQuery(e.target.value); }}
                         />
-                    </div>
+                    </a>
 
-                    <div className="bg-light mx-1" >
-                        {results && results.length > 0 && results.map((item, index) => {
-                            return (
-                                <div key={index} className="d-flex justify-content-between mt-2" style={{ height: "50px" }}
-                                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "lightgray"; }}
-                                    onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                                    onClick={() => { handleViewProduct(item.slug) }}>
-                                    <img src={item.options[0].images[0]} alt={item.title} className="ps-2" style={{ width: "50px", height: "80%" }} />
-                                    <label style={{ fontSize: "14px" }} className="ms-3 me-4">{item.title}</label>
-                                    <label style={{ fontSize: "14px" }} className="me-2">{formatCurrency(item.price)}đ</label>
-                                </div>
-                            );
-                        })}
-                    </div>
-
+                    <ul className="dropdown-menu text-small m-0">
+                        <div className="bg-light mt-2 " style={{ zIndex: "1000" }}>
+                            {results && results.length > 0 && results.map((item, index) => {
+                                return (
+                                    <li key={index} className="d-flex justify-content-between mt-2 pt-2" style={{ height: "50px" }}
+                                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "lightgray"; }}
+                                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                                        onClick={() => { handleViewProduct(item.slug) }}>
+                                        <img src={item.options[0].images[0]} alt={item.title} className="ps-2" style={{ width: "50px", height: "80%" }} />
+                                        <label style={{ fontSize: "14px" }} className="ms-3 me-4">{item.title}</label>
+                                        <label style={{ fontSize: "14px" }} className="me-2">{formatCurrency(item.price)}đ</label>
+                                    </li>
+                                );
+                            })}
+                        </div>
+                    </ul>
                 </div>
             </div>
+
+
         </>
     );
 };

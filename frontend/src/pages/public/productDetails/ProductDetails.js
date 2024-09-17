@@ -33,6 +33,7 @@ const ProductDetails = (props) => {
     const [ratings, setRatings] = useState([])
     const isLoggedIn = useSelector(state => state.user.isLoggedIn)
     const sliderRef = useRef();
+    const sliderRefMobile = useRef()
     const [loading, setLoading] = useState(false)
     const [productNotFound, setProductNotFound] = useState(false);
     const settings = {
@@ -97,6 +98,15 @@ const ProductDetails = (props) => {
     const nextSlide = () => {
         sliderRef.current.slickNext();
     };
+
+    const prevSlideMobile = () => {
+        sliderRefMobile.current.slickPrev();
+    };
+
+    const nextSlideMobile = () => {
+        sliderRefMobile.current.slickNext();
+    };
+
 
     const handleChangeImage = (image) => {
         setDisplayImage(image)
@@ -299,7 +309,7 @@ const ProductDetails = (props) => {
                                         <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
                                     </div>
                                     <div className={"d-sm-none d-block list-imgs-product-sm col-12"}>
-                                        <Slider {...settingsMobile} ref={sliderRef}>
+                                        <Slider {...settingsMobile} ref={sliderRefMobile}>
                                             {imagesSlider && imagesSlider.length > 0 && imagesSlider.map((item, index) => {
                                                 return (
                                                     <div key={`img-${index}`}>
@@ -311,8 +321,8 @@ const ProductDetails = (props) => {
 
                                         {/* Thêm ảnh từ các biến khác nếu cần */}
 
-                                        <button className="prevBtn" onClick={prevSlide}><IoIosArrowUp /></button>
-                                        <button className="nextBtn" onClick={nextSlide}><IoIosArrowDown /></button>
+                                        <button className="prevBtnMobile" onClick={prevSlideMobile}><IoIosArrowUp /></button>
+                                        <button className="nextBtnMobile" onClick={nextSlideMobile}><IoIosArrowDown /></button>
                                     </div>
                                     <div className='display-img-product col-sm-10 d-sm-block d-none' >
                                         <img src={displayImage} alt='' style={{ width: "100%" }} />
