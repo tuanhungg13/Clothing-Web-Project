@@ -1,6 +1,5 @@
-import Order from "../models/order";
-import User from "../models/users";
-import mongoose from "mongoose";
+const Order = require("../models/order.js");
+const User = require("../models/users.js");
 const handleCreateNewOrder = async (data, uid) => {
     try {
         const initialTotalPrice = data.products.reduce((sum, item) => {

@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import controllers from '../controller/couponController';
-import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken';
+const controllers = require('../controller/couponController.js');
+const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js');
 
 router.post("/create", [verifyAccessToken, isAdmin], controllers.createNewCoupon);
 router.get('/', controllers.getCoupons);

@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import controllers from '../controller/orderController';
-import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken';
+const controllers = require('../controller/orderController.js');
+const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js');
 
 router.post("/", verifyAccessToken, controllers.createNewOrder);
 router.post("/guest", controllers.createNewOrder);

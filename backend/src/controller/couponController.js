@@ -1,4 +1,4 @@
-import couponService from "../service/couponService";
+const couponService = require("../service/couponService.js");
 
 const createNewCoupon = async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-import ProductCategory from "../models/productCategory";
+const ProductCategory = require("../models/productCategory.js");
 
 const handleCreateProductCategory = async (data) => {
     try {

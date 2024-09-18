@@ -1,4 +1,4 @@
-import productService from "../service/productService";
+const productService = require("../service/productService.js");
 
 const createNewProduct = async (req, res) => {
     try {

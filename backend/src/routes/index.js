@@ -1,9 +1,9 @@
-import userApi from './userApi';
-import productApi from './productApi';
-import productCategory from "./productCategoryApi";
-import blogApi from "./blogApi";
-import couponApi from "./couponApi";
-import orderApi from "./orderApi";
+const userApi = require('./userApi.js');
+const productApi = require('./productApi.js');
+const productCategory = require("./productCategoryApi.js");
+const blogApi = require("./blogApi.js");
+const couponApi = require("./couponApi.js");
+const orderApi = require("./orderApi.js");
 const initRoutes = (app) => {
     app.use('/api/user', userApi);
     app.use("/api/product", productApi);

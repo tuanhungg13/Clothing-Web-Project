@@ -1,4 +1,4 @@
-import Blog from "../models/blog";
+const Blog = require("../models/blog.js");
 
 const handleCreateNewBlog = async (data, file) => {
     try {

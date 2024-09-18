@@ -1,10 +1,10 @@
-import express from 'express';
+const express = require('express');
 require("dotenv").config();
-import dbConnect from './config/database';
-import initRoutes from './routes/index';
-import cookieParser from 'cookie-parser';
-import cors from "cors";
-import bodyParser from 'body-parser';
+const dbConnect = require("./config/database")
+const initRoutes = require('./routes/index');
+const cookieParser = require('cookie-parser');
+const cors = require("cors");
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -17,13 +17,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-const port = process.env.PORT || 8888;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 dbConnect();
 app.use(cookieParser())
 initRoutes(app);
 
-app.listen(port, () => {
-    console.log('server is running ', port)
+app.listen(process.env.PORT, () => {
+    console.log('server is running ', process.env.PORT)
 })

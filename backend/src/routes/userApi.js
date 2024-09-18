@@ -1,8 +1,8 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import controllers from '../controller/userController';
-import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken'
-import uploadCloudUser from "../config/cloudinaryUser"
+const controllers = require('../controller/userController.js');
+const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js')
+const uploadCloudUser = require("../config/cloudinaryUser.js")
 router.post('/register', controllers.register);
 router.post('/login', controllers.login);
 //users

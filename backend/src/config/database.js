@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const dbConnect = async () => {
     try {
-        const dbconnection = await mongoose.connect(process.env.MONGODB_URL);
+        const dbconnection = await mongoose.connect(process.env.MONGODB_URL_CLOUD);
         if (dbconnection.connection.readyState === 1) {
             console.log('Db connection is successfully')
         }
@@ -10,8 +10,8 @@ const dbConnect = async () => {
             console.log('db connection is failed')
         }
     } catch (error) {
-        console.log('database connection is failed')
-        throw new Error(error)
+        console.log(`database connection is failed!: ${error}`)
+
     }
 }
 

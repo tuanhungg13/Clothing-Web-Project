@@ -1,8 +1,8 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import controllers from '../controller/productController';
-import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken';
-import uploader from "../config/cloudinary"
+const controllers = require('../controller/productController.js');
+const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js');
+const uploader = require("../config/cloudinary.js")
 
 
 

@@ -1,4 +1,4 @@
-import orderService from "../service/orderService";
+const orderService = require("../service/orderService.js");
 const createNewOrder = async (req, res) => {
     try {
         const { products, orderBy } = req.body;

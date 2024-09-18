@@ -1,6 +1,6 @@
-import Product from "../models/products";
-import slugify from 'slugify';
-import Order from "../models/order"
+const Product = require("../models/products.js");
+const slugify = require('slugify');
+const Order = require("../models/order.js")
 
 const handleCreateNewProduct = async (data, files) => {
     try {

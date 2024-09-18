@@ -1,4 +1,4 @@
-import blogService from "../service/blogService";
+const blogService = require("../service/blogService.js");
 
 const createNewBlog = async (req, res) => {
     try {

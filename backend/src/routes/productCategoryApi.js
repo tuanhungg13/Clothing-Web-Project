@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import controllers from '../controller/prodCategoryController';
-import { verifyAccessToken, isAdmin } from '../middlewares/verifyToken';
+const controllers = require('../controller/prodCategoryController.js');
+const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js');
 
 router.post("/create", [verifyAccessToken, isAdmin], controllers.createProductCategory);
 router.get('/', controllers.getAllProdCategory);

@@ -1,4 +1,4 @@
-import userService from '../service/userService';
+const userService = require('../service/userService.js');
 
 
 const register = async (req, res) => {
