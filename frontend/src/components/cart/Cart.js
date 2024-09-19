@@ -69,7 +69,7 @@ const CartMenu = () => {
                     <label>Bạn đang có {cartItems?.length} sản phẩm trong giỏ hàng</label>
                     <hr />
                 </div>
-                {displayCart.map((item, index) => {
+                {displayCart && displayCart.length > 0 && displayCart.map((item, index) => {
                     return (
                         <div key={`cartItem -${index}`}>
                             <div className='d-flex justify-content-between'>

@@ -7,8 +7,7 @@ const cartSlice = createSlice({
     },
     reducers: {
         getCartFromCookies: (state, action) => {
-            console.log("check action login:", action);
-            state.cartFromCookies = action.payload.cart;
+            state.cartFromCookies = action?.payload?.cart;
         },
     }
 })

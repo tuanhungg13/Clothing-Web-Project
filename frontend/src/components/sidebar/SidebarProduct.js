@@ -33,7 +33,7 @@ const SidebarProduct = (props) => {
                         </button>
                         <div className="collapse" id="home-collapse">
                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                {categories.map((item, index) => {
+                                {categories && categories.length > 0 && categories.map((item, index) => {
                                     return (
                                         <li key={item._id}>
                                             <input type='checkbox' value={item._id} checked={props?.selectedCategory === item}

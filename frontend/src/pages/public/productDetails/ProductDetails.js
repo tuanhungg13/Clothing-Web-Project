@@ -351,7 +351,7 @@ const ProductDetails = (props) => {
                                     <div className='d-inline '>Màu sắc</div>
                                     <div className='d-inline mx-3' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>{color}</div>
                                     <div className='d-flex mt-2'>
-                                        {productDetails?.options?.map((item, index) => {
+                                        {productDetails && productDetails.options && productDetails.options.length > 0 && productDetails.options.map((item, index) => {
                                             return (
                                                 <label onClick={() => { handleChooseColor(item.color) }} key={`color-${index}`}
                                                     className={`${color === item.color && handleCheckColor(item.color) ? "active" : ""} ${handleCheckColor(item.color) ? " " : "inactive pe-none"}`}>
@@ -367,7 +367,7 @@ const ProductDetails = (props) => {
                                         <div className='d-inline mx-4 text-decoration-underline' style={{ fontSize: '14px', textTransform: 'capitalize', color: 'rgb(116, 114, 114)' }}>Hướng dẫn chọn size</div>
                                     </div>
                                     <div className='list-size-items d-flex mt-2'>
-                                        {productDetails?.allSizes?.map((item, index) => {
+                                        {productDetails && productDetails.allSizes && productDetails.allSizes.length > 0 && productDetails.allSizes.map((item, index) => {
                                             return (
                                                 <label key={`${item}-${index}`}
                                                     className={`${size === item && handleCheckSize(item) ? "active" : " "} ${handleCheckSize(item) ? " " : "inactive pe-none"} size-items`}

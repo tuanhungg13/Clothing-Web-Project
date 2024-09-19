@@ -17,7 +17,7 @@ const createNewOrder = async (req, res) => {
         }
 
         const response = await orderService.handleCreateNewOrder(req.body, _id);
-        if (response.EC === 1) {
+        if (response && response.EC === 1) {
             return res.status(500).json({
                 EM: response.EM,
                 EC: response.EC,
@@ -30,9 +30,11 @@ const createNewOrder = async (req, res) => {
             DT: response.DT,
         })
     } catch (error) {
+        console.log(`There is an error in the "createNewOrder function" in orderControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "createNewOrder function" in orderControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
+            DT: {}
         })
     }
 }
@@ -57,9 +59,11 @@ const getOrdersByAdmin = async (req, res) => {
 
         })
     } catch (error) {
+        console.log(`There is an error in the "getOrders function" in orderControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "getOrders function" in orderControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
+            DT: []
         })
     }
 }
@@ -85,9 +89,11 @@ const getOrdersByUser = async (req, res) => {
 
         })
     } catch (error) {
+        console.log(`There is an error in the "getOrdersByUser function" in orderControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "getOrdersByUser function" in orderControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
+            DT: {}
         })
     }
 
@@ -99,7 +105,7 @@ const updateOrderByAdmin = async (req, res) => {
         const { oid } = req.body;
         if (!oid) {
             return res.status(400).json({
-                EM: "Missing input!",
+                EM: "Thiếu id đơn hàng!!",
                 EC: 1
             })
         }
@@ -118,9 +124,11 @@ const updateOrderByAdmin = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(`There is an error in the "updateOrderByAdmin function" in orderControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "updateOrderByAdmin function" in orderControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
+            DT: {}
         })
     }
 }
@@ -131,7 +139,7 @@ const updateOrderByUser = async (req, res) => {
         const { oid } = req.body;
         if (!oid) {
             return res.status(400).json({
-                EM: "Missing input!",
+                EM: "Thiếu id đơn hàng!",
                 EC: 1
             })
         }
@@ -150,9 +158,11 @@ const updateOrderByUser = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(`There is an error in the "updateOrderByUser function" in orderControllers.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "updateOrderByUser function" in orderControllers.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! VUi lòng thử lại!",
             EC: 1,
+            DT: {}
         })
     }
 }

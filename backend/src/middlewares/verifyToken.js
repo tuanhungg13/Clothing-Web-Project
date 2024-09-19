@@ -7,7 +7,7 @@ const verifyAccessToken = (req, res, next) => {
             jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
                 if (err) {
                     return res.status(401).json({
-                        EM: "Invalid access token",
+                        EM: "Token không hợp lệ!",
                         EC: 1
                     })
                 }
@@ -17,14 +17,15 @@ const verifyAccessToken = (req, res, next) => {
         }
         else {
             return res.status(401).json({
-                EM: "Require authentication!!!",
+                EM: "Vui lòng cung cấp token xác thực!",
                 EC: 1
             })
         }
 
     } catch (error) {
+        console.log(`Error from 'verifyAccessToken funct' from verifyToken.js : ${error.message} `)
         return res.status(500).json({
-            EM: `Error from 'verifyAccessToken funct' from verifyToken.js : ${error.message} `,
+            EM: "Có lỗi xảy ra! VUi lòng thử lại!",
             EC: 1
         })
     }
@@ -34,7 +35,7 @@ const isAdmin = (req, res, next) => {
     const { role } = req.user;
     if (role !== 'admin') {
         return res.status(403).json({
-            EM: 'Require admin role!',
+            EM: 'Bạn không đủ quyền hạn truy cập!',
             EC: 1
         })
     }

@@ -25,15 +25,15 @@ export const prodCategorySlice = createSlice({
         builder.addCase(fetchProductCategories.fulfilled, (state, action) => {
             // Tắt trạng thái loading, lưu thông tin user vào store
             state.isLoading = false;
-            state.categories = action.payload.DT;
+            state.categories = action?.payload?.DT;
         });
 
         // Khi thực hiện action login thất bại (Promise rejected)
         builder.addCase(fetchProductCategories.rejected, (state, action) => {
             // Tắt trạng thái loading, lưu thông báo lỗi vào store
             state.isLoading = false;
-            state.errorMessage = action.payload.EM;
-            state.errorMessage = action.payload.EM || "Failed to fetch categories";
+            state.errorMessage = action?.payload?.EM;
+            state.errorMessage = action?.payload?.EM || "Failed to fetch categories";
         });
     },
 })
@@ -45,7 +45,7 @@ export const prodCategorySlice = createSlice({
 export const fetchProductCategories = createAsyncThunk("prodCategories/fetchProductCategories", async (data, { rejectWithValue }) => {
     const response = await getProductCategories()
     console.log("check response:", response);
-    if (response.EC === 1) {
+    if (response && response.EC === 1) {
         return rejectWithValue(response)
     }
     return response

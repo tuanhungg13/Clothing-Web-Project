@@ -16,7 +16,7 @@ const Banner = (props) => {
     return (
         <div className="slider-container" >
             <Slider {...settings} >
-                {props.images.map((item, index) => {
+                {props && props.images && props.images.map((item, index) => {
                     return (
                         <div key={`background-${index + 1}`} className="slider-background" style={{ margin: "10000px" }}>
                             <img src={item} alt="" />

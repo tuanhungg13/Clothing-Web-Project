@@ -7,20 +7,17 @@ const handleCreateNewCoupon = async (data) => {
             expiry: Date.now() + data.expiry * 24 * 60 * 60 * 1000
         });
         if (!newCoupon) {
-            return {
-                EM: "Create new coupon failed!",
-                EC: 1,
-                DT: {}
-            }
+            throw new Error("Tạo phiếu giảm giá thất bại!")
         }
         return {
-            EM: "Create new coupon successfully!",
+            EM: "Tạo phiếu giảm giá thành công!",
             EC: 0,
             DT: newCoupon
         }
     } catch (error) {
+        console.log(`There is an error in the "handleCreateNewCoupon func" in couponService.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "handleCreateNewCoupon func" in couponService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -30,20 +27,17 @@ const handleGetCoupons = async () => {
     try {
         const coupons = await Coupon.find();
         if (!coupons) {
-            return {
-                EM: "Get coupons failed!",
-                EC: 1,
-                DT: []
-            }
+            throw new Error("Lấy danh sách phiếu giảm giá thất bại!")
         }
         return {
-            EM: "Get coupons successfully!",
+            EM: "Lấy danh sách phiếu giảm giá thành công!",
             EC: 0,
             DT: coupons
         }
     } catch (error) {
+        console.log(`There is an error in the "handleGetCoupons function" in couponService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetCoupons function" in couponService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
             DT: []
         }
@@ -54,20 +48,17 @@ const handleGetACoupon = async (_cid) => {
     try {
         const coupon = await Coupon.findById(_cid);
         if (!coupon) {
-            return {
-                EM: "Get coupon failed!",
-                EC: 1,
-                DT: []
-            }
+            throw new Error("Lấy phiếu giảm giá thất bại!")
         }
         return {
-            EM: "Get coupon successfully!",
+            EM: "Lấy phiếu giảm giá thành công!",
             EC: 0,
             DT: coupon
         }
     } catch (error) {
+        console.log(`There is an error in the "handleGetBlog function" in blogService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetBlog function" in blogService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
             DT: []
         }
@@ -81,20 +72,17 @@ const handleUpdateCoupon = async (_cid, data) => {
         }
         const updateCoupon = await Coupon.findByIdAndUpdate(_cid, data, { new: true });
         if (!updateCoupon) {
-            return {
-                EM: "Update coupon failed!",
-                EC: 1,
-                DT: {}
-            }
+            throw new Error("Cập nhật phiếu giảm giá thất bại!")
         }
         return {
-            EM: "Update coupon successfully!",
+            EM: "Cập nhật phiếu giảm giá thành công!",
             EC: 0,
             DT: updateCoupon
         }
     } catch (error) {
+        console.log(`There is an error in the "handleUpdateCoupon function" in couponService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleUpdateCoupon function" in couponService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
             DT: {}
         }
@@ -105,18 +93,16 @@ const handleDeleteCoupon = async (_cid) => {
     try {
         const deleteCoupon = await Coupon.findByIdAndDelete(_cid);
         if (!deleteCoupon) {
-            return {
-                EM: "Delete coupon failed!",
-                EC: 1
-            }
+            throw new Error("Xóa phiếu giảm giá thất bại!")
         }
         return {
-            EM: "Delete coupon successfully!",
+            EM: "Xóa phiếu giảm giá thành công!",
             EC: 0
         }
     } catch (error) {
+        console.log(`There is an error in the "handleDeleteCoupon function" in couponService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleDeleteCoupon function" in couponService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         }
     }

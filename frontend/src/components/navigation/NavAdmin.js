@@ -62,7 +62,7 @@ const NavAdmin = () => {
 
                 </div>
                 <div className="topnav d-sm-flex flex-column text-none " >
-                    {dataNav.map(item => {
+                    {dataNav && dataNav.length > 0 && dataNav.map(item => {
                         return (
                             <NavLink to={item.path} className="w-100 text-start border-top" key={`navADM-${item.id}`}
                                 style={{ borderRight: 0 }} >
@@ -81,7 +81,7 @@ const NavAdmin = () => {
                     <img src={logo} alt="lg" className="mb-1 ms-2" style={{ width: "50px" }} />
                     <div class="container-nav navbar-collapse collapse" id="navbarsExample01">
                         <div className="topnav d-flex flex-column text-none " >
-                            {dataNav.map(item => {
+                            {dataNav && dataNav.length > 0 && dataNav.map(item => {
                                 return (
                                     <NavLink to={item.path} className="w-100 text-start border-top text-decoration-none text-dark" key={`navADM-${item.id}`}>
                                         <span className="me-2">{item.icon}</span> {item.name}

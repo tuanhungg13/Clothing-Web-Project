@@ -70,20 +70,17 @@ const handleGetBlog = async (_bid) => {
     try {
         const blog = await Blog.findByIdAndUpdate(_bid, { $inc: { views: 1 } }, { new: true })
         if (!blog) {
-            return {
-                EM: "Get blog failed!",
-                EC: 1,
-                DT: []
-            }
+            throw new Error("Xem chi tiết blog thất bại!")
         }
         return {
-            EM: "Get blog successfully!",
+            EM: "Xem chi tiết blog thành công!",
             EC: 0,
             DT: blog
         }
     } catch (error) {
+        console.log(`There is an error in the "handleGetBlog function" in blogService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleGetBlog function" in blogService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
             DT: []
         }
@@ -97,20 +94,17 @@ const handleUpdateBlog = async (_bid, data, file) => {
         }
         const updateBlog = await Blog.findByIdAndUpdate(_bid, data, { new: true });
         if (!updateBlog) {
-            return {
-                EM: "Update blog failed!",
-                EC: 1,
-                DT: {}
-            }
+            throw new Error("Cập nhật blog thất bại!")
         }
         return {
-            EM: "Update blog successfully!",
+            EM: "Cập nhật blog thành công!",
             EC: 0,
             DT: updateBlog
         }
     } catch (error) {
+        console.log(`There is an error in the "handleUpdateBlog function" in blogService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleUpdateBlog function" in blogService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
             DT: {}
         }
@@ -121,18 +115,16 @@ const handleDeleteBlog = async (_bid) => {
     try {
         const deleteBlog = await Blog.findByIdAndDelete(_bid);
         if (!deleteBlog) {
-            return {
-                EM: "Delete blog failed!",
-                EC: 1
-            }
+            throw new Error("Xóa blog thành công!")
         }
         return {
-            EM: "Delete successfully!",
+            EM: "Xóa blog thất bại!",
             EC: 0
         }
     } catch (error) {
+        console.log(`There is an error in the "handleDeleteBlog function" in blogService.js: ${error.message} `)
         return {
-            EM: `There is an error in the "handleDeleteBlog function" in blogService.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         }
     }

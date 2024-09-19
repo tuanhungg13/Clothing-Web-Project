@@ -6,7 +6,7 @@ const createNewBlog = async (req, res) => {
         console.log(title, description, req.file)
         if (!title || !description) {
             return res.status(400).json({
-                EM: "Missing require parameter!",
+                EM: "Vui lòng nhập đầy đủ thông tin!",
                 EC: 1
             })
         }
@@ -24,8 +24,9 @@ const createNewBlog = async (req, res) => {
             DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "createNewBlog func" in blogController.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "createNewBlog func" in blogController.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -49,8 +50,9 @@ const getBlogs = async (req, res) => {
             totalPages: response.totalPages
         })
     } catch (error) {
+        console.log(`There is an error in the "getBlogs func" in blogController.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "getBlogs func" in blogController.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -61,7 +63,7 @@ const getBlog = async (req, res) => {
         const { bid } = req.params;
         if (!bid) {
             return res.status(400).json({
-                EM: "Missing blog id",
+                EM: "Không tìm thấy blog!",
                 EC: 1
             })
         }
@@ -72,8 +74,9 @@ const getBlog = async (req, res) => {
             DT: response.DT
         })
     } catch (error) {
+        console.log(`There is an error in the "getBlog func" in blogController.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "getBlog func" in blogController.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -82,7 +85,6 @@ const getBlog = async (req, res) => {
 const updateBlog = async (req, res) => {
     try {
         const { bid } = req.params;
-        console.log("check", req.file, req.body, bid)
         if (!bid || Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 EM: "Vui lòng nhập đầy đủ dữ liệu!",
@@ -90,15 +92,23 @@ const updateBlog = async (req, res) => {
             })
         }
         const response = await blogService.handleUpdateBlog(bid, req.body, req.file);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+                DT: response.DT
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
             DT: response.DT
         })
 
     } catch (error) {
+        confirm.log(`There is an error in the "updateBlog func" in blogController.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "updateBlog func" in blogController.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }
@@ -109,18 +119,25 @@ const deleteBlog = async (req, res) => {
         const { bid } = req.params;
         if (!bid) {
             return res.status(400).json({
-                EM: "Missing require parameter!",
+                EM: "Không thấy bài viết!",
                 EC: 1
             })
         }
         const response = await blogService.handleDeleteBlog(bid);
-        return res.status(200).json({
+        if (response && response.EC === 0) {
+            return res.status(200).json({
+                EM: response.EM,
+                EC: response.EC,
+            })
+        }
+        return res.status(500).json({
             EM: response.EM,
             EC: response.EC,
         })
     } catch (error) {
+        console.log(`There is an error in the "deleteBlog func" in blogController.js: ${error.message} `)
         return res.status(500).json({
-            EM: `There is an error in the "deleteBlog func" in blogController.js: ${error.message} `,
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1,
         })
     }

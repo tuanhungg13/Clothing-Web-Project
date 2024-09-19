@@ -28,7 +28,7 @@ const userSlice = createSlice({
         // Khi thực hiện action lấy dữ liệu người dùng thành công (Promise fulfilled)
         builder.addCase(getCurrent.fulfilled, (state, action) => {
             state.isLoggedIn = true;
-            state.current = action.payload.DT;
+            state.current = action?.payload?.DT;
         });
 
         // Khi thực hiện action lấy dữ liệu người dùng thất bại (Promise rejected)
@@ -46,7 +46,7 @@ export const { login, logout } = userSlice.actions
 
 export const getCurrent = createAsyncThunk("user/getCurrent", async (data, { rejectWithValue }) => {
     const response = await apiGetCurrent();
-    if (response.EC === 1) {
+    if (response && response.EC === 1) {
         return rejectWithValue(response)
     }
     return response

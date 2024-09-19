@@ -54,7 +54,7 @@ const handleCreateNewProduct = async (data, files) => {
 const handleGetProducts = async (data) => {
     try {
         const queries = { ...data };
-        const excluderFields = ["sort", "limit", "page", "fields"];
+        const excluderFields = ["sort", "limit", "page"];
         //Loại bỏ các trường sort, limit, page, fields khỏi queries;
         excluderFields.forEach(item => delete queries[item]);
         //Format lại các operators cho đúng cú pháp của mongodb;
@@ -79,7 +79,6 @@ const handleGetProducts = async (data) => {
 
         if (queries?.title) {
             queryString.title = { $regex: `.*${queries.title}.*`, $options: "i" };
-            console.log("3:", queryString)
         }
         let queryCommand = Product.find(queryString).populate("category", "categoryName");
 

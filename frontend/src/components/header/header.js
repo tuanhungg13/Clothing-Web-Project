@@ -24,7 +24,7 @@ const Header = () => {
         if (isLoggedIn === true) {
             dispatch(getCurrent())
         }
-    }, [dispatch, isLoggedIn])
+    }, [])
 
     const handleLogout = async () => {
         const response = await apiLogout()
