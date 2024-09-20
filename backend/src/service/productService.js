@@ -210,9 +210,7 @@ const handleUpdateProduct = async (pid, data, files) => {
             brand: data.brand,
             options: optionsWithImages,
             stock: stock,
-            discount: +data.discount,
-            expiry: data.expiry,
-            category: data.category._id
+            category: data.category
         }, { new: true });
 
         if (!updateProduct) {

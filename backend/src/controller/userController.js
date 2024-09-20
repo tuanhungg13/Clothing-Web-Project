@@ -44,7 +44,12 @@ const login = async (req, res) => {
         const response = await userService.handleLogin(req.body);
         //Thêm refresh token vào cookie
         if (response && response.EC === 0) {
-            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000, httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+            res.cookie('refreshToken', response.newRefreshToken,
+                {
+                    maxAge: 86400000, httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'none'
+                })
             return res.status(200).json({
                 EM: response.EM,
                 accessToken: response.accessToken,
@@ -108,10 +113,19 @@ const getUserById = async (req, res) => {
 const refreshAccessToken = async (req, res) => {
     try {
         const cookie = req.cookies;
-        if (!cookie && !cookie.refreshToken) throw new Error("Cookie not found");
+        console.log("check cookies:", cookie)
+        if (Object.keys(cookie).length === 0 && !cookie.refreshToken) {
+            throw new Error("Không tìm thấy dữ liệu từ cookie");
+        }
         const response = await userService.handleRefreshAccessToken(cookie);
         if (response && response.EC === 0) {
-            res.cookie('refreshToken', response.newRefreshToken, { maxAge: 86400000, httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+            res.cookie('refreshToken', response.newRefreshToken,
+                {
+                    maxAge: 86400000,
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'none'
+                })
             return res.status(200).json({
                 EC: response.EC,
                 EM: response.EM,
@@ -126,7 +140,7 @@ const refreshAccessToken = async (req, res) => {
     } catch (error) {
         console.log(`Server: There is an error in the "refreshAccessToken function" in userControllers.js: ${error.message}`)
         return res.status(500).json({
-            EM: "Có lỗi xảy ra! VUi lòng thử lại!",
+            EM: "Có lỗi xảy ra! Vui lòng thử lại!",
             EC: 1
         })
     }

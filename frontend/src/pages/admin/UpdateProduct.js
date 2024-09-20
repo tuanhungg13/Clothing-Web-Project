@@ -230,6 +230,7 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
         setPreviewImg(previewImgCopy);
     };
     const handleUpdateProduct = async () => {
+        window.scrollTo(0, 0);
         // Cập nhật payload với options
         const updatedPayload = {
             ...payload,
@@ -240,19 +241,28 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
             const formData = new FormData;
             // Thêm các trường không phải tệp vào FormData
             for (let [key, value] of Object.entries(updatedPayload)) {
-                if (key === 'options') {
+                if (key === 'category') {
+                    if (typeof value === 'object' && value !== null) {
+                        formData.append(key, value._id);
+                    } else {
+                        formData.append(key, value);
+                    }
+                }
+                else if (key === 'options') {
                     // Xử lý options như chuỗi JSON
                     formData.append(key, JSON.stringify(value));
                 } else {
                     formData.append(key, value);
                 }
             }
+            console.log("check payload", payload)
             options.forEach((option, optionIndex) => {
                 option.images.forEach((file, fileIndex) => {
                     if (typeof file === "object") formData.append(`option[${optionIndex}][images]`, file);
                 });
             });
-            const updateProduct = await apiUpdateProduct(updatedPayload._id, formData);
+            console.log(Object.fromEntries(formData.entries()));
+            const updateProduct = await apiUpdateProduct(formData);
             if (updateProduct && updateProduct.EC === 0) {
                 toast.success("Cập nhật sản phẩm thành công!")
                 fetchProducts()
@@ -260,6 +270,9 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
             else {
                 toast.error("Cập nhật sản phẩm không thành công!")
             }
+        }
+        else {
+            toast.error("Thiếu thông tin sản phẩm!")
         }
     }
     const handleBackPage = () => {
@@ -307,7 +320,7 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                         <select className="form-select" aria-label="Default select example" value={payload.category._id}
                             onChange={(event) => { setPayload(prev => ({ ...prev, category: event.target.value })) }}>
                             <option value={""}>Chọn danh mục</option>
-                            {categories.map((option, index) => {
+                            {categories && categories.length > 0 && categories.map((option, index) => {
                                 return (
                                     <option value={option._id} key={`categoryOpt - ${index}`}>{option.categoryName}</option>
                                 )

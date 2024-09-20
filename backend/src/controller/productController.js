@@ -121,20 +121,16 @@ const deleteProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { pid, title, price, options, description, category } = req.body;
-        if (!pid || !title || !price || !options || !description || !category) {
+        const { _id, title, price, options, description, category } = req.body;
+        console.log("check updateProduct:", req.body);
+        console.log("check updateProduct files:", req.files);
+        if (!_id || !title || !price || !options || !description || !category) {
             return res.status(400).json({
                 EM: "Vui lòng nhập đầu đủ dữ liệu!",
                 EC: 1
             })
         }
-        // if ((!req.body.discount && req.body.expiryDiscount) || (req.body.discount && !req.body.expiryDiscount)) {
-        //     return res.status(400).json({
-        //         EM: "Missing discount and expiration date!",
-        //         EC: 1
-        //     })
-        // }
-        const response = await productService.handleUpdateProduct(pid, req.body, req.files);
+        const response = await productService.handleUpdateProduct(_id, req.body, req.files);
         if (response && response.EC === 0) {
             return res.status(200).json({
                 EM: response.EM,

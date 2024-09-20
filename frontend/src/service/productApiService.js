@@ -24,6 +24,7 @@ const apiCreateProduct = (data) => {
 }
 
 const apiUpdateProduct = (data) => {
+    console.log("dataUpdate:", data)
     return axios.put(`/product/update`, data, {
         headers: {
             'Content-Type': 'multipart/form-data'

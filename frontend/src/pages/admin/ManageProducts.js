@@ -16,6 +16,7 @@ const ManageProducts = () => {
     const [edit, setEdit] = useState(false)
     useEffect(() => {
         fetchProducts()
+        window.scrollTo(0, 0);
     }, [currentPage])
 
     const fetchProducts = useCallback(async () => {
@@ -72,11 +73,9 @@ const ManageProducts = () => {
                                     <th scope="col">Ảnh</th>
                                     <th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
-                                    <th scope="col">Giá KM</th>
                                     <th scope="col">Danh mục</th>
                                     <th scope="col">Tồn kho</th>
                                     <th scope="col">Đã bán</th>
-                                    <th scope="col">Khuyến mãi</th>
                                     <th scope="col">Đánh giá</th>
                                     <th scope="col">Hành động</th>
 
@@ -92,13 +91,12 @@ const ManageProducts = () => {
                                             </td>
                                             <td >{item.title}</td>
                                             <td>{formatCurrency(item.price)}</td>
-                                            <td>1</td>
+
                                             <td>{item?.category?.categoryName}</td>
                                             <td className={`${+item.stock === 0 ? "text-danger" : `${item.stock < 100 ? "text-warning" : "text-success"}`}`}>
                                                 {item.stock}
                                             </td>
                                             <td>{item.sold}</td>
-                                            <td className={`${+item.discount === 0 ? "" : "text-success"}`}>{+item.discount === 0 ? "Không" : `-${item.discount}%`}</td>
                                             <td>{item.totalRatings} <FaStar style={{ marginBottom: "5px", color: '#ee4d2d' }} /></td>
                                             <td>
                                                 <button className="btn btn-secondary me-sm-2 mb-sm-0 mb-2" onClick={() => { handleEditProduct(item) }}>

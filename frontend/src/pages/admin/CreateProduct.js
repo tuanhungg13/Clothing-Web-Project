@@ -214,6 +214,7 @@ const CreateProduct = () => {
         setPreviewImg(previewImgCopy);
     }
     const handleCreateProduct = async () => {
+        window.scrollTo(0, 0);
         const updatedPayload = {
             ...payload,
             options
@@ -240,25 +241,25 @@ const CreateProduct = () => {
                 const createProduct = await apiCreateProduct(formData);
                 if (createProduct && createProduct.EC === 0) {
                     toast.success("Tạo sản phẩm thành công!")
-                    setPayload({
-                        title: "",
-                        price: 0,
-                        description: "",
-                        category: "",
-                        brand: "",
-                        options: [],
-                        discount: 0,
-                        expiry: ""
-                    })
-                    setOptions([{
-                        color: "",
-                        sizeQuantity: [],
-                        images: []
+                    // setPayload({
+                    //     title: "",
+                    //     price: 0,
+                    //     description: "",
+                    //     category: "",
+                    //     brand: "",
+                    //     options: [],
+                    //     discount: 0,
+                    //     expiry: ""
+                    // })
+                    // setOptions([{
+                    //     color: "",
+                    //     sizeQuantity: [],
+                    //     images: []
 
-                    }])
-                    setPreviewImg([{
-                        images: []
-                    }])
+                    // }])
+                    // setPreviewImg([{
+                    //     images: []
+                    // }])
                     setLoading(false)
                 }
                 else {
