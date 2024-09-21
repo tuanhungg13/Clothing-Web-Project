@@ -3,10 +3,6 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { formatCurrency } from "../../untils/helpers";
-import Cookies from 'js-cookie'
-import { getCartFromCookies } from "../../redux/cartSlice";
-import { apiRemoveFromCart } from "../../service/userApiService";
-import { getCurrent } from "../../redux/userSlice";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdPublishedWithChanges } from "react-icons/md";
 import { RiContactsBookLine } from "react-icons/ri";
@@ -23,7 +19,6 @@ const CartDetailsPage = () => {
     useEffect(() => {
         //Nếu người dùng đăng nhập hiển thị cart của người dùng lưu trong csdl
         //Nếu ko đăng nhập thì hiển thị cart lưu ở cookies
-        console.log("chạy cc")
         if (isLoggedIn) {
             setDisplayCart(cartItems)
         }
@@ -45,7 +40,7 @@ const CartDetailsPage = () => {
         return img
     }
     const calculateTotalPrice = () => {
-        const total = displayCart.reduce((total, item) => total + item?.product?.price * item?.quantity, 0);
+        const total = displayCart.reduce((total, item) => total + item?.price * item?.quantity, 0);
         return formatCurrency(total)
     }
 
@@ -118,15 +113,15 @@ const CartDetailsPage = () => {
                                 <div key={`cartItem -${index}`}>
                                     <div className='d-flex justify-content-between'>
                                         <div className='d-flex align-items-center'>
-                                            <img type='button' src={getImgOfProduct(item)} alt={item?.product?.title} style={{ width: '100px', height: '100px', marginRight: '10px' }}
+                                            <img type='button' src={getImgOfProduct(item)} alt={item.product.title} style={{ width: '100px', height: '100px', marginRight: '10px' }}
                                                 onClick={() => {
-                                                    navigation(`/${item?.product?.slug}`);
+                                                    navigation(`/products/${item?.product?.slug}`);
                                                 }} />
                                             <div className="ms-2">
                                                 <label type='button' onClick={() => {
                                                     navigation(`/${item.product.slug}`);
-                                                }}>{item?.product?.title} - {item?.size} - {item?.color}</label>
-                                                <div>{formatCurrency(item?.product?.price)} </div>
+                                                }}>{item.product.title} - {item.size} - {item.color}</label>
+                                                <div>{formatCurrency(item.price)} </div>
                                                 <div>
                                                     <button className="bg-transparent border-0" style={{ fontSize: "25px" }}
                                                         onClick={() => { handleChangeQuantityReduce(item, index) }}>-</button>
@@ -154,7 +149,7 @@ const CartDetailsPage = () => {
                         <div className="border bg-light p-3">
                             <label className="fw-bold">TÓM TẮT ĐƠN HÀNG</label>
                             <span className="d-block mt-2">Chưa bao gồm phí ship và mã giảm giá(nếu có)</span>
-                            <label className="mt-2">Tổng tiền:
+                            <label className="mt-2 d-flex justify-content-between">Tổng tiền:
                                 <span className="fw-bold">
                                     {calculateTotalPrice()}
                                 </span>

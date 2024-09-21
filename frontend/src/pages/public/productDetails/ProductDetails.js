@@ -84,7 +84,6 @@ const ProductDetails = (props) => {
     }
 
     useEffect(() => {
-        console.log("oke")
         fetchAProduct()
 
     }, [productId])
@@ -212,10 +211,8 @@ const ProductDetails = (props) => {
                     price: productDetails.price
                 })
                 if (addToCart && addToCart.EC === 0) {
-                    dispatch(getCurrent())
-                    setTimeout(() => {
-                        navigation("/thanh-toan")
-                    }, 100)
+                    await dispatch(getCurrent())
+                    navigation("/order")
                 }
             }
             // Người dùng chưa đăng nhập
@@ -267,7 +264,7 @@ const ProductDetails = (props) => {
                 Cookies.set("PRODUCT_CART_NEW", JSON.stringify(cart), { expires: 30 });
                 // Cập nhật Redux state (nếu cần)
                 dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
-                navigation("/thanh-toan")
+                navigation("/order")
             }
         }
     }

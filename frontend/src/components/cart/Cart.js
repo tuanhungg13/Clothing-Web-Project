@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,8 +31,8 @@ const CartMenu = () => {
         return img
     }
     const calculateTotalPrice = () => {
-        const total = displayCart.reduce((total, item) => total + item?.product?.price * item?.quantity, 0);
-        return formatCurrency(total)
+        const total = displayCart.reduce((total, item) => total + item.price * item.quantity, 0);
+        return total
     }
 
     const handleRemoveCartItems = async (e, cartItem) => {
@@ -58,15 +58,15 @@ const CartMenu = () => {
         }
     }
     return (
-        <div className="dropdown">
+        <div className="dropdown" >
             <button className=" border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px', marginRight: "10px" }} />
                 <label className="d-inline">{displayCart ? displayCart.length : 0}</label>
             </button >
-            <ul className="dropdown-menu dropdown-menu-end px-3" style={{ width: "40vw" }} >
+            <ul className="dropdown-menu dropdown-menu-end px-3" style={{ width: "40vw", overflowY: "scroll", minHeight: "70vh" }} >
                 <div className="mx-3">
                     <h3>GIỎ HÀNG</h3>
-                    <label>Bạn đang có {cartItems?.length} sản phẩm trong giỏ hàng</label>
+                    <label>Bạn đang có {displayCart?.length} sản phẩm trong giỏ hàng</label>
                     <hr />
                 </div>
                 {displayCart && displayCart.length > 0 && displayCart.map((item, index) => {
@@ -76,13 +76,13 @@ const CartMenu = () => {
                                 <div className='d-flex align-items-center'>
                                     <img type='button' src={getImgOfProduct(item)} alt={item?.product?.title} style={{ width: '100px', height: '100px', marginRight: '10px' }}
                                         onClick={() => {
-                                            navigation(`/${item?.product?.slug}`);
+                                            navigation(`/products/${item.product.slug}`);
                                         }} />
                                     <div className="ms-2">
                                         <label type='button' onClick={() => {
                                             navigation(`/${item.product.slug}`);
-                                        }}>{item?.product?.title} - {item?.size} - {item?.color}</label>
-                                        <div>{formatCurrency(item?.product?.price)} x {item?.quantity}</div>
+                                        }}>{item.product.title} - {item.size} - {item?.color}</label>
+                                        <div>{formatCurrency(item.price)} x {item.quantity}</div>
                                     </div>
                                 </div>
                                 <button type="button" className='border-0' style={{ backgroundColor: "transparent" }}
@@ -100,7 +100,7 @@ const CartMenu = () => {
                 <div>
                     <div className="d-flex justify-content-between">
                         <label style={{ fontSize: "15px" }}>TỔNG TIỀN TẠM TÍNH:</label>
-                        <div>{calculateTotalPrice()}</div>
+                        <div>{formatCurrency(calculateTotalPrice())}</div>
                     </div>
                     <button type="button" className="w-100 my-3 " style={{ backgroundColor: "black", height: "40px", color: "white" }}>
                         <NavLink className={"text-white text-decoration-none"} to={"/order"}>TIẾN HÀNH ĐẶT HÀNG</NavLink></button>
