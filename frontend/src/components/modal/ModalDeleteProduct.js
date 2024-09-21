@@ -10,7 +10,6 @@ const ModalDeleteProduct = (props) => {
     }, [props.showModalProductDelete])
     //xac nhan chan nguoi dung
     const handleConfirmDeleteProduct = async () => {
-        console.log("check pid:", props.dataProduct.pid)
         const response = await apiDeleteProduct({ pid: props.dataProduct.pid })
         if (response?.EC === 0) {
             toast.success("Xóa sản phẩm thành công!")

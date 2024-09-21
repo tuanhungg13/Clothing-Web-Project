@@ -15,7 +15,6 @@ const ManageOrder = () => {
     }
     useEffect(() => {
         fetchOrders()
-        console.log("order")
     }, [currentPage])
     const fetchOrders = useCallback(async () => {
         const response = await apiGetOrdersByAdmin({ page: currentPage, limit, sort: "-createdAt" });

@@ -13,6 +13,8 @@ import { logout } from "../../redux/userSlice";
 import Cookies from 'js-cookie'
 import { getCartFromCookies } from '../../redux/cartSlice';
 import Search from '../Search';
+import { FaShoppingCart } from "react-icons/fa";
+
 const Header = () => {
     const { isLoggedIn, current } = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const Header = () => {
         }
         if (isLoggedIn === true) {
             dispatch(getCurrent())
+
         }
     }, [])
 
@@ -82,9 +85,9 @@ const Header = () => {
                         <Nav />
                         <NavLink className="navbar-brand me-0 mb-2" to='/'><img src={logo} alt='atino' /></NavLink>
 
-                        <CartMenu />
+                        <NavLink to={"/cart-details"}><FaShoppingCart style={{ fontSize: '25px', paddingBottom: '5px', marginRight: "10px" }} /></NavLink>
                         {!isLoggedIn &&
-                            <button className='btn-login border-0 me-3'>Login</button>
+                            <NavLink className={"text-decoration-none text-dark p-2 bg-secondary"} to={"/login"}>Login</NavLink>
                         }
                         {isLoggedIn &&
                             <div className="account dropdown text-end me-3">

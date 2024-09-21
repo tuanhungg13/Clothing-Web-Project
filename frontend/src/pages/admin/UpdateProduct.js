@@ -6,7 +6,6 @@ import { TiDelete } from "react-icons/ti";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { toBase64 } from "../../untils/helpers";
 import { useSelector } from "react-redux";
-import { DatePicker } from 'antd';
 import { apiUpdateProduct } from "../../service/productApiService";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
@@ -149,14 +148,12 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                     const sizeIndex = currentSizeQuantity.findIndex(sq => sq.size === size);
 
                     if (sizeIndex === -1) {
-                        console.log("push")
                         // Nếu kích thước chưa tồn tại, thêm mới vào
                         return {
                             ...option,
                             sizeQuantity: [...currentSizeQuantity, { size: size, quantity: "" }]
                         };
                     } else {
-                        console.log("delete")
                         // Nếu kích thước đã tồn tại, xóa nó
                         return {
                             ...option,
@@ -238,7 +235,7 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
         };
         const checkValid = validate()
         if (checkValid) {
-            const formData = new FormData;
+            const formData = new FormData();
             // Thêm các trường không phải tệp vào FormData
             for (let [key, value] of Object.entries(updatedPayload)) {
                 if (key === 'category') {
@@ -255,13 +252,11 @@ const UpdateProduct = ({ dataProduct, setEdit, setDataProduct, fetchProducts }) 
                     formData.append(key, value);
                 }
             }
-            console.log("check payload", payload)
             options.forEach((option, optionIndex) => {
                 option.images.forEach((file, fileIndex) => {
                     if (typeof file === "object") formData.append(`option[${optionIndex}][images]`, file);
                 });
             });
-            console.log(Object.fromEntries(formData.entries()));
             const updateProduct = await apiUpdateProduct(formData);
             if (updateProduct && updateProduct.EC === 0) {
                 toast.success("Cập nhật sản phẩm thành công!")

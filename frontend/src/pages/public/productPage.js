@@ -6,18 +6,17 @@ import { apiGetProducts } from "../../service/productApiService";
 import { Spin } from "antd";
 import { toast } from "react-toastify";
 import Breadcrumbs from "../../components/Breadcrumbs";
-const Shirt = () => {
+const ProductPage = () => {
     const [sortBy, setSortBy] = useState("-createdAt");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const limit = 10;
+    const limit = 12;
     const [products, setProducts] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedSize, setSlectedSize] = useState("");
     const [loading, setLoading] = useState(false)
     useEffect(() => {
-        console.log("size:", selectedSize)
         if (selectedCategory && selectedCategory._id && !selectedSize) {
             fetchProducts({ limit, page: currentPage, sort: sortBy, category: selectedCategory?._id, price: { gt: priceRange[0], lt: priceRange[1] } })
         }
@@ -50,14 +49,15 @@ const Shirt = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchProducts();
+        window.scrollTo(0, 0);
+
     }
 
     return (
         <div className="product-page container">
             <Breadcrumbs />
             <div className="row">
-                <div className="col-sm-3 col-12">
+                <div className="col-md-3 col-12">
                     <SidebarProduct setProducts={setProducts}
                         selectedCategory={selectedCategory}
                         setSelectedCategory={setSelectedCategory}
@@ -67,7 +67,7 @@ const Shirt = () => {
                         setPriceRange={setPriceRange}
                     />
                 </div>
-                <div className="col-sm-9 col-12">
+                <div className="col-md-9 col-12">
                     <div className='d-flex justify-content-between p-3 my-4' style={{ backgroundColor: "#f7f7f7" }}>
                         <label>Bạn đang xem:
                             <span className="category ms-3 text-uppercase fw-bold text-info">
@@ -114,4 +114,4 @@ const Shirt = () => {
     )
 }
 
-export default Shirt;
+export default ProductPage;

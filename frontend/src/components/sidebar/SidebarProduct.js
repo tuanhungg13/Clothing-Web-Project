@@ -22,7 +22,7 @@ const SidebarProduct = (props) => {
     }
     return (
         <div className='sidebar-product'>
-            <div className="flex-shrink-0 p-3 d-sm-block d-none" >
+            <div className="flex-shrink-0 p-3 d-md-block d-none" >
                 <a href="/" className="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
                     <span className="fs-5 fw-semibold mt-1">Danh mục</span>
                 </a>
@@ -106,7 +106,7 @@ const SidebarProduct = (props) => {
                 </ul>
             </div>
 
-            <div className="btn-toggler d-sm-none d-block ">
+            <div className="btn-toggler d-md-none d-block ">
                 <div className="container-fluid m-auto">
                     <button className="navbar-toggler btn mb-1  mt-3 mt-sm-0 px-2" style={{ height: "30px", borderRadius: "5px", border: "1px solid #d7d7d7", backgroundColor: "#d7d7d7" }}
                         type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="true" aria-label="Toggle navigation">

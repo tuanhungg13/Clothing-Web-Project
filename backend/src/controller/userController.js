@@ -48,7 +48,7 @@ const login = async (req, res) => {
                 {
                     maxAge: 86400000, httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'none'
+                    sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax"
                 })
             return res.status(200).json({
                 EM: response.EM,
@@ -113,7 +113,6 @@ const getUserById = async (req, res) => {
 const refreshAccessToken = async (req, res) => {
     try {
         const cookie = req.cookies;
-        console.log("check cookies:", cookie)
         if (Object.keys(cookie).length === 0 && !cookie.refreshToken) {
             throw new Error("Không tìm thấy dữ liệu từ cookie");
         }
@@ -124,7 +123,7 @@ const refreshAccessToken = async (req, res) => {
                     maxAge: 86400000,
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'none'
+                    sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax"
                 })
             return res.status(200).json({
                 EC: response.EC,

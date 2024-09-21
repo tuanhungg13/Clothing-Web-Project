@@ -44,7 +44,6 @@ export const prodCategorySlice = createSlice({
 
 export const fetchProductCategories = createAsyncThunk("prodCategories/fetchProductCategories", async (data, { rejectWithValue }) => {
     const response = await getProductCategories()
-    console.log("check response:", response);
     if (response && response.EC === 1) {
         return rejectWithValue(response)
     }

@@ -29,12 +29,29 @@ instance.interceptors.request.use(function (config) {
 });
 
 // Thêm một bộ đón chặn response
+let isRefreshing = false;
+let failedRequestsQueue = [];
 instance.interceptors.response.use(function (response) {
     // Bất kì mã trạng thái nào nằm trong tầm 2xx đều khiến hàm này được trigger
     // Làm gì đó với dữ liệu response
     return response.data;
 }, async function (error) {
+    const originalRequest = error.config;
     if (error && error.response && error.response.status === 401) {
+        if (isRefreshing) {
+            return new Promise(function (resolve, reject) {
+                failedRequestsQueue.push({ resolve, reject });
+            }).then(token => {
+                originalRequest.headers['Authorization'] = 'Bearer ' + token;
+                return axios(originalRequest);
+            }).catch(err => {
+                return Promise.reject(err);
+            });
+        }
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
         try {
             const response = await instance.get('/user/refreshAccessToken');
             if (response && response.EC === 0) {
@@ -47,7 +64,8 @@ instance.interceptors.response.use(function (response) {
                     window.localStorage.setItem("persist:profile", JSON.stringify(localStorageData));
                 }
                 // Gửi lại request gốc với accessToken mới
-                const originalRequest = error.config;
+                failedRequestsQueue.forEach((req) => req.resolve(newAccessToken));
+                failedRequestsQueue = [];
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return instance(originalRequest);
             }

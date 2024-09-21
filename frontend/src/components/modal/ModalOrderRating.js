@@ -11,7 +11,6 @@ const ModalOrderRating = ({ showModalRating, dataOrder, onClose, fetchOrders }) 
     const [comment, setComment] = useState("");
     const [ratingLabel, setRatingLabel] = useState("")
     useEffect(() => {
-        console.log("check show order")
         if (showModalRating) {
             setOrder(dataOrder);
             modalRef.current.focus();

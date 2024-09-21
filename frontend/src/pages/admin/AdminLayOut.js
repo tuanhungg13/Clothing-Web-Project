@@ -5,9 +5,10 @@ import { useSelector } from "react-redux";
 import SidebarAdmin from "../../components/sidebar/SidebarAdmin";
 const AdminLayOut = () => {
     const { isLoggedIn, current } = useSelector(state => state.user)
-    if (!isLoggedIn || !current || current.role !== "admin") return (<Navigate to={"/"} />)
+    const { _persist } = useSelector(state => state);  // Kiểm tra trạng thái persist
+    if (_persist?.rehydrated && (!isLoggedIn || !current || current.role !== "admin")) return (<Navigate to={"/"} />)
     return (
-        <div className="">
+        <div className="admin-page">
             <div className="d-flex row mx-0">
                 <div className="col-sm-2 mt-3 p-0" style={{ borderRight: "1px solid black" }}>
                     <SidebarAdmin />

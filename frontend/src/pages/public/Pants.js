@@ -9,7 +9,7 @@ const Pants = () => {
     const [sortBy, setSortBy] = useState("-createdAt");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const limit = 10;
+    const limit = 12;
     const [products, setProducts] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 3000000]);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -46,14 +46,14 @@ const Pants = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchProducts();
+        window.scrollTo(0, 0)
     }
 
     return (
         <div className="product-page container">
             <Breadcrumbs />
             <div className="row">
-                <div className="col-sm-3 col-12">
+                <div className="col-md-3 col-12">
                     <SidebarProduct setProducts={setProducts}
                         selectedCategory={selectedCategory}
                         setSelectedCategory={setSelectedCategory}
@@ -63,7 +63,7 @@ const Pants = () => {
                         setPriceRange={setPriceRange}
                     />
                 </div>
-                <div className="col-sm-9 col-12">
+                <div className="col-md-9 col-12">
                     <div className='d-flex justify-content-between p-3 my-4' style={{ backgroundColor: "#f7f7f7" }}>
                         <div className='d-flex'>
                             <label className=''>Bạn đang xem:

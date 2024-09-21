@@ -5,7 +5,6 @@ const ModalViewRatingOrder = ({ showModalRating, dataViewRating, onClose }) => {
     const modalRef = useRef(null);
     const [order, setOrder] = useState([]);
     useEffect(() => {
-        console.log("check show order")
         if (showModalRating) {
             setOrder(dataViewRating);
             modalRef.current.focus();

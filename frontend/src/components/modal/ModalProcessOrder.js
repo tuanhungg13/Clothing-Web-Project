@@ -6,9 +6,7 @@ const ModalProcessOrder = ({ showModalOrder, dataOrder, onClose, fetchOrders }) 
     const modalRef = useRef(null);
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("")
-    console.log(dataOrder)
     useEffect(() => {
-        console.log("check show order")
         if (showModalOrder) {
             setOrder(dataOrder);
             setStatus(dataOrder.status)

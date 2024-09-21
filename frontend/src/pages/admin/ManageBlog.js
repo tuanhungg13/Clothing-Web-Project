@@ -15,7 +15,6 @@ const ManageBlog = () => {
     const fetchBlog = useCallback(async () => {
         const response = await apiGetBlogs({ sort: "-createdAt", page: currentPage, limit });
         if (response && response.EC === 0) {
-            console.log((response.DT))
             setBlogs(response.DT);
             setTotalPages(response.totalPages);
         }

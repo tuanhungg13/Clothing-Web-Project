@@ -74,12 +74,12 @@ const NavAdmin = () => {
                 </div>
             </div>
             <div className="btn-toggler d-sm-none d-block ">
-                <div class="container-fluid m-auto">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="true" aria-label="Toggle navigation">
+                <div className="container-fluid m-auto">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="true" aria-label="Toggle navigation">
                         <MdMenu />
                     </button>
                     <img src={logo} alt="lg" className="mb-1 ms-2" style={{ width: "50px" }} />
-                    <div class="container-nav navbar-collapse collapse" id="navbarsExample01">
+                    <div className="container-nav navbar-collapse collapse" id="navbarsExample01">
                         <div className="topnav d-flex flex-column text-none " >
                             {dataNav && dataNav.length > 0 && dataNav.map(item => {
                                 return (
