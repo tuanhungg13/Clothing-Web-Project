@@ -22,7 +22,6 @@ const ManageBlog = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchBlog();
     }
     const handleUpdateBlog = (bid) => {
         if (!bid) return

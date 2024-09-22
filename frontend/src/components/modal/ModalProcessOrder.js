@@ -64,10 +64,10 @@ const ModalProcessOrder = ({ showModalOrder, dataOrder, onClose, fetchOrders }) 
                                 <div key={`productItem-${index}`}>
                                     <div className='d-flex justify-content-between'>
                                         <div className='d-flex align-items-center'>
-                                            <img type='button' src={getImgOfProduct(item)} alt={item.product.title} style={{ width: '100px', height: '100px', marginRight: '10px' }} />
+                                            <img type='button' src={getImgOfProduct(item)} alt={item?.product?.title} style={{ width: '100px', height: '100px', marginRight: '10px' }} />
                                             <div className="ms-2">
-                                                <label >{item.product.title} - {item.size} - {item.color}</label>
-                                                <div>{formatCurrency(item.product.price)} x {item.quantity}</div>
+                                                <label >{item?.product?.title} - {item.size} - {item.color}</label>
+                                                <div>{formatCurrency(item.price)} x {item.quantity}</div>
                                             </div>
                                         </div>
                                     </div>

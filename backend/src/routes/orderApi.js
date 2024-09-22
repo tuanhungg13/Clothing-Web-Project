@@ -3,7 +3,7 @@ const router = express.Router();
 const controllers = require('../controller/orderController.js');
 const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken.js');
 
-router.post("/", verifyAccessToken, controllers.createNewOrder);
+router.post("/", controllers.createNewOrder);
 router.post("/guest", controllers.createNewOrder);
 router.get('/getOrderByAdmin', [verifyAccessToken, isAdmin], controllers.getOrdersByAdmin);
 router.get("/getOrderByUser", [verifyAccessToken], controllers.getOrdersByUser)

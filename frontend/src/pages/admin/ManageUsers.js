@@ -26,7 +26,7 @@ const ManageUsers = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchUsers();
+
     }
 
     //edit user

@@ -29,7 +29,6 @@ const ManageProducts = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchProducts();
     }
 
     const handleEditProduct = (item) => {
@@ -52,8 +51,6 @@ const ManageProducts = () => {
     }
     return (
         <>
-
-
             {edit && <UpdateProduct dataProduct={dataProduct} setEdit={setEdit} setDataProduct={setDataProduct} fetchProducts={fetchProducts} />}
 
             {!edit &&
@@ -61,7 +58,7 @@ const ManageProducts = () => {
                     <div className="d-flex justify-content-between">
                         <h2>Quản lí sản phẩm</h2>
                         <button className="btn btn-success me-3">
-                            <NavLink className={"text-light text-decoration-none"} to={"/admin/tao-san-pham"}>Tạo sản phẩm</NavLink>
+                            <NavLink className={"text-light text-decoration-none"} to={"/admin/create-product"}>Tạo sản phẩm</NavLink>
                         </button>
                     </div>
                     <hr style={{ marginTop: "13px" }} />

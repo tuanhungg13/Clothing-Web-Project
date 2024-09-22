@@ -38,7 +38,6 @@ const Announcement = () => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
-        fetchBlog();
     }
     const handleReadBlog = (bid) => {
         if (!bid) return

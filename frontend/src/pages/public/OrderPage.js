@@ -11,6 +11,7 @@ import Cookies from "js-cookie"
 import { getCurrent } from "../../redux/userSlice";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { Spin } from 'antd';
+import { getCartFromCookies } from "../../redux/cartSlice";
 const OrderPage = () => {
     const cartItems = useSelector(state => state?.user?.current?.cart);
     const { current, isLoggedIn } = useSelector(state => state?.user);
@@ -125,7 +126,7 @@ const OrderPage = () => {
         if (!payload.phoneNumber) {
             newError.phoneNumber = "Vui lòng nhập số điện thoại!";
             isValid = false
-        } else if (payload.phoneNumber.length < 9 || payload.phoneNumber.length > 10) {
+        } else if (payload.phoneNumber.length < 8 || payload.phoneNumber.length > 12) {
             newError.phoneNumber = "Số điện thoại không hợp lệ!";
             isValid = false
         }
@@ -155,7 +156,8 @@ const OrderPage = () => {
                         email: payload.email,
                         phoneNumber: payload.phoneNumber,
                         userName: payload.userName,
-                    }
+                    },
+
                 })
                 if (response.EC === 0) {
                     toast.success("Bạn đã đặt hàng thành công!")
@@ -168,7 +170,7 @@ const OrderPage = () => {
             }
             else {
                 const response = await apiCreateOrderByGuest({
-                    memoizedDisplayCart,
+                    products: memoizedDisplayCart,
                     note: payload.note,
                     shippingPrice: shippingPrice,
                     discount: discount,
@@ -182,6 +184,7 @@ const OrderPage = () => {
                 if (response.EC === 0) {
                     toast.success("Bạn đã đặt hàng thành công!")
                     Cookies.set("PRODUCT_CART_NEW", JSON.stringify({}), { expires: 30 });
+                    dispatch(getCartFromCookies({ cart: JSON.parse(Cookies.get("PRODUCT_CART_NEW")) }));
                     navigation("/")
                 }
                 else {

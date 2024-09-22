@@ -5,7 +5,7 @@ import { SiShopee } from "react-icons/si";
 import logo from "../assets/img/logo.png"
 const Footer = () => {
     return (
-        <div className="container" style={{ marginTop: "180px" }}>
+        <div style={{ marginTop: "180px" }}>
             <hr />
             <div className="container footer">
                 <div className="row ">
@@ -30,7 +30,7 @@ const Footer = () => {
                 </div>
 
             </div>
-            <div className="mt-3 bg-light pt-2 pb-5 ps-5">
+            <div className="mt-3 bg-light pt-2 pb-5 ps-sm-5 ps-3">
                 <div className="mt-2"><img src={logo} alt="atino" style={{ width: "150px" }} /></div>
                 <div>
                     <label className="fw-bold mt-2">Địa chỉ</label>

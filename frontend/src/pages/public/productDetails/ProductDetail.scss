@@ -39,12 +39,12 @@
         }
 
         .list-imgs-product-sm {
-            height: 70vh;
+            height: 50vh;
             width: 100vw;
             position: relative;
             overflow: hidden;
             padding-top: 20px;
-            padding-bottom: 40px;
+            padding-bottom: 30px;
 
             img {
                 max-width: 100%;
@@ -56,7 +56,7 @@
             .prevBtnMobile {
                 background-color: transparent;
                 position: absolute;
-                top: 30%;
+                top: 40%;
                 left: 0;
                 font-size: 50px;
                 border: none;
@@ -68,7 +68,7 @@
             .nextBtnMobile {
                 background-color: transparent;
                 position: absolute;
-                top: 30%;
+                top: 40%;
                 right: 0;
                 font-size: 50px;
                 border: none;

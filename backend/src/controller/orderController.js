@@ -1,8 +1,22 @@
 const orderService = require("../service/orderService.js");
+const jwt = require("jsonwebtoken")
 const createNewOrder = async (req, res) => {
     try {
         const { products, orderBy } = req.body;
-        const { _id } = req.user;
+        if (req?.headers?.authorization?.startsWith("Bearer") && req?.headers?.authorization?.length > 15) {
+            const token = req.headers.authorization.split(" ")[1];
+            const decode = jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+                if (err) {
+                    return res.status(401).json({
+                        EM: "Token không hợp lệ!",
+                        EC: 1
+                    })
+                }
+                return decode;
+            })
+            req.user = decode
+        }
+
         if (!products || products.length <= 0) {
             return res.status(400).json({
                 EM: "Không có sản phẩm trong giỏ hàng!",
@@ -16,7 +30,7 @@ const createNewOrder = async (req, res) => {
             });
         }
 
-        const response = await orderService.handleCreateNewOrder(req.body, _id);
+        const response = await orderService.handleCreateNewOrder(req.body, req.user);
         if (response && response.EC === 1) {
             return res.status(500).json({
                 EM: response.EM,

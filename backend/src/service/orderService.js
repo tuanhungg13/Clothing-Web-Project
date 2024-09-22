@@ -2,13 +2,26 @@ const Order = require("../models/order.js");
 const User = require("../models/users.js");
 const handleCreateNewOrder = async (data, uid) => {
     try {
-        const initialTotalPrice = data.products.reduce((sum, item) => {
+        const initialTotalPrice = data?.products?.reduce((sum, item) => {
             return sum + (item.price * item.quantity)
         }, 0);
         const totalPrice = (initialTotalPrice + data.shippingPrice) * (1 - (data.discount / 100));
         if (uid) {
             data.orderBy.user = uid
         }
+        else {
+            data.products = data.products.map(item => {
+                const product = {
+                    product: item.product._id,
+                    quantity: item.quantity,
+                    price: item.price,
+                    color: item.color,
+                    size: item.size
+                }
+                return product
+            })
+        }
+
         const newOrder = await Order.create({ ...data, totalPrice: totalPrice, initialTotalPrice: initialTotalPrice });
         if (newOrder && uid) {
             await User.findByIdAndUpdate(data.orderBy.user, {
